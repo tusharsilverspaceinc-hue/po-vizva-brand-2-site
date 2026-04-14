@@ -30,7 +30,7 @@
     }
 
     .wrap {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
       padding: 32px 20px 48px;
     }
@@ -52,6 +52,10 @@
       font-size: clamp(28px, 4vw, 44px);
     }
 
+    h2 {
+      margin: 0 0 8px;
+    }
+
     p {
       margin: 0;
       color: var(--muted);
@@ -65,7 +69,7 @@
 
     .toolbar {
       display: grid;
-      grid-template-columns: 1fr auto auto;
+      grid-template-columns: minmax(220px, 280px) 1fr auto auto;
       gap: 12px;
       align-items: end;
       margin-bottom: 16px;
@@ -194,7 +198,7 @@
       color: var(--muted);
     }
 
-    @media (max-width: 960px) {
+    @media (max-width: 1100px) {
       .grid { grid-template-columns: 1fr; }
       .toolbar { grid-template-columns: 1fr; }
     }
@@ -204,7 +208,7 @@
   <div class="wrap">
     <section class="hero">
       <h1>VCS Marketing Hub Admin</h1>
-      <p>Use this private dashboard to review candidate and reference form submissions stored in Supabase.</p>
+      <p>Use this private dashboard to review candidate, reference, BSR, and application submissions stored in Supabase.</p>
     </section>
 
     <section class="panel">
@@ -215,7 +219,7 @@
         </div>
         <div class="field">
           <label for="searchInput">Search Records</label>
-          <input id="searchInput" type="text" placeholder="Search by candidate, email, phone, vendor...">
+          <input id="searchInput" type="text" placeholder="Search by candidate, email, phone, period, or any payload value...">
         </div>
         <button id="loadBtn" type="button">Load Submissions</button>
         <button id="clearBtn" class="secondary" type="button">Clear Token</button>
@@ -226,6 +230,8 @@
       <div class="meta">
         <div class="chip">Candidate records: <strong id="candidateCount">0</strong></div>
         <div class="chip">Reference records: <strong id="referenceCount">0</strong></div>
+        <div class="chip">BSR records: <strong id="bsrCount">0</strong></div>
+        <div class="chip">Application records: <strong id="applicationCount">0</strong></div>
       </div>
     </section>
 
@@ -277,6 +283,52 @@
           </table>
         </div>
       </section>
+
+      <section class="panel">
+        <h2>BSR Submissions</h2>
+        <p class="muted">Latest records captured from the BSR export page.</p>
+        <div class="meta">
+          <button id="exportBsrBtn" class="secondary" type="button">Export BSR CSV</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Created</th>
+                <th>Record Name</th>
+                <th>Review Period</th>
+                <th>Payload</th>
+              </tr>
+            </thead>
+            <tbody id="bsrTable">
+              <tr><td colspan="4" class="muted">No data loaded yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Application Submissions</h2>
+        <p class="muted">Latest records captured from the application export page.</p>
+        <div class="meta">
+          <button id="exportApplicationsBtn" class="secondary" type="button">Export Applications CSV</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Created</th>
+                <th>Record Name</th>
+                <th>Primary Email</th>
+                <th>Payload</th>
+              </tr>
+            </thead>
+            <tbody id="applicationTable">
+              <tr><td colspan="4" class="muted">No data loaded yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
     </section>
   </div>
 
@@ -287,14 +339,23 @@
     const searchInput = document.getElementById('searchInput');
     const exportCandidatesBtn = document.getElementById('exportCandidatesBtn');
     const exportReferencesBtn = document.getElementById('exportReferencesBtn');
+    const exportBsrBtn = document.getElementById('exportBsrBtn');
+    const exportApplicationsBtn = document.getElementById('exportApplicationsBtn');
     const message = document.getElementById('message');
     const candidateTable = document.getElementById('candidateTable');
     const referenceTable = document.getElementById('referenceTable');
+    const bsrTable = document.getElementById('bsrTable');
+    const applicationTable = document.getElementById('applicationTable');
     const candidateCount = document.getElementById('candidateCount');
     const referenceCount = document.getElementById('referenceCount');
+    const bsrCount = document.getElementById('bsrCount');
+    const applicationCount = document.getElementById('applicationCount');
     const storageKey = 'vcs-marketing-hub-admin-token';
+
     let candidateRows = [];
     let referenceRows = [];
+    let bsrRows = [];
+    let applicationRows = [];
 
     tokenInput.value = sessionStorage.getItem(storageKey) || '';
 
@@ -343,9 +404,17 @@
       const filteredReferences = query
         ? referenceRows.filter(row => getSearchText(row).includes(query))
         : referenceRows;
+      const filteredBsr = query
+        ? bsrRows.filter(row => getSearchText(row).includes(query))
+        : bsrRows;
+      const filteredApplications = query
+        ? applicationRows.filter(row => getSearchText(row).includes(query))
+        : applicationRows;
 
       candidateCount.textContent = String(filteredCandidates.length);
       referenceCount.textContent = String(filteredReferences.length);
+      bsrCount.textContent = String(filteredBsr.length);
+      applicationCount.textContent = String(filteredApplications.length);
 
       renderRows(candidateTable, filteredCandidates, [
         { render: row => escapeHtml(formatDate(row.created_at)) },
@@ -362,6 +431,20 @@
         { render: row => escapeHtml(row.vendor_phone || '') },
         { render: row => `<div class="json">${escapeHtml(JSON.stringify(row.payload, null, 2))}</div>` }
       ]);
+
+      renderRows(bsrTable, filteredBsr, [
+        { render: row => escapeHtml(formatDate(row.created_at)) },
+        { render: row => escapeHtml(row.record_name || '') },
+        { render: row => escapeHtml(row.review_period || '') },
+        { render: row => `<div class="json">${escapeHtml(JSON.stringify(row.payload, null, 2))}</div>` }
+      ]);
+
+      renderRows(applicationTable, filteredApplications, [
+        { render: row => escapeHtml(formatDate(row.created_at)) },
+        { render: row => escapeHtml(row.record_name || '') },
+        { render: row => escapeHtml(row.primary_email || '') },
+        { render: row => `<div class="json">${escapeHtml(JSON.stringify(row.payload, null, 2))}</div>` }
+      ]);
     }
 
     function escapeCsv(value) {
@@ -370,21 +453,21 @@
       return text;
     }
 
-    function downloadCsv(filename, rows) {
+    function downloadCsv(filename, rows, mapRow) {
       if (!rows.length) {
         setMessage('No records available to export.', true);
         return;
       }
 
-      const headers = ['created_at', 'name', 'email_or_vendor_email', 'phone_or_vendor_phone', 'payload'];
+      const headers = ['created_at', 'primary_name', 'secondary_value', 'payload'];
       const csvRows = [headers.join(',')];
 
       rows.forEach(function(row) {
+        const mapped = mapRow(row);
         csvRows.push([
           escapeCsv(row.created_at || ''),
-          escapeCsv(row.candidate_name || ''),
-          escapeCsv(row.candidate_email || row.vendor_email || ''),
-          escapeCsv(row.candidate_phone || row.vendor_phone || ''),
+          escapeCsv(mapped.primary || ''),
+          escapeCsv(mapped.secondary || ''),
           escapeCsv(JSON.stringify(row.payload || {}))
         ].join(','));
       });
@@ -424,8 +507,10 @@
 
         sessionStorage.setItem(storageKey, token);
 
-        candidateRows = data.candidateSubmissions;
-        referenceRows = data.referenceSubmissions;
+        candidateRows = data.candidateSubmissions || [];
+        referenceRows = data.referenceSubmissions || [];
+        bsrRows = data.bsrSubmissions || [];
+        applicationRows = data.applicationSubmissions || [];
         applyFilters();
 
         setMessage('Submissions loaded successfully.', false);
@@ -442,10 +527,36 @@
       if (event.key === 'Enter') loadSubmissions();
     });
     exportCandidatesBtn.addEventListener('click', function() {
-      downloadCsv('candidate-submissions.csv', candidateRows);
+      downloadCsv('candidate-submissions.csv', candidateRows, function(row) {
+        return {
+          primary: row.candidate_name || '',
+          secondary: row.candidate_email || row.candidate_phone || ''
+        };
+      });
     });
     exportReferencesBtn.addEventListener('click', function() {
-      downloadCsv('reference-submissions.csv', referenceRows);
+      downloadCsv('reference-submissions.csv', referenceRows, function(row) {
+        return {
+          primary: row.candidate_name || '',
+          secondary: row.vendor_email || row.vendor_phone || ''
+        };
+      });
+    });
+    exportBsrBtn.addEventListener('click', function() {
+      downloadCsv('bsr-submissions.csv', bsrRows, function(row) {
+        return {
+          primary: row.record_name || '',
+          secondary: row.review_period || ''
+        };
+      });
+    });
+    exportApplicationsBtn.addEventListener('click', function() {
+      downloadCsv('application-submissions.csv', applicationRows, function(row) {
+        return {
+          primary: row.record_name || '',
+          secondary: row.primary_email || ''
+        };
+      });
     });
 
     clearBtn.addEventListener('click', function() {

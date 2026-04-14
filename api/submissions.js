@@ -46,14 +46,23 @@ export default async function handler(req, res) {
   const limit = Number.isFinite(rawLimit) ? Math.min(Math.max(rawLimit, 1), 500) : 100;
 
   try {
-    const [candidateSubmissions, referenceSubmissions] = await Promise.all([
+    const [
+      candidateSubmissions,
+      referenceSubmissions,
+      bsrSubmissions,
+      applicationSubmissions
+    ] = await Promise.all([
       queryTable('candidate_submissions', limit),
-      queryTable('reference_submissions', limit)
+      queryTable('reference_submissions', limit),
+      queryTable('bsr_submissions', limit),
+      queryTable('application_submissions', limit)
     ]);
 
     return json(res, 200, {
       candidateSubmissions,
-      referenceSubmissions
+      referenceSubmissions,
+      bsrSubmissions,
+      applicationSubmissions
     });
   } catch (error) {
     return json(res, 500, {

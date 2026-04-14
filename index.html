@@ -2720,6 +2720,8 @@ input.date-invalid {
 <script>
 const SUPABASE_URL = 'https://clhxaqvrhyakypbpxssl.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_ptQOSEiYzJnIhOLRhjBbgQ_wMe6vbtj';
+window.VCS_SUPABASE_URL = SUPABASE_URL;
+window.VCS_SUPABASE_PUBLISHABLE_KEY = SUPABASE_PUBLISHABLE_KEY;
 const supabaseClient = window.supabase
   ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY)
   : null;
@@ -2772,6 +2774,174 @@ async function saveSubmission(table, row) {
   if (result.error) throw result.error;
   return result;
 }
+
+function escapeInlineScript(value) {
+  return String(value).replace(/<\/script/gi, '<\\/script');
+}
+
+function decodeBase64Html(value) {
+  return atob(value.split(',')[1] || '');
+}
+
+function enhanceEmbeddedIframe(config) {
+  var wrap = document.getElementById(config.wrapId);
+  var iframe = wrap ? wrap.querySelector('iframe') : null;
+  var src;
+  var html;
+  var injectedScript;
+
+  if (!iframe || iframe.dataset.supabaseEnhanced === 'true') return;
+
+  src = iframe.getAttribute('src') || '';
+  if (!src.startsWith('data:text/html;base64,')) return;
+
+  html = decodeBase64Html(src);
+  if (html.indexOf('__VCS_EMBEDDED_SAVE_LAYER__') !== -1) {
+    iframe.dataset.supabaseEnhanced = 'true';
+    return;
+  }
+
+  injectedScript = escapeInlineScript(
+    "<script>(function(){\n" +
+    "  var CONFIG = " + JSON.stringify(config) + ";\n" +
+    "  var MARKER = '__VCS_EMBEDDED_SAVE_LAYER__';\n" +
+    "  if (window[MARKER]) return;\n" +
+    "  window[MARKER] = true;\n" +
+    "  function cleanValue(value) {\n" +
+    "    return typeof value === 'string' ? value.trim() : (value == null ? '' : value);\n" +
+    "  }\n" +
+    "  function getKey(el, index) {\n" +
+    "    return el.name || el.id || el.placeholder || ('field_' + index);\n" +
+    "  }\n" +
+    "  function serializeDocument() {\n" +
+    "    var data = {};\n" +
+    "    var radios = {};\n" +
+    "    Array.prototype.forEach.call(document.querySelectorAll('input, select, textarea'), function(el, index) {\n" +
+    "      if (el.disabled) return;\n" +
+    "      if (el.type === 'button' || el.type === 'submit' || el.type === 'reset' || el.type === 'file') return;\n" +
+    "      var key = getKey(el, index);\n" +
+    "      if (el.type === 'radio') {\n" +
+    "        var group = el.name || key;\n" +
+    "        if (!Object.prototype.hasOwnProperty.call(radios, group)) radios[group] = '';\n" +
+    "        if (el.checked) radios[group] = cleanValue(el.value);\n" +
+    "        data[group] = radios[group];\n" +
+    "        return;\n" +
+    "      }\n" +
+    "      if (el.type === 'checkbox') {\n" +
+    "        data[key] = !!el.checked;\n" +
+    "        return;\n" +
+    "      }\n" +
+    "      data[key] = cleanValue(el.value);\n" +
+    "    });\n" +
+    "    return data;\n" +
+    "  }\n" +
+    "  function findValue(keys, payload) {\n" +
+    "    for (var i = 0; i < keys.length; i += 1) {\n" +
+    "      var key = keys[i];\n" +
+    "      var byId = document.getElementById(key);\n" +
+    "      if (byId && cleanValue(byId.value || byId.textContent)) return cleanValue(byId.value || byId.textContent);\n" +
+    "      if (payload[key]) return cleanValue(payload[key]);\n" +
+    "      var byName = document.querySelector('[name=\"' + key + '\"]');\n" +
+    "      if (byName && cleanValue(byName.value || byName.textContent)) return cleanValue(byName.value || byName.textContent);\n" +
+    "    }\n" +
+    "    return '';\n" +
+    "  }\n" +
+    "  function buildRow(payload) {\n" +
+    "    if (CONFIG.table === 'bsr_submissions') {\n" +
+    "      return {\n" +
+    "        record_name: findValue(['empName', 'employeeName', 'candidateName', 'fullName'], payload),\n" +
+    "        review_period: findValue(['monthInput', 'reviewDate', 'reviewMonth', 'month'], payload),\n" +
+    "        payload: payload\n" +
+    "      };\n" +
+    "    }\n" +
+    "    return {\n" +
+    "      record_name: findValue(['candidateName', 'fullName', 'applicantName', 'name', 'empName'], payload),\n" +
+    "      primary_email: findValue(['email', 'emailId', 'candidateEmail', 'applicantEmail', 'refVendorLinkedIn'], payload),\n" +
+    "      payload: payload\n" +
+    "    };\n" +
+    "  }\n" +
+    "  function getButton() {\n" +
+    "    return document.querySelector('.btn-pdf');\n" +
+    "  }\n" +
+    "  function setBusy(button, busy) {\n" +
+    "    if (!button) return;\n" +
+    "    if (!button.dataset.defaultLabel) button.dataset.defaultLabel = button.innerHTML;\n" +
+    "    button.disabled = busy;\n" +
+    "    button.style.opacity = busy ? '0.7' : '1';\n" +
+    "    button.style.cursor = busy ? 'wait' : 'pointer';\n" +
+    "    button.innerHTML = busy ? 'Saving...' : button.dataset.defaultLabel;\n" +
+    "  }\n" +
+    "  function ensureButtonLabel() {\n" +
+    "    var button = getButton();\n" +
+    "    if (!button || button.dataset.vcsLabelApplied === 'true') return;\n" +
+    "    button.dataset.vcsLabelApplied = 'true';\n" +
+    "    button.innerHTML = 'Save & Export PDF';\n" +
+    "    button.dataset.defaultLabel = button.innerHTML;\n" +
+    "  }\n" +
+    "  async function persistSubmission() {\n" +
+    "    var supabaseGlobal = parent && parent.window ? parent.window.supabase : null;\n" +
+    "    var client;\n" +
+    "    var result;\n" +
+    "    if (!supabaseGlobal || !parent.window.VCS_SUPABASE_URL || !parent.window.VCS_SUPABASE_PUBLISHABLE_KEY) {\n" +
+    "      throw new Error('Supabase client failed to load.');\n" +
+    "    }\n" +
+    "    client = supabaseGlobal.createClient(parent.window.VCS_SUPABASE_URL, parent.window.VCS_SUPABASE_PUBLISHABLE_KEY);\n" +
+    "    result = await client.from(CONFIG.table).insert(buildRow(serializeDocument()));\n" +
+    "    if (result.error) throw result.error;\n" +
+    "  }\n" +
+    "  function wireExport() {\n" +
+    "    if (window.__vcsExportWrapped) return;\n" +
+    "    if (typeof window.exportPDF !== 'function') {\n" +
+    "      setTimeout(wireExport, 200);\n" +
+    "      return;\n" +
+    "    }\n" +
+    "    ensureButtonLabel();\n" +
+    "    window.__vcsExportWrapped = true;\n" +
+    "    var originalExport = window.exportPDF.bind(window);\n" +
+    "    window.exportPDF = async function() {\n" +
+    "      var button = getButton();\n" +
+    "      if (window.__vcsExportInFlight) return;\n" +
+    "      window.__vcsExportInFlight = true;\n" +
+    "      setBusy(button, true);\n" +
+    "      try {\n" +
+    "        await persistSubmission();\n" +
+    "      } catch (error) {\n" +
+    "        console.error(error);\n" +
+    "        alert('Unable to save this ' + CONFIG.label + ' form right now. Please try again.');\n" +
+    "        return;\n" +
+    "      } finally {\n" +
+    "        window.__vcsExportInFlight = false;\n" +
+    "        setBusy(button, false);\n" +
+    "      }\n" +
+    "      return originalExport.apply(this, arguments);\n" +
+    "    };\n" +
+    "  }\n" +
+    "  if (document.readyState === 'loading') {\n" +
+    "    document.addEventListener('DOMContentLoaded', wireExport, { once: true });\n" +
+    "  } else {\n" +
+    "    wireExport();\n" +
+    "  }\n" +
+    "})();<\/script>"
+  );
+
+  html = html.replace('</body>', '\n' + injectedScript + '\n</body>');
+  iframe.removeAttribute('src');
+  iframe.setAttribute('srcdoc', html);
+  iframe.dataset.supabaseEnhanced = 'true';
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+  enhanceEmbeddedIframe({
+    wrapId: 'bsr-frame-wrap',
+    table: 'bsr_submissions',
+    label: 'BSR'
+  });
+  enhanceEmbeddedIframe({
+    wrapId: 'app-frame-wrap',
+    table: 'application_submissions',
+    label: 'Application'
+  });
+});
 /* ── Progress bar — single passive listener ── */
 (function(){
   const b = document.getElementById('prog');

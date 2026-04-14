@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Candidate Information Form — Vizva</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@300;400;500;600&family=Fira+Code:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+/* ════════════════════════════════════════
+   DESIGN TOKENS — EXACT PORTFOLIO MATCH
+════════════════════════════════════════ */
+:root {
+  --void: #0D1B25;
+  --deep: #162130;
+  --mid:  #223645;
+  --c:    #14A2E2;
+  --g:    #0774B7;
+  --r:    #FF2255;
+  --w:    #FFFFFF;
+  --tx:   #B5D6F2;
+  --tx2:  #6B90B0;
+  --bdr:  rgba(20,162,226,.16);
+  --bdr2: rgba(20,162,226,.35);
+  --sf:   rgba(7,116,183,.18);
+  --ease: cubic-bezier(.16,1,.3,1);
+  /* Component backgrounds */
+  --form-bg:    rgba(11,22,32,.97);
+  --header-bg:  rgba(8,18,28,.98);
+  --section-bg: rgba(15,26,38,.98);
+}
+
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--void);
+  color: #FFFFFF;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 500;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(56px,8vh,96px) clamp(1rem,4vw,3rem) 60px;
+  position: relative;
+}
+
+/* ── CSS-only background — zero JS, zero canvas ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 20%, rgba(20,162,226,.16) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 85% 80%, rgba(7,116,183,.12)  0%, transparent 50%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(7,116,183,.10)  0%, transparent 60%),
+    var(--void);
+  /* GPU composited — no repaint */
+  will-change: transform;
+}
+
+/* Perspective grid — pure CSS, no JS */
+body::after {
+  content: '';
+  position: fixed; bottom: 0; left: 0; right: 0;
+  height: 50%; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(20,162,226,.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20,162,226,.11) 1px, transparent 1px);
+  background-size: 60px 60px;
+  transform: perspective(400px) rotateX(60deg) scaleX(1.4);
+  transform-origin: center bottom;
+  mask-image: linear-gradient(to top, rgba(0,0,0,.25), transparent);
+}
+
+::-webkit-scrollbar { width: 1px; }
+::-webkit-scrollbar-thumb { background: linear-gradient(#14A2E2, #0774B7); }
+
+/* ── PROGRESS BAR — CSS transition only ── */
+#prog {
+  position: fixed; top: 0; left: 0; right: 0; height: 1.5px;
+  background: linear-gradient(90deg, #055A8E, #14A2E2, #0774B7);
+  transform-origin: left; transform: scaleX(0); z-index: 9000;
+  box-shadow: 0 0 6px #14A2E2;
+  will-change: transform;
+}
+
+/* ════════════════════════════════════════
+   WRAPPER
+════════════════════════════════════════ */
+.form-wrapper {
+  position: relative; z-index: 2;
+  width: 100%; max-width: 900px;
+  border: 1px solid rgba(20,162,226,.38);
+  background: var(--form-bg);
+  overflow: hidden;
+}
+
+/* Scanlines — pure CSS, no animation on this one */
+.form-wrapper::before {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent, transparent 2px,
+    rgba(20,162,226,.015) 2px, rgba(20,162,226,.015) 4px
+  );
+}
+
+/* ════════════════════════════════════════
+   HEADER
+════════════════════════════════════════ */
+.form-header {
+  position: relative; z-index: 1;
+  padding: clamp(1.8rem,4vw,2.8rem) clamp(1.5rem,5vw,3.5rem);
+  background: linear-gradient(135deg, rgba(8,16,24,.98) 0%, rgba(12,22,34,.94) 100%);
+  border-bottom: 1px solid var(--bdr);
+  overflow: hidden;
+}
+
+/* teal glow orb — CSS only, animation is transform so GPU composited */
+.form-header::after {
+  content: '';
+  position: absolute; top: -60px; right: -60px;
+  width: 240px; height: 240px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(20,162,226,.18) 0%, transparent 70%);
+  pointer-events: none;
+  animation: breathe 6s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+@keyframes breathe {
+  0%,100% { transform: scale(1);   opacity: .7; }
+  50%      { transform: scale(1.15); opacity: 1; }
+}
+
+.header-top {
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 1.5rem;
+  position: relative; z-index: 1;
+}
+
+.brand { display: flex; align-items: center; gap: 1.2rem; }
+
+.brand-icon {
+  width: 52px; height: 52px; flex-shrink: 0;
+  border: 1px solid rgba(20,162,226,.38);
+  background: rgba(20,162,226,.11);
+  display: flex; align-items: center; justify-content: center;
+}
+.brand-icon svg { width: 28px; height: 28px; }
+
+.brand-text h1 {
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: clamp(.95rem,2vw,1.3rem);
+  letter-spacing: .12em; color: var(--w); line-height: 1.1;
+}
+.brand-text p {
+  font-family: 'Fira Code', monospace;
+  font-size: clamp(.46rem,.65vw,.56rem);
+  letter-spacing: .22em; text-transform: uppercase;
+  color: var(--tx); margin-top: .3rem;
+}
+
+.header-badge {
+  font-family: 'Fira Code', monospace;
+  font-size: .92rem; letter-spacing: .14em; text-transform: uppercase;
+  font-weight: 700;
+  color: var(--c); border: 1px solid rgba(20,162,226,.38);
+  padding: .42rem 1rem; white-space: nowrap;
+  background: rgba(20,162,226,.11);
+}
+
+/* rainbow stripe */
+.header-stripe {
+  height: 1.5px;
+  background: linear-gradient(90deg, #055A8E, #14A2E2, #0774B7);
+  box-shadow: 0 0 5px var(--c);
+}
+
+/* ════════════════════════════════════════
+   TICKER — CSS animation, no JS
+════════════════════════════════════════ */
+.ticker-wrap {
+  overflow: hidden;
+  border-top: 1px solid var(--bdr2);
+  border-bottom: 1px solid var(--bdr2);
+  padding: .55rem 0; position: relative;
+}
+.ticker-wrap::before, .ticker-wrap::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2; pointer-events: none;
+}
+.ticker-wrap::before { left:  0; background: linear-gradient(90deg,  rgba(8,18,28,.98), transparent); }
+.ticker-wrap::after  { right: 0; background: linear-gradient(-90deg, rgba(8,18,28,.98), transparent); }
+
+.ticker-track {
+  display: flex; gap: 2rem; white-space: nowrap;
+  animation: ticker 20s linear infinite;
+  width: max-content;
+  will-change: transform;
+}
+.ticker-item {
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: .78rem; letter-spacing: .06em; text-transform: uppercase;
+  color: #FFFFFF; -webkit-text-stroke: 0;
+  display: flex; align-items: center; gap: 2rem; flex-shrink: 0;
+}
+.td { color: var(--c); -webkit-text-stroke: 0; font-size: .5rem; font-weight: 800; }
+
+@keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+/* ════════════════════════════════════════
+   FORM BODY
+════════════════════════════════════════ */
+form {
+  position: relative; z-index: 1;
+  padding: clamp(1.8rem,4vw,3rem) clamp(1.5rem,5vw,3.5rem) clamp(2rem,4vw,3rem);
+}
+
+/* ── Section eye — exact portfolio pattern ── */
+.section-block { margin-top: clamp(2rem,4vw,2.8rem); }
+.section-block:first-child { margin-top: 0; }
+
+.sec-eye {
+  font-family: 'Fira Code', monospace;
+  font-size: .95rem; letter-spacing: .22em; text-transform: uppercase;
+  font-weight: 700;
+  color: var(--c); display: flex; align-items: center; gap: .7rem;
+  margin-bottom: .85rem;
+}
+.sec-eye::before {
+  content: ''; width: 16px; height: 1px;
+  background: var(--c); opacity: .7; flex-shrink: 0;
+}
+
+.sec-head {
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: clamp(1.1rem,2.5vw,1.55rem);
+  letter-spacing: -.02em; color: var(--w);
+  margin-bottom: 1.3rem; line-height: 1;
+}
+.sec-head .cy { color: #14A2E2; }
+.sec-head .gd { color: var(--g); }
+
+/* ── Grid ── */
+.grid   { display: grid; gap: 13px; }
+.grid-2 { grid-template-columns: 1fr 1fr; }
+.grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+.span-2 { grid-column: span 2; }
+
+/* ── Field ── */
+.field { display: flex; flex-direction: column; gap: 5px; }
+
+.field label {
+  font-family: 'Fira Code', monospace;
+  font-size: .92rem; letter-spacing: .12em; text-transform: uppercase;
+  font-weight: 700;
+  color: var(--tx); transition: color .2s;
+}
+.field label .req { color: var(--r); }
+
+.field input,
+.field select,
+.field textarea {
+  background: var(--sf);
+  border: 1px solid var(--bdr);
+  padding: .7rem .95rem;
+  font-size: .875rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  color: #FFFFFF;
+  outline: none; width: 100%;
+  transition: border-color .18s, background .18s, box-shadow .18s;
+}
+.field input::placeholder,
+.field textarea::placeholder { color: var(--tx2); font-size: .8rem; }
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: rgba(20,162,226,.58);
+  background: rgba(20,162,226,.09);
+  box-shadow: 0 0 0 1px rgba(20,162,226,.22), inset 0 0 16px rgba(20,162,226,.07);
+}
+.field:focus-within label { color: var(--c); }
+
+.field input[type="date"] { color: var(--tx); color-scheme: dark; }
+.field input[type="date"]:focus { color: var(--w); }
+.field textarea { resize: vertical; min-height: 88px; line-height: 1.75; }
+
+/* ── Radio group ── */
+.radio-group {
+  display: flex; gap: 3px; flex-wrap: wrap;
+  padding: .5rem .55rem;
+  background: var(--sf); border: 1px solid var(--bdr);
+}
+.radio-group label {
+  font-family: 'Fira Code', monospace;
+  font-size: .92rem; letter-spacing: .05em; text-transform: uppercase;
+  font-weight: 700;
+  color: var(--tx); cursor: pointer;
+  display: flex; align-items: center; gap: .45rem;
+  padding: .42rem .9rem;
+  border: 1px solid transparent;
+  transition: color .15s, border-color .15s, background .15s;
+}
+.radio-group label:hover {
+  color: var(--c); border-color: var(--bdr2);
+  background: rgba(20,162,226,.11);
+}
+.radio-group input[type="radio"] {
+  width: 11px; height: 11px; accent-color: var(--c);
+  border: none; padding: 0; background: none;
+}
+
+/* ── PO Count ── */
+.po-grid {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 1px; background: var(--bdr);
+}
+.po-cell {
+  background: var(--header-bg);
+  padding: 1.1rem 1rem; position: relative; overflow: hidden;
+  transition: background .25s;
+}
+.po-cell::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--c), transparent);
+  opacity: 0; transition: opacity .3s;
+}
+.po-cell:focus-within { background: rgba(20,162,226,.06); }
+.po-cell:focus-within::before { opacity: 1; }
+
+.po-label {
+  font-family: 'Fira Code', monospace;
+  font-size: .88rem; letter-spacing: .1em; text-transform: uppercase;
+  font-weight: 700;
+  color: var(--tx2); margin-bottom: .5rem;
+}
+.po-cell input {
+  border: none !important; background: transparent !important;
+  font-weight: 700 !important;
+  padding: 0 !important; box-shadow: none !important; width: 100% !important;
+  font-family: 'Syne', sans-serif !important; font-weight: 800 !important;
+  font-size: clamp(1.6rem,3vw,2.3rem) !important;
+  color: var(--c) !important; line-height: 1 !important;
+  letter-spacing: -.02em !important;
+}
+.po-cell input::placeholder { color: rgba(20,162,226,.30) !important; font-size: clamp(1.6rem,3vw,2.3rem) !important; }
+
+/* ── Team cards ── */
+.groups-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--bdr); }
+
+.group-card {
+  background: var(--section-bg); position: relative; overflow: hidden;
+  transition: background .25s;
+}
+.group-card:hover { background: var(--section-bg); }
+.group-card::after {
+  content: '';
+  position: absolute; width: 80px; height: 80px;
+  background: radial-gradient(circle, rgba(20,162,226,.18), transparent 70%);
+  bottom: -20px; right: -10px;
+  opacity: 0; transition: opacity .35s; pointer-events: none;
+}
+.group-card:hover::after { opacity: 1; }
+
+.gc-lbl {
+  font-family: 'Fira Code', monospace;
+  font-size: .92rem; letter-spacing: .08em; text-transform: uppercase;
+  font-weight: 700;
+  color: var(--c); padding: .78rem 1.2rem;
+  border-bottom: 1px solid var(--bdr);
+  display: flex; align-items: center; gap: .4rem;
+  background: rgba(20,162,226,.06);
+}
+.gc-lbl::before { content: '✓'; font-weight: 700; font-size: .52rem; }
+.gc-lbl.gold { color: var(--g); }
+.gc-lbl.gold::before { content: '◆'; }
+.gc-lbl.blue { color: #1587E6; }
+.gc-lbl.blue::before { content: '▸'; }
+
+.gc-body { padding: 1.1rem 1.2rem; display: flex; flex-direction: column; gap: 10px; }
+
+/* ── Separator ── */
+.sep {
+  width: 100%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--bdr), transparent);
+  margin: clamp(1.6rem,3vw,2.4rem) 0;
+}
+
+/* ── Submit row ── */
+.submit-row {
+  display: flex; gap: .65rem; justify-content: flex-end;
+  flex-wrap: wrap; margin-top: 2.2rem;
+  padding-top: 1.6rem; border-top: 1px solid var(--bdr);
+}
+
+/* ── Buttons — exact portfolio bp/bg ── */
+.btn {
+  font-family: 'Fira Code', monospace;
+  font-size: .6rem; letter-spacing: .14em; text-transform: uppercase;
+  cursor: pointer; border: none;
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .82rem 1.7rem;
+  position: relative; overflow: hidden;
+  transition: box-shadow .25s, transform .25s;
+}
+
+/* primary — teal fill with white wipe */
+.btn-p {
+  color: var(--void); background: var(--c);
+}
+.btn-p:hover {
+  box-shadow: 0 0 28px rgba(20,162,226,.75), 0 0 56px rgba(20,162,226,.40);
+  transform: translateY(-2px);
+}
+.btn-p::before {
+  content: ''; position: absolute; inset: 0;
+  background: var(--w);
+  transform: scaleX(0); transform-origin: right;
+  transition: transform .38s var(--ease);
+}
+.btn-p:hover::before { transform: scaleX(1); transform-origin: left; }
+.btn-p span { position: relative; z-index: 1; }
+
+/* ghost */
+.btn-g {
+  color: var(--c); border: 1px solid rgba(20,162,226,.38); background: transparent;
+}
+.btn-g:hover {
+  border-color: var(--c);
+  box-shadow: 0 0 20px rgba(20,162,226,.28);
+  transform: translateY(-2px);
+}
+
+/* neutral */
+.btn-n {
+  color: var(--tx); border: 1px solid var(--bdr); background: transparent;
+}
+.btn-n:hover { color: var(--w); border-color: rgba(255,255,255,.14); background: var(--sf); }
+
+/* ── Reveal — CSS only, IntersectionObserver lightweight ── */
+.rv { opacity: 0; transform: translateY(24px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+.rv.on { opacity: 1; transform: none; }
+.d1{transition-delay:.05s}.d2{transition-delay:.1s}.d3{transition-delay:.15s}
+.d4{transition-delay:.2s}.d5{transition-delay:.25s}.d6{transition-delay:.3s}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  body { padding: 48px 0 40px; }
+  form { padding: 1.4rem 1rem 1.8rem; }
+  .form-header { padding: 1.4rem 1rem; }
+  .header-top { flex-direction: column; align-items: flex-start; }
+  .grid-2,.grid-3,.groups-row { grid-template-columns: 1fr; }
+  .span-2 { grid-column: span 1; }
+  .po-grid { grid-template-columns: 1fr 1fr; }
+  .submit-row { flex-direction: column; }
+  .btn { justify-content: center; }
+}
+  
+/* ── Select / Dropdown styling (matches input aesthetic) ── */
+select {
+  width: 100%;
+  background: var(--deep);
+  color: var(--w);
+  border: 1px solid rgba(20,162,226,.38);
+  border-radius: 0;
+  padding: 0.6rem 0.75rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.875rem;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2314A0DC' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 12px;
+  cursor: pointer;
+  transition: border-color .2s, box-shadow .2s;
+  outline: none;
+  height: auto;
+  line-height: 1.5;
+}
+select:focus {
+  border-color: var(--c);
+  box-shadow: 0 0 0 2px rgba(20,162,226,.35);
+}
+select option {
+  background: var(--deep);
+  color: var(--w);
+}
+
+
+/* ── Past-date error message ── */
+.date-error {
+  display: none;
+  color: var(--r);
+  font-family: 'Fira Code', monospace;
+  font-size: .62rem;
+  letter-spacing: .05em;
+  margin-top: 3px;
+}
+.date-error.visible { display: block; }
+
+/* ── Input with $ prefix ── */
+.input-prefix-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.input-prefix {
+  position: absolute;
+  left: 0.75rem;
+  color: #14A2E2;
+  font-family: 'Fira Code', monospace;
+  font-size: .9rem;
+  pointer-events: none;
+  z-index: 1;
+  user-select: none;
+}
+.input-prefix-wrap input {
+  width: 100%;
+}
+
+/* ── Date input error state ── */
+input.date-invalid {
+  border-color: var(--r) !important;
+  box-shadow: 0 0 0 2px rgba(255,34,85,.15) !important;
+}
+
+
+/* ── Theme Toggle Button ── */
+.theme-toggle {
+  position: fixed; top: 1.1rem; right: 1.2rem; z-index: 9999;
+  width: 42px; height: 42px; border-radius: 50%;
+  border: 1px solid var(--bdr2); background: var(--deep);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; transition: all .25s var(--ease);
+  box-shadow: 0 2px 12px rgba(0,0,0,.25); outline: none;
+}
+.theme-toggle:hover {
+  border-color: var(--c);
+  box-shadow: 0 0 0 3px rgba(20,162,226,.35), 0 2px 12px rgba(0,0,0,.2);
+  transform: scale(1.08);
+}
+
+/* ════════════════════════════════
+   PAGE TABS
+════════════════════════════════ */
+.page-tabs {
+  display: flex; gap: 0;
+  border-bottom: 1px solid var(--bdr2);
+  background: var(--deep);
+  position: relative; z-index: 2;
+}
+.page-tab {
+  padding: .75rem 1.8rem;
+  font-family: 'Fira Code', monospace;
+  font-size: .78rem; font-weight: 700;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--tx); cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color .2s, border-color .2s;
+  user-select: none; background: transparent; border-top: none; border-left: none; border-right: none;
+  outline: none;
+}
+.page-tab:hover { color: var(--w); }
+.page-tab.active { color: var(--c); border-bottom-color: var(--c); }
+
+.page-panel { display: none; }
+.page-panel.active { display: block; }
+
+/* Ref Check specific */
+.ref-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.ref-grid.g3 { grid-template-columns: 1fr 1fr 1fr; }
+.ref-person-card {
+  background: var(--sf); border: 1px solid var(--bdr2);
+  padding: 1.4rem; display: flex; flex-direction: column; gap: .8rem;
+}
+.ref-person-card .card-title {
+  font-family: 'Fira Code', monospace; font-size: .78rem;
+  font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--c); margin-bottom: .3rem;
+}
+.company-block {
+  background: var(--sf); border: 1px solid var(--bdr);
+  padding: 1rem 1.2rem; margin-bottom: .6rem;
+}
+.company-block-title {
+  font-family: 'Fira Code', monospace; font-size: .72rem;
+  font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--g); margin-bottom: .7rem;
+}
+.ref-form-footer {
+  display: flex; gap: 1rem; justify-content: flex-end;
+  padding: 1.4rem 1.6rem; border-top: 1px solid var(--bdr);
+  background: rgba(0,20,50,.04);
+}
+
+</style>
+</head>
+<body>
+
+<!-- PROGRESS — driven by single scroll listener -->
+<div id="prog"></div>
+
+<button class="theme-toggle" id="themeToggle" title="Toggle light/dark mode" aria-label="Toggle theme">🌙</button>
+<div class="form-wrapper">
+
+  <!-- HEADER -->
+  <div class="form-header">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-icon" style="background:transparent;border:none;width:56px;height:56px;padding:0;">
+          <img src="data:image/jpeg;base64,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" alt="Vizva Logo"
+               style="width:56px;height:56px;object-fit:contain;
+                      filter: drop-shadow(0 0 6px rgba(20,162,226,.75)) drop-shadow(0 0 14px rgba(20,160,220,.28));
+                      border-radius:4px;"/>
+        </div>
+        <div class="brand-text">
+          <h1>VIZVA CONSULTANCY SERVICES</h1>
+          <p>Connecting Talent with Opportunity · Specialized Staffing Solutions</p>
+        </div>
+      </div>
+      <div class="header-badge" id="header-badge">PO Format</div>
+    </div>
+  </div>
+  <div class="header-stripe"></div>
+
+  <!-- PAGE TABS -->
+  <div class="page-tabs">
+    <button class="page-tab active" onclick="switchTab('po')"     id="tab-po">PO Format</button>
+    <button class="page-tab"        onclick="switchTab('ref')"    id="tab-ref">Reference Check</button>
+  </div>
+
+  <!-- TICKER — pure CSS -->
+  <div class="ticker-wrap">
+    <div class="ticker-track">
+      <div class="ticker-item">Candidate Profile <span class="td">✦</span></div>
+      <div class="ticker-item">PO Record <span class="td">✦</span></div>
+      <div class="ticker-item">Job Details <span class="td">✦</span></div>
+      <div class="ticker-item">Team Assignments <span class="td">✦</span></div>
+      <div class="ticker-item">Vizva Intel <span class="td">✦</span></div>
+      <div class="ticker-item">GGR · AMD · LKN <span class="td">✦</span></div>
+      <!-- duplicate for seamless loop -->
+      <div class="ticker-item">Candidate Profile <span class="td">✦</span></div>
+      <div class="ticker-item">PO Record <span class="td">✦</span></div>
+      <div class="ticker-item">Job Details <span class="td">✦</span></div>
+      <div class="ticker-item">Team Assignments <span class="td">✦</span></div>
+      <div class="ticker-item">Vizva Intel <span class="td">✦</span></div>
+      <div class="ticker-item">GGR · AMD · LKN <span class="td">✦</span></div>
+    </div>
+  </div>
+
+  <div class="page-panel active" id="panel-po">
+<form id="candidateForm" onsubmit="handleSubmit(event)">
+
+    <!-- ① BASIC INFO -->
+    <div class="section-block rv">
+      <div class="sec-eye">01 — Identity</div>
+      <div class="sec-head">Basic <span class="cy">Information.</span></div>
+      <div class="grid grid-2">
+        <div class="field rv d1"><label>Name of Candidate <span class="req">*</span></label><input type="text" name="candidateName" placeholder="Full name" required/></div>
+        <div class="field rv d2"><label>SST / Vizva <span class="req">*</span></label>
+          <select name="sstVizva" required>
+            <option value="" disabled selected>Select…</option>
+            <option value="SST">SST</option>
+            <option value="VCS">VCS</option>
+            <option value="FED">FED</option>
+          </select></div>
+        <div class="field rv d3"><label>Location <span class="req">*</span></label>
+          <select name="location" required>
+            <option value="" disabled selected>Select…</option>
+            <option value="GGR">GGR</option>
+            <option value="AMD">AMD</option>
+            <option value="LKN">LKN</option>
+          </select></div>
+        <div class="field rv d4"><label>Personal Phone Number <span class="req">*</span></label><input type="tel" id="phoneInput" name="phone" placeholder="+1 000-000-0000" maxlength="15" required/></div>
+        <div class="field rv d5"><label>Email ID <span class="req">*</span></label><input type="email" name="email" placeholder="email@example.com" required/></div>
+        <div class="field span-2 rv d6"><label>Full Address <span class="req">*</span></label><textarea name="address" placeholder="Street, City, State, ZIP" required></textarea></div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- ② PO COUNT -->
+    <div class="section-block rv">
+      <div class="sec-eye">02 — Pipeline</div>
+      <div class="sec-head">PO <span class="gd">Count.</span></div>
+      <div class="po-grid">
+        <div class="po-cell"><div class="po-label">Total</div><input type="text" name="poTotal" placeholder="00" required/></div>
+        <div class="po-cell"><div class="po-label">AMD</div><input type="text" name="poAMD" placeholder="00" required/></div>
+        <div class="po-cell"><div class="po-label">GGR</div><input type="text" name="poGGR" placeholder="00" required/></div>
+        <div class="po-cell"><div class="po-label">LKO</div><input type="text" name="poLKO" placeholder="00" required/></div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- ③ JOB DETAILS -->
+    <div class="section-block rv">
+      <div class="sec-eye">03 — Placement</div>
+      <div class="sec-head">Job <span class="cy">Details.</span></div>
+      <div class="grid grid-2">
+        <div class="field rv d1"><label>Type of Job <span class="req">*</span></label>
+          <div class="radio-group">
+            <label><input type="radio" name="jobType" value="W2"/> W2</label>
+            <label><input type="radio" name="jobType" value="C2C"/> C2C</label>
+            <label><input type="radio" name="jobType" value="FTE"/> FTE</label>
+            <label><input type="radio" name="jobType" value="Part Time"/> Part Time</label>
+            <label><input type="radio" name="jobType" value="1099"/> 1099</label>
+          </div>
+          <span class="date-error" id="jobTypeErr">⚠ Please select a Job Type</span>
+        </div>
+        <div class="field rv d2"><label>Position that Applied <span class="req">*</span></label><input type="text" name="position" placeholder="e.g. Java Developer" required/></div>
+        <div class="field rv d3"><label>Job Location <span class="req">*</span></label><input type="text" name="jobLocation" placeholder="City / Remote" required/></div>
+        <div class="field rv d4"><label>Implementation / End Client <span class="req">*</span></label><input type="text" name="endClient" placeholder="Client name" required/></div>
+        <div class="field rv d5"><label>Vendor Details <span class="req">*</span></label><input type="text" name="vendor" placeholder="Vendor name / details" required/></div>
+        <div class="field rv d6"><label id="rateLabel">Rate <span class="req">*</span></label>
+          <div class="input-prefix-wrap">
+            <span class="input-prefix">$</span>
+            <input type="text" id="rateInput" name="rate" placeholder="75/hr" style="padding-left:2.1rem;" required/>
+          </div></div>
+        <div class="field rv d1"><label>Signup Date <span class="req">*</span></label><input type="date" id="signupDate" name="signupDate" required/><span class="date-error" id="signupDateErr">⚠ Date cannot be in the future</span></div>
+        <div class="field rv d2"><label>Training Yes/No <span class="req">*</span></label>
+          <div class="radio-group">
+            <label><input type="radio" name="training" value="Yes"/> Yes</label>
+            <label><input type="radio" name="training" value="No"/> No</label>
+          </div>
+          <span class="date-error" id="trainingErr">⚠ Please select Training Yes/No</span>
+        </div>
+        <div class="field span-2 rv d3"><label>When Training Done <span class="req">*</span></label><input type="text" id="trainingDoneInput" name="trainingDone" placeholder="e.g. 2025-06-15 or NA"/></div>
+        <div class="field rv d1"><label>Visa Status <span class="req">*</span></label>
+          <select name="visaStatus" required>
+            <option value="" disabled selected>Select…</option>
+            <option value="USC">USC</option>
+            <option value="GC">GC</option>
+            <option value="H1B">H1B</option>
+            <option value="H4 EAD">H4 EAD</option>
+            <option value="OPT">OPT</option>
+            <option value="STEM OPT">STEM OPT</option>
+            <option value="CPT">CPT</option>
+            <option value="TN">TN</option>
+            <option value="L2 EAD">L2 EAD</option>
+            <option value="GC EAD">GC EAD</option>
+          </select>
+        </div>
+        <div class="field rv d2"><label>Offer Letter <span class="req">*</span></label>
+          <select name="offerLetter" required>
+            <option value="" disabled selected>Select…</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+        <div class="field rv d2"><label>BGC / Reference Check <span class="req">*</span></label>
+          <select name="bgcCheck" required>
+            <option value="" disabled selected>Select…</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- ④ TEAM ASSIGNMENTS -->
+    <div class="section-block rv">
+      <div class="sec-eye">04 — Command</div>
+      <div class="sec-head">Team <span class="cy">Assignments.</span></div>
+      <div class="groups-row" style="margin-bottom:1px">
+        <div class="group-card rv d1">
+          <div class="gc-lbl gold">Sales</div>
+          <div class="gc-body">
+            <div class="field"><label>Lead By <span class="req">*</span></label><input type="text" name="salesLeadBy" placeholder="Name" required/></div>
+            <div class="field"><label>Sales Person <span class="req">*</span></label><input type="text" name="salesPerson" placeholder="Name" required/></div>
+            <div class="field"><label>Team Lead <span class="req">*</span></label><input type="text" name="salesTeamLead" placeholder="Name" required/></div>
+            <div class="field"><label>Manager <span class="req">*</span></label><input type="text" name="salesManager" placeholder="Name" value="Roma Sahu" required/></div>
+          </div>
+        </div>
+        <div class="group-card rv d2">
+          <div class="gc-lbl blue">Interview Support</div>
+          <div class="gc-body">
+            <div class="field"><label>Support By <span class="req">*</span></label><input type="text" name="intSupportBy" placeholder="Name" required/></div>
+            <div class="field"><label>Team Lead <span class="req">*</span></label><input type="text" name="intTeamLead" placeholder="Name" required/></div>
+            <div class="field"><label>Manager <span class="req">*</span></label><input type="text" name="intManager" placeholder="Name" value="Harsh Patel" required/></div>
+          </div>
+        </div>
+      </div>
+      <div class="group-card rv d3" style="margin-top:1px">
+        <div class="gc-lbl">Marketing</div>
+        <div class="gc-body">
+          <div class="grid grid-3" style="gap:11px">
+            <div class="field"><label>Application By <span class="req">*</span></label><input type="text" name="mktAppBy" placeholder="Name" required/></div>
+            <div class="field"><label>Recruiter Name <span class="req">*</span></label><input type="text" name="mktRecruiter" placeholder="Name" required/></div>
+            <div class="field"><label>Team Lead <span class="req">*</span></label><input type="text" name="mktTeamLead" placeholder="Name" required/></div>
+            <div class="field"><label>Ast. Manager <span class="req">*</span></label><input type="text" name="mktAsstMgr" placeholder="Name" required/></div>
+            <div class="field"><label>Manager <span class="req">*</span></label><input type="text" name="mktManager" placeholder="Name" required/></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- ⑤ MARKETING & AGREEMENT -->
+    <div class="section-block rv">
+      <div class="sec-eye">05 — Timeline</div>
+      <div class="sec-head">Marketing &amp; <span class="gd">Agreement.</span></div>
+      <div class="grid grid-2">
+        <div class="field rv d1"><label>Marketing Start Date <span class="req">*</span></label><input type="date" id="mktStart" name="mktStart" required/><span class="date-error" id="mktStartErr">⚠ Date cannot be in the future</span></div>
+        <div class="field rv d2"><label>Marketing End Date <span class="req">*</span></label><input type="date" name="mktEnd" required/></div>
+        <div class="field rv d3">
+          <label>Joining Date <span class="req">*</span></label>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <input type="date" id="joiningDateInput" name="joiningDate" style="transition:opacity .2s;"/>
+            <label style="display:flex;align-items:center;gap:.55rem;cursor:pointer;font-family:'Fira Code',monospace;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tx);user-select:none;" onmouseover="this.style.color='var(--w)'" onmouseout="this.style.color='var(--tx)'">
+              <input type="checkbox" id="joiningAfterBGC" name="joiningAfterBGC" style="width:14px;height:14px;accent-color:var(--c);cursor:pointer;flex-shrink:0;" onchange="toggleJoiningDate(this)"/>
+              After BGC
+            </label>
+          </div>
+        </div>
+        <div class="field rv d4"><label>Agreement Percentage and Months <span class="req">*</span></label><input type="text" name="agreement" placeholder="e.g. 15% / 6 months" required/></div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- ⑥ JOB DESCRIPTION -->
+    <div class="section-block rv">
+      <div class="sec-eye">06 — Context</div>
+      <div class="sec-head">Job <span class="cy">Description.</span></div>
+      <div class="field">
+        <label>Job Description <span class="req">*</span></label>
+        <textarea name="jobDescription" placeholder="Enter job description..." style="min-height:110px" required></textarea>
+      </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="submit-row">
+      <button type="reset"   class="btn btn-n">↺ Clear</button>
+      <button type="button"  class="btn btn-g" onclick="downloadAsDoc()">↓ Download .doc</button>
+      <button type="submit"  class="btn btn-p"><span>✓ Submit Form</span></button>
+    </div>
+
+  </form>
+</div><!-- end panel-po -->
+
+<!-- ══════════════════════════════════════
+     REFERENCE CHECK PAGE
+══════════════════════════════════════ -->
+<div class="page-panel" id="panel-ref">
+
+  <form id="refForm" onsubmit="handleRefSubmit(event)">
+
+    <!-- ① CANDIDATE INFO -->
+    <div class="section-block rv">
+      <div class="sec-eye">01 — Candidate</div>
+      <div class="sec-head">Basic <span class="cy">Information.</span></div>
+      <div class="grid grid-2">
+        <div class="field rv"><label>Name of Candidate <span class="req">*</span></label><input type="text" name="refCandName" placeholder="Full name" required/></div>
+        <div class="field rv"><label>Visa Status <span class="req">*</span></label>
+          <select name="refVisaStatus" required>
+            <option value="" disabled selected>Select…</option>
+            <option>USC</option><option>GC</option><option>H1B</option>
+            <option>H4 EAD</option><option>OPT</option><option>STEM OPT</option>
+            <option>CPT</option><option>TN</option><option>L2 EAD</option>
+            <option>GC EAD</option><option>F1 Stem OPT EAD</option>
+          </select>
+        </div>
+        <div class="field rv"><label>Candidate Technology <span class="req">*</span></label><input type="text" name="refPosition" placeholder="e.g. Data Engineer / ML Engineer" required/></div>
+        <div class="field rv"><label>Job Role (Applied) <span class="req">*</span></label><input type="text" name="refJobRole" placeholder="e.g. Senior Data Engineer" required/></div>
+        <div class="field rv">
+          <label>Candidate Location <span class="req">*</span></label>
+          <input type="text" name="refLocation" placeholder="e.g. Austin, TX" list="locationList" autocomplete="off" required/>
+          <datalist id="locationList">
+            <option value="Austin, TX"/>
+            <option value="Dallas, TX"/>
+            <option value="Houston, TX"/>
+            <option value="New York, NY"/>
+            <option value="New Jersey, NJ"/>
+            <option value="Chicago, IL"/>
+            <option value="Atlanta, GA"/>
+            <option value="Charlotte, NC"/>
+            <option value="Raleigh, NC"/>
+            <option value="Seattle, WA"/>
+            <option value="San Jose, CA"/>
+            <option value="San Francisco, CA"/>
+            <option value="Los Angeles, CA"/>
+            <option value="Denver, CO"/>
+            <option value="Phoenix, AZ"/>
+            <option value="Minneapolis, MN"/>
+            <option value="Detroit, MI"/>
+            <option value="Columbus, OH"/>
+            <option value="Boston, MA"/>
+            <option value="Washington, DC"/>
+            <option value="Remote"/>
+          </datalist>
+        </div>
+        <div class="field rv"><label>End Client (Vendor Hiring For) <span class="req">*</span></label><input type="text" name="refEndClient" placeholder="e.g. TransformCo" required/></div>
+        <div class="field rv">
+          <label>Contract Tenure <span class="req">*</span></label>
+          <input type="text" name="refTimePeriod" placeholder="e.g. 6 Months" list="tenureList" autocomplete="off" required/>
+          <datalist id="tenureList">
+            <option value="1 Month"/>
+            <option value="2 Months"/>
+            <option value="3 Months"/>
+            <option value="4 Months"/>
+            <option value="6 Months"/>
+            <option value="8 Months"/>
+            <option value="9 Months"/>
+            <option value="12 Months"/>
+            <option value="18 Months"/>
+            <option value="24 Months"/>
+            <option value="Ongoing / Present"/>
+          </datalist>
+        </div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- ② VENDOR INFO -->
+    <div class="section-block rv">
+      <div class="sec-eye">02 — Vendor</div>
+      <div class="sec-head">Vendor <span class="cy">Details.</span></div>
+      <div class="grid grid-2">
+        <div class="field rv"><label>Vendor Name <span class="req">*</span></label><input type="text" name="refVendorName" placeholder="e.g. Hunter (Akdis) Matchett" required/></div>
+        <div class="field rv"><label>Vendor Title <span class="req">*</span></label><input type="text" name="refVendorTitle" placeholder="e.g. Technical Recruiter" required/></div>
+        <div class="field rv">
+          <label>Vendor Company <span class="req">*</span></label>
+          <input type="text" name="refVendorOffice" id="refVendorCompany" placeholder="e.g. Kforce, Robert Half…" list="vendorCompanyList" autocomplete="off" required/>
+          <datalist id="vendorCompanyList">
+            <option value="Kforce"/>
+            <option value="Robert Half"/>
+            <option value="TEKsystems"/>
+            <option value="Apex Systems"/>
+            <option value="Insight Global"/>
+            <option value="Randstad Technologies"/>
+            <option value="Staffmark"/>
+            <option value="Mastech Digital"/>
+            <option value="Infosys BPM"/>
+            <option value="Wipro"/>
+            <option value="HCL Technologies"/>
+            <option value="Cognizant"/>
+            <option value="Tata Consultancy Services"/>
+            <option value="Accenture"/>
+            <option value="Capgemini"/>
+            <option value="Deloitte Consulting"/>
+            <option value="CGI Group"/>
+            <option value="ManpowerGroup"/>
+            <option value="Adecco"/>
+            <option value="Spherion"/>
+          </datalist>
+        </div>
+        <div class="field rv"><label>Mobile Phone <span class="req">*</span></label><input type="tel" name="refVendorMobile" placeholder="e.g. 303-582-4570" required/></div>
+        <div class="field rv"><label>Vendor Email ID <span class="req">*</span></label><input type="email" name="refVendorLinkedIn" placeholder="e.g. vendor@company.com" required/></div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- ③ COMPANY HISTORY -->
+    <div class="section-block rv">
+      <div class="sec-eye">03 — History</div>
+      <div class="sec-head">Reference <span class="cy">Provided.</span></div>
+
+      <!-- Company 1 (static) -->
+      <div id="companies-container">
+        <div class="company-block rv" id="company-block-1">
+          <div class="company-block-title">Company 1</div>
+          <div class="grid grid-2">
+            <div class="field"><label>Company Name <span class="req">*</span></label><input type="text" id="refCo1Name" name="refCo1Name" placeholder="e.g. Uber" required oninput="syncCompanyToRef(1,this.value)"/></div>
+            <div class="field"><label>Position <span class="req">*</span></label><input type="text" name="refCo1Position" placeholder="e.g. Data Engineer / ML Engineer" required/></div>
+            <div class="field"><label>Time Period <span class="req">*</span></label><input type="text" name="refCo1Period" placeholder="e.g. Mar 2025 – Present" required/></div>
+            <div class="field"><label>Notes</label><input type="text" name="refCo1Notes" placeholder="Additional info"/></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Company Button -->
+      <div style="margin-top:1rem;display:flex;gap:.6rem;align-items:center;">
+        <button type="button" id="addCompanyBtn" class="btn btn-g" onclick="addCompanyBlock()" style="font-size:.58rem;">
+          + Add Company
+        </button>
+      </div>
+
+      <script>
+        var companyCount = 1;
+
+        /*
+          Mapping: Company N → Ref (2N-1) primary + Ref (2N) optional
+          Company 1 → Ref 1 (static) + Ref 2 (via button)
+          Company 2 → Ref 3 (auto) + Ref 4 (via button)
+          Company 3 → Ref 5 (auto) + Ref 6 (via button) ...
+        */
+        function primaryRef(n)   { return (2 * n) - 1; }
+        function secondaryRef(n) { return  2 * n; }
+
+        /* Get element by id or name */
+        function getEl(id) {
+          return document.getElementById(id) || document.querySelector('[name="' + id + '"]');
+        }
+
+        /* Get current company name value for company N */
+        function getCoName(n) {
+          var el = document.getElementById('refCo' + n + 'Name') ||
+                   document.querySelector('[name="refCo' + n + 'Name"]');
+          return el ? el.value : '';
+        }
+
+        /* Sync company name → both ref company fields if they exist */
+        function syncCompanyToRef(n, val) {
+          [primaryRef(n), secondaryRef(n)].forEach(function(rn) {
+            var f = document.getElementById('ref' + rn + 'Company');
+            if (f) f.value = val;
+          });
+        }
+
+        function makeRefCard(refN) {
+          var companyN = Math.ceil(refN / 2);
+          var card = document.createElement('div');
+          card.className = 'ref-person-card rv';
+          card.id = 'ref-card-' + refN;
+          var isPrimary = (refN % 2 !== 0);
+          card.innerHTML =
+            '<div class="card-title" style="display:flex;justify-content:space-between;align-items:center;">' +
+              '<span>Reference ' + refN + '</span>' +
+              (!isPrimary ? '<button type="button" onclick="removeRefCard(' + refN + ',' + companyN + ')" style="background:none;border:none;color:var(--r);font-family:\'Fira Code\',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;padding:.2rem .5rem;opacity:.8;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.8">&#x2715; Remove</button>' : '') +
+            '</div>' +
+            '<div class="field"><label>Full Name</label><input type="text" name="ref' + refN + 'Name" placeholder="e.g. Full Name"/></div>' +
+            '<div class="field"><label>Title / Role</label><input type="text" name="ref' + refN + 'Title" placeholder="e.g. Manager"/></div>' +
+            '<div class="field"><label>Email</label><input type="email" name="ref' + refN + 'Email" placeholder="e.g. name@company.com"/></div>' +
+            '<div class="field"><label>Phone</label><input type="tel" name="ref' + refN + 'Phone" placeholder="e.g. 512-855-7163"/></div>' +
+            '<div class="field"><label>Company</label><input type="text" id="ref' + refN + 'Company" name="ref' + refN + 'Company" placeholder="Auto-filled from above"/></div>';
+          return card;
+        }
+
+        /* Remove a single ref card; restore add-button if secondary removed */
+        function removeRefCard(refN, companyN) {
+          var isSecondary = (refN === secondaryRef(companyN));
+          var fade = function(el, cb) {
+            if (!el) return;
+            el.style.transition = 'opacity .25s, transform .25s';
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(-8px)';
+            setTimeout(function(){ el.remove(); if(cb) cb(); }, 260);
+          };
+
+          if (isSecondary) {
+            // Just remove secondary ref, restore the add button
+            fade(document.getElementById('ref-card-' + refN), function() {
+              var btn = document.getElementById('add-ref-wrap-' + companyN);
+              if (btn) {
+                btn.style.display = 'block';
+                btn.style.opacity = '0';
+                setTimeout(function(){ btn.style.transition='opacity .25s'; btn.style.opacity='1'; }, 30);
+              }
+            });
+          } else {
+            // Primary removed → also remove secondary + hide add button
+            fade(document.getElementById('ref-card-' + refN));
+            fade(document.getElementById('ref-card-' + secondaryRef(companyN)));
+            var btn = document.getElementById('add-ref-wrap-' + companyN);
+            if (btn) fade(btn);
+          }
+        }
+
+        /* Add secondary ref (Ref 2, Ref 4, Ref 6…) for a given company */
+        function addSecondRef(companyN) {
+          var refN = secondaryRef(companyN);
+          if (document.getElementById('ref-card-' + refN)) return; // already exists
+          var grid = document.getElementById('ref-contacts-grid');
+          var card = makeRefCard(refN);
+          // Insert after primary card
+          var primary = document.getElementById('ref-card-' + primaryRef(companyN));
+          if (primary && primary.nextSibling) {
+            grid.insertBefore(card, primary.nextSibling);
+          } else {
+            grid.appendChild(card);
+          }
+          setTimeout(function(){
+            card.classList.add('on');
+            // Sync company name after card is in DOM
+            var coVal = getCoName(companyN);
+            if (coVal) {
+              var f = document.getElementById('ref' + refN + 'Company');
+              if (f) f.value = coVal;
+            }
+          }, 30);
+          // Hide the button
+          var btn = document.getElementById('add-ref-wrap-' + companyN);
+          if (btn) {
+            btn.style.transition = 'opacity .2s';
+            btn.style.opacity = '0';
+            setTimeout(function(){ btn.style.display = 'none'; }, 210);
+          }
+        }
+
+        function addCompanyBlock() {
+          companyCount++;
+          var n = companyCount;
+
+          /* ── Add Company block ── */
+          var container = document.getElementById('companies-container');
+          var block = document.createElement('div');
+          block.className = 'company-block rv';
+          block.id = 'company-block-' + n;
+          block.style.marginTop = '.8rem';
+          block.innerHTML =
+            '<div class="company-block-title" style="display:flex;justify-content:space-between;align-items:center;">' +
+              '<span>Company ' + n + '</span>' +
+              '<button type="button" onclick="removeCompanyBlock(' + n + ')" style="background:none;border:none;color:var(--r);font-family:Fira Code,monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;padding:.2rem .5rem;opacity:.8;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.8">&#x2715; Remove</button>' +
+            '</div>' +
+            '<div class="grid grid-2">' +
+              '<div class="field"><label>Company Name <span class="req">*</span></label><input type="text" id="refCo' + n + 'Name" name="refCo' + n + 'Name" placeholder="e.g. Company Name" required oninput="syncCompanyToRef(' + n + ',this.value)"/></div>' +
+              '<div class="field"><label>Position <span class="req">*</span></label><input type="text" name="refCo' + n + 'Position" placeholder="e.g. Software Engineer" required/></div>' +
+              '<div class="field"><label>Time Period <span class="req">*</span></label><input type="text" name="refCo' + n + 'Period" placeholder="e.g. Jan 2024 – Dec 2024" required/></div>' +
+              '<div class="field"><label>Notes</label><input type="text" name="refCo' + n + 'Notes" placeholder="Additional info"/></div>' +
+            '</div>';
+          container.appendChild(block);
+          setTimeout(function(){ block.classList.add('on'); }, 30);
+
+          /* ── Add primary ref card only ── */
+          var grid = document.getElementById('ref-contacts-grid');
+          var pRefN = primaryRef(n);
+          var card = makeRefCard(pRefN);
+          grid.appendChild(card);
+          setTimeout(function(){
+            card.classList.add('on');
+            // Pre-fill company name if already typed
+            var coVal = getCoName(n);
+            if (coVal) {
+              var cf = document.getElementById('ref' + pRefN + 'Company');
+              if (cf) cf.value = coVal;
+            }
+          }, 30);
+
+          /* ── Add "Add Reference" button for this company ── */
+          var sRefN = secondaryRef(n);
+          var refSection = document.getElementById('ref-contacts-grid').parentNode;
+          var btnWrap = document.createElement('div');
+          btnWrap.id = 'add-ref-wrap-' + n;
+          btnWrap.style.cssText = 'margin-top:.75rem;margin-bottom:.4rem;';
+          btnWrap.innerHTML = '<button type="button" class="btn btn-g" onclick="addSecondRef(' + n + ')" style="font-size:.58rem;">+ Add Reference ' + sRefN + '</button>';
+          // Insert after ref-contacts-grid parent section
+          var existingBtn = document.getElementById('add-ref-wrap-' + (n-1));
+          if (existingBtn && existingBtn.nextSibling) {
+            existingBtn.parentNode.insertBefore(btnWrap, existingBtn.nextSibling);
+          } else {
+            refSection.appendChild(btnWrap);
+          }
+          setTimeout(function(){ btnWrap.style.opacity = '1'; }, 30);
+        }
+
+        function removeCompanyBlock(n) {
+          var fade = function(el) {
+            if (!el) return;
+            el.style.transition = 'opacity .25s, transform .25s';
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(-8px)';
+            setTimeout(function(){ el.remove(); }, 260);
+          };
+          fade(document.getElementById('company-block-' + n));
+          fade(document.getElementById('ref-card-' + primaryRef(n)));
+          fade(document.getElementById('ref-card-' + secondaryRef(n)));
+          fade(document.getElementById('add-ref-wrap-' + n));
+        }
+      </script>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- ④ REFERENCE CONTACTS -->
+    <div class="section-block rv">
+      <div class="sec-eye">04 — References</div>
+      <div class="sec-head">Reference <span class="cy">Contacts.</span></div>
+      <div class="ref-grid" id="ref-contacts-grid">
+
+        <!-- Reference 1 (static — Company 1) -->
+        <div class="ref-person-card rv" id="ref-card-1">
+          <div class="card-title">Reference 1</div>
+          <div class="field"><label>Full Name</label><input type="text" name="ref1Name" placeholder="e.g. Edric Miller"/></div>
+          <div class="field"><label>Title / Role</label><input type="text" name="ref1Title" placeholder="e.g. Manager"/></div>
+          <div class="field"><label>Email</label><input type="email" name="ref1Email" placeholder="e.g. edric@uber-us.co"/></div>
+          <div class="field"><label>Phone</label><input type="tel" name="ref1Phone" placeholder="e.g. 512-855-7163"/></div>
+          <div class="field"><label>Company</label><input type="text" id="ref1Company" name="ref1Company" placeholder="Auto-filled from Company 1"/></div>
+        </div>
+
+      </div>
+
+      <!-- Add Reference button for Company 1 -->
+      <div id="add-ref-wrap-1" style="margin-top:.75rem;margin-bottom:.4rem;">
+        <button type="button" class="btn btn-g" onclick="addSecondRef(1)" style="font-size:.58rem;">+ Add Reference 2</button>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- SCREENING CONFIRMATION CHECKBOXES -->
+    <div class="section-block rv" style="margin-top:0;">
+      <div class="sec-eye">05 — Confirmation</div>
+      <div class="sec-head">Screening <span class="cy">Status.</span></div>
+      <div style="display:flex;flex-direction:column;gap:.85rem;margin-top:.4rem;">
+
+        <label style="display:flex;align-items:center;gap:.75rem;cursor:pointer;font-family:'Fira Code',monospace;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tx);user-select:none;" onmouseover="this.style.color='var(--w)'" onmouseout="this.style.color='var(--tx)'">
+          <input type="checkbox" id="chkInterview" name="chkInterview" style="width:16px;height:16px;accent-color:var(--c);cursor:pointer;flex-shrink:0;"/>
+          Interview / Screening has been completed
+        </label>
+
+
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- FOOTER -->
+    <div class="ref-form-footer">
+      <button type="button" class="btn-clear" onclick="clearRefForm()">↺ Clear</button>
+      <button type="button" class="btn-submit" onclick="downloadRefDoc()" style="background:linear-gradient(135deg,var(--g),var(--c));color:#fff;border:none;padding:.75rem 1.8rem;font-family:'Fira Code',monospace;font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">↓ Download .doc</button>
+    </div>
+
+  </form>
+</div><!-- end panel-ref -->
+
+<script>
+/* ── Progress bar — single passive listener ── */
+(function(){
+  const b = document.getElementById('prog');
+  window.addEventListener('scroll', () => {
+    const t = document.documentElement.scrollHeight - innerHeight;
+    b.style.transform = 'scaleX(' + (window.scrollY / t) + ')';
+  }, { passive: true });
+})();
+
+/* ── Scroll reveal — lightweight IntersectionObserver only ── */
+(function(){
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.rv').forEach(el => obs.observe(el));
+})();
+
+/* ════════════════════════════════════════════════
+   ALL ORIGINAL FORM FUNCTIONS — UNCHANGED
+════════════════════════════════════════════════ */
+function g(name) {
+  const all = document.querySelectorAll('[name="' + name + '"]');
+  if (all.length > 1 && all[0].type === 'radio') {
+    const c = document.querySelector('[name="' + name + '"]:checked');
+    return c ? c.value : '';
+  }
+  return all[0] ? (all[0].value || '') : '';
+}
+
+const B  = 'border:1px solid #000;';
+const F  = 'font-size:10pt;font-family:Arial,sans-serif;';
+const P  = 'padding:3pt 5pt;';
+const VM = 'vertical-align:middle;';
+const BG = 'background:#ffffff;';
+
+const W1 = '190pt';
+const W2 = '105pt';
+const W3 = '205pt';
+
+const sPlain    = `${B}${F}${P}${VM}${BG}`;
+const sLabelCol = `${sPlain} width:${W1};`;
+const sSubCol   = `${sPlain} width:${W2};`;
+const sValCol   = `${sPlain} width:${W3};`;
+const sGroupCol = `${sPlain} width:${W1};`;
+
+function pr(label, value) {
+  return `<tr>
+    <td colspan="2" style="${sLabelCol}">${label}</td>
+    <td style="${sValCol}">${value}</td>
+  </tr>`;
+}
+
+function poRows(total, amd, ggr, lko) {
+  const rows = [
+    ['TOTAL –', total],
+    ['AMD –',   amd],
+    ['GGR –',   ggr],
+    ['LKO -',   lko],
+  ];
+  return rows.map((r, i) => {
+    const groupCell = i === 0
+      ? `<td rowspan="4" style="${sGroupCol}">PO Count</td>`
+      : '';
+    return `<tr>${groupCell}
+      <td style="${sSubCol}">${r[0]}</td>
+      <td style="${sValCol}">${r[1]}</td>
+    </tr>`;
+  }).join('');
+}
+
+function grp(name, rows) {
+  return rows.map((r, i) => {
+    const groupCell = i === 0
+      ? `<td rowspan="${rows.length}" style="${sGroupCol}">${name}</td>`
+      : '';
+    return `<tr>${groupCell}
+      <td style="${sSubCol}">${r[0]}</td>
+      <td style="${sValCol}">${r[1]}</td>
+    </tr>`;
+  }).join('');
+}
+
+function downloadAsDoc() {
+  function fmtDate(val) {
+    if (!val) return '';
+    const p = val.split('-');
+    if (p.length === 3) return p[1] + '/' + p[2] + '/' + p[0];
+    return val;
+  }
+
+  const d = {
+    name:         g('candidateName'),
+    sst:          g('sstVizva'),
+    location:     g('location'),
+    poTotal:      g('poTotal'),
+    poAMD:        g('poAMD'),
+    poGGR:        g('poGGR'),
+    poLKO:        g('poLKO'),
+    phone:        g('phone'),
+    email:        g('email'),
+    address:      g('address'),
+    jobType:      g('jobType'),
+    position:     g('position'),
+    jobLocation:  g('jobLocation'),
+    endClient:    g('endClient'),
+    vendor:       g('vendor'),
+    rate: (function(){
+      var sel = document.querySelector('input[name="jobType"]:checked');
+      var jobType = sel ? sel.value : '';
+      var val = g('rate');
+      if (!val) return '';
+      var clean = val.replace(/[^0-9,]/g,'');
+      if (!clean) return '';
+      if (jobType === 'FTE')        return '$' + clean + ' /yr (Annual)';
+      if (jobType === 'W2')         return '$' + clean + ' /hr (Hourly — W2)';
+      if (jobType === 'C2C')        return '$' + clean + ' /hr (Hourly — C2C)';
+      if (jobType === '1099')       return '$' + clean + ' /hr (Hourly — 1099)';
+      if (jobType === 'Part Time')  return '$' + clean + ' /hr (Part Time)';
+      return '$' + clean;
+    })(),
+
+
+    signupDate:   fmtDate(g('signupDate')),
+    training:     g('training'),
+    trainingDone: (function(){ const v=g('trainingDone'); return v==='NA'?'NA':fmtDate(v); })(),
+    visaStatus:   g('visaStatus'),
+    offerLetter:  g('offerLetter'),
+    bgcCheck:     g('bgcCheck'),
+    salesLeadBy:  g('salesLeadBy'),
+    salesPerson:  g('salesPerson'),
+    salesTeamLead:g('salesTeamLead'),
+    salesManager: g('salesManager'),
+    intSupportBy: g('intSupportBy'),
+    intTeamLead:  g('intTeamLead'),
+    intManager:   g('intManager'),
+    mktAppBy:     g('mktAppBy'),
+    mktRecruiter: g('mktRecruiter'),
+    mktTeamLead:  g('mktTeamLead'),
+    mktAsstMgr:   g('mktAsstMgr'),
+    mktManager:   g('mktManager'),
+    mktStart:     fmtDate(g('mktStart')),
+    mktEnd:       fmtDate(g('mktEnd')),
+    joiningDate:  (document.getElementById('joiningAfterBGC') && document.getElementById('joiningAfterBGC').checked) ? 'After BGC' : fmtDate(g('joiningDate')),
+    agreement:    g('agreement'),
+    jobDesc:      g('jobDescription'),
+  };
+
+  const table = `
+<table style="border-collapse:collapse;width:500pt;table-layout:fixed;">
+  ${pr('Name of Candidate:', d.name)}
+  ${pr('SST/Vizva', d.sst)}
+  ${pr('Location', d.location)}
+  ${poRows(d.poTotal, d.poAMD, d.poGGR, d.poLKO)}
+  ${pr('Personal Phone Number', d.phone)}
+  ${pr('Email ID', d.email)}
+  ${pr('Full Address', d.address)}
+  ${pr('Type of Job: W2 / C2C / FTE', d.jobType)}
+  ${pr('Position that Applied:', d.position)}
+  ${pr('Job Location:', d.jobLocation)}
+  ${pr('Implementation/End Client', d.endClient)}
+  ${pr('Vendor Details', d.vendor)}
+  ${pr('Rate:', d.rate)}
+  ${pr('Signup Date:', d.signupDate)}
+  ${pr('Training Yes/No:', d.training)}
+  ${pr('When training Done:', d.trainingDone)}
+  ${grp('Sales', [
+    ['Lead By',      d.salesLeadBy],
+    ['Sales Person', d.salesPerson],
+    ['Team Lead',    d.salesTeamLead],
+    ['Manager',      d.salesManager],
+  ])}
+  ${grp('Interview Support', [
+    ['Support by', d.intSupportBy],
+    ['Team Lead',  d.intTeamLead],
+    ['Manager',    d.intManager],
+  ])}
+  ${grp('Marketing', [
+    ['Application BY', d.mktAppBy],
+    ['Recruiter Name', d.mktRecruiter],
+    ['Team Lead',      d.mktTeamLead],
+    ['Ast. Manager',   d.mktAsstMgr],
+    ['Manager',        d.mktManager],
+  ])}
+  ${pr('Marketing Start Date:', d.mktStart)}
+  ${pr('Marketing End Date:', d.mktEnd)}
+  ${pr('Joining Date', d.joiningDate)}
+  ${pr('Agreement Percentage and Months', d.agreement)}
+  <tr>
+    <td colspan="3" style="${sPlain} font-weight:bold;">&nbsp;Job Description</td>
+  </tr>
+  <tr>
+    <td colspan="3" style="${sPlain} height:60pt; vertical-align:top;">${d.jobDesc}</td>
+  </tr>
+</table>`;
+
+  const subject = `Subject : PO Mail of ${d.name} - ${d.location} - ${d.sst}`;
+
+  const mailBody = `<p style="font-family:Arial,sans-serif;font-size:10pt;margin:0 0 6pt 0;">
+    <strong>${subject}</strong>
+  </p>
+  <p style="font-family:Arial,sans-serif;font-size:10pt;margin:0 0 10pt 0;">&nbsp;</p>
+  <p style="font-family:Arial,sans-serif;font-size:10pt;margin:0 0 6pt 0;">Hello Sir,</p>
+  <p style="font-family:Arial,sans-serif;font-size:10pt;margin:0 0 10pt 0;">
+    Kindly find the attached PO details <strong>${d.name}</strong>
+  </p>
+  <ul style="font-family:Arial,sans-serif;font-size:10pt;margin:0 0 12pt 0;padding-left:20pt;list-style:disc;">
+    <li style="margin-bottom:5pt;">Visa Status &ndash; ${d.visaStatus}</li>
+    <li style="margin-bottom:5pt;">Offer Letter &ndash; ${d.offerLetter}</li>
+    <li style="margin-bottom:5pt;">BGC / Reference Check &ndash; ${d.bgcCheck}</li>
+  </ul>
+  <hr style="border:none;border-top:1px solid #ccc;margin:14pt 0;"/>`;
+
+  const doc = `<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head><meta charset="utf-8"/><title>PO Format</title>
+<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View>
+<w:Zoom>100</w:Zoom><w:DoNotOptimizeForBrowser/></w:WordDocument></xml><![endif]-->
+<style>@page{size:A4 portrait;margin:2cm 2.5cm}body{font-family:Arial,sans-serif;font-size:10pt}</style>
+</head><body>${mailBody}${table}</body></html>`;
+
+  const blob = new Blob([doc], { type: 'application/msword' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = (d.name.trim().replace(/\s+/g,'_') || 'Candidate') + '_Vizva_Form.doc';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function handleSubmit(e) {
+  e.preventDefault();
+  alert('Form submitted successfully!');
+}
+
+/* ── Phone auto-format: +1 xxx-xxx-xxxx ── */
+(function(){
+  const ph = document.getElementById('phoneInput');
+  if (!ph) return;
+  ph.addEventListener('input', function(e){
+    let raw = this.value.replace(/\D/g, '');
+    // strip leading 1 if user typed it
+    if (raw.startsWith('1')) raw = raw.slice(1);
+    raw = raw.slice(0, 10);
+    let formatted = '';
+    if (raw.length > 0) formatted = '+1 ' + raw.slice(0, 3);
+    if (raw.length >= 4) formatted += '-' + raw.slice(3, 6);
+    if (raw.length >= 7) formatted += '-' + raw.slice(6, 10);
+    this.value = formatted;
+  });
+  ph.addEventListener('keydown', function(e){
+    // allow backspace to clear naturally
+    if (e.key === 'Backspace' && this.value === '+1 ') {
+      this.value = '';
+    }
+  });
+})();
+
+/* ── Training Yes/No → auto-fill "NA" when No is selected ── */
+(function(){
+  const radios = document.querySelectorAll('[name="training"]');
+  const td     = document.getElementById('trainingDoneInput');
+  if (!td) return;
+  radios.forEach(function(r){
+    r.addEventListener('change', function(){
+      if (this.value === 'No') {
+        td.value    = 'NA';
+        td.readOnly = true;
+        td.style.opacity = '0.5';
+        td.style.cursor  = 'not-allowed';
+      } else {
+        if (td.value === 'NA') td.value = '';
+        td.readOnly = false;
+        td.style.opacity = '1';
+        td.style.cursor  = '';
+      }
+    });
+  });
+})();
+
+
+/* ── Past-date validation for Signup Date & Marketing Start Date ── */
+(function(){
+  function checkPastDate(inputId, errId) {
+    const inp = document.getElementById(inputId);
+    const err = document.getElementById(errId);
+    if (!inp || !err) return;
+    inp.addEventListener('change', function(){
+      const today = new Date(); today.setHours(0,0,0,0);
+      const picked = new Date(this.value);
+      if (this.value && picked > today) {
+        err.classList.add('visible');
+        inp.classList.add('date-invalid');
+        this.value = ''; // clear the invalid future date
+      } else {
+        err.classList.remove('visible');
+        inp.classList.remove('date-invalid');
+      }
+    });
+  }
+  checkPastDate('signupDate',  'signupDateErr');
+  checkPastDate('mktStart',    'mktStartErr');
+})();
+
+
+/* ── Radio group required validation (jobType + training) ── */
+(function(){
+  const form = document.querySelector('form');
+  if (!form) return;
+  form.addEventListener('submit', function(e){
+    let valid = true;
+
+    // jobType radio
+    const jobChecked = document.querySelector('[name="jobType"]:checked');
+    const jobErr = document.getElementById('jobTypeErr');
+    if (!jobChecked) {
+      if (jobErr) jobErr.classList.add('visible');
+      valid = false;
+    } else {
+      if (jobErr) jobErr.classList.remove('visible');
+    }
+
+    // training radio
+    const trainChecked = document.querySelector('[name="training"]:checked');
+    const trainErr = document.getElementById('trainingErr');
+    if (!trainChecked) {
+      if (trainErr) trainErr.classList.add('visible');
+      valid = false;
+    } else {
+      if (trainErr) trainErr.classList.remove('visible');
+    }
+
+    if (!valid) e.preventDefault();
+  });
+})();
+
+
+/* ── Light / Dark mode toggle — JS stylesheet injection ── */
+(function(){
+  const LIGHT_CSS = `
+    /* ══ LIGHT MODE — full override ══ */
+    body { background: #E8F2FB !important; color: #0A1E30 !important; }
+    body::before {
+      background:
+        radial-gradient(ellipse 80% 60% at 15% 20%, rgba(0,120,180,.08) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 50% at 85% 80%, rgba(0,60,120,.05)  0%, transparent 50%),
+        #E8F2FB !important;
+    }
+    body::after {
+      background-image:
+        linear-gradient(rgba(0,100,160,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,100,160,.06) 1px, transparent 1px) !important;
+    }
+    .form-wrapper   { background: #FFFFFF !important; border-color: rgba(0,100,160,.22) !important; box-shadow: 0 8px 40px rgba(0,50,100,.1) !important; }
+    .header-inner   { background: linear-gradient(135deg,#002A60 0%,#0064A0 55%,#0090CC 100%) !important; }
+    .header-stripe  { background: linear-gradient(90deg,#055A8E,#14A2E2,#0774B7) !important; }
+    .brand-text h1  { color: #FFFFFF !important; }
+    .brand-text p   { color: rgba(255,255,255,.78) !important; }
+    .header-badge   { color: rgba(255,255,255,.88) !important; border-color: rgba(255,255,255,.25) !important; }
+    .ticker-wrap    { background: rgba(0,60,120,.05) !important; border-top-color: rgba(0,100,160,.15) !important; }
+    .ticker-item    { color: #0064A0 !important; }
+    .ticker-item span { color: #055A8E !important; }
+    .section-block  { background: #FFFFFF !important; border-color: rgba(0,100,160,.12) !important; }
+    .sec-eye        { color: #0774B7 !important; background: rgba(0,100,160,.07) !important; border-color: rgba(0,100,160,.18) !important; }
+    .sec-head       { color: #0A1E30 !important; }
+    .cy             { color: #0064A0 !important; }
+    .sep            { background: rgba(0,100,160,.12) !important; }
+    .field label    { color: #3A6080 !important; }
+    .field input, .field select, .field textarea {
+      background: #F0F6FC !important; border-color: rgba(0,100,160,.2) !important; color: #0A1E30 !important;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      background: #FFFFFF !important; border-color: #0774B7 !important;
+      box-shadow: 0 0 0 2px rgba(0,120,180,.18) !important;
+    }
+    .field input::placeholder, .field textarea::placeholder { color: #7A9AB8 !important; }
+    select option   { background: #FFFFFF !important; color: #0A1E30 !important; }
+    .input-prefix   { color: #0774B7 !important; }
+    .po-cell        { background: rgba(0,80,150,.04) !important; border-color: rgba(0,100,160,.15) !important; }
+    .po-cell input  { color: #055A8E !important; }
+    .po-label       { color: #3A6080 !important; }
+    .radio-group label { color: #0A1E30 !important; }
+    .radio-group input[type=radio] { accent-color: #0774B7; }
+    .group-card     { background: #F0F6FC !important; border-color: rgba(0,100,160,.15) !important; }
+    .gc-lbl         { color: #0774B7 !important; background: rgba(0,100,160,.07) !important; border-color: rgba(0,100,160,.15) !important; }
+    .form-footer    { background: rgba(0,30,80,.04) !important; border-color: rgba(0,100,160,.12) !important; }
+    .btn-clear      { border-color: rgba(0,100,160,.28) !important; color: #3A6080 !important; background: transparent !important; }
+    .btn-clear:hover{ background: rgba(0,100,160,.07) !important; }
+    .btn-submit     { background: linear-gradient(135deg,#055A8E,#0774B7) !important; color: #fff !important; }
+    .theme-toggle   { background: #FFFFFF !important; border-color: rgba(0,100,160,.32) !important; }
+    #prog           { background: linear-gradient(90deg,#055A8E,#14A2E2,#0774B7) !important; }
+  `;
+
+  let styleEl = null;
+
+  function applyLight() {
+    if (!styleEl) {
+      styleEl = document.createElement('style');
+      styleEl.id = 'vizva-light-theme';
+      document.head.appendChild(styleEl);
+    }
+    styleEl.textContent = LIGHT_CSS;
+  }
+  function applyDark() {
+    if (styleEl) { styleEl.textContent = ''; }
+  }
+
+  const btn  = document.getElementById('themeToggle');
+  const saved = localStorage.getItem('vizva-theme');
+  let isLight = saved === 'light';
+
+  if (isLight) { applyLight(); btn.textContent = '☀️'; }
+
+  btn.addEventListener('click', function(){
+    isLight = !isLight;
+    isLight ? applyLight() : applyDark();
+    btn.textContent = isLight ? '☀️' : '🌙';
+    localStorage.setItem('vizva-theme', isLight ? 'light' : 'dark');
+  });
+})();
+
+
+
+/* ── Rate label: FTE=Annual, W2/C2C/1099=Hourly ── */
+window.addEventListener('DOMContentLoaded', function(){
+  var rateInput = document.getElementById('rateInput');
+  var rateLabel = document.getElementById('rateLabel');
+  var jobRadios = document.querySelectorAll('input[name="jobType"]');
+
+  if (!rateInput || !rateLabel) return;
+
+  function addCommas(n) {
+    var s = n.toString().replace(/\D/g,'');
+    if (!s) return '';
+    return Number(s).toLocaleString('en-US');
+  }
+
+  var currentType = '';
+
+  function updateRateField(type) {
+    currentType = type;
+    if (type === 'FTE') {
+      rateLabel.innerHTML = 'Rate — Annual <span class="req">*</span>';
+      rateInput.setAttribute('placeholder','e.g. 75,000');
+      if (rateInput.value) rateInput.value = addCommas(rateInput.value);
+    } else if (type === 'W2' || type === 'C2C' || type === '1099' || type === 'Part Time') {
+      rateLabel.innerHTML = 'Rate — Hourly <span class="req">*</span>';
+      rateInput.setAttribute('placeholder','e.g. 75');
+      rateInput.value = rateInput.value.replace(/,/g,'');
+    } else {
+      rateLabel.innerHTML = 'Rate <span class="req">*</span>';
+      rateInput.setAttribute('placeholder','75/hr');
+      rateInput.value = rateInput.value.replace(/,/g,'');
+    }
+  }
+
+  jobRadios.forEach(function(radio) {
+    radio.addEventListener('change', function() {
+      updateRateField(this.value);
+    });
+  });
+
+  rateInput.addEventListener('input', function() {
+    if (currentType !== 'FTE') return;
+    var caret = this.selectionStart;
+    var before = this.value.length;
+    this.value = addCommas(this.value);
+    var after = this.value.length;
+    var newPos = Math.max(0, caret + (after - before));
+    try { this.setSelectionRange(newPos, newPos); } catch(e){}
+  });
+});
+
+
+
+/* ── Page Tab Switching ── */
+function switchTab(tab) {
+  document.querySelectorAll('.page-panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.page-tab').forEach(function(t){ t.classList.remove('active'); });
+  document.getElementById('panel-' + tab).classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+  var badge = document.getElementById('header-badge');
+  if (badge) badge.textContent = tab === 'ref' ? 'Reference Check' : 'PO Format';
+}
+
+function toggleJoiningDate(cb) {
+  var dateInput = document.getElementById('joiningDateInput');
+  if (cb.checked) {
+    dateInput.value = '';
+    dateInput.disabled = true;
+    dateInput.style.opacity = '.35';
+    dateInput.removeAttribute('required');
+  } else {
+    dateInput.disabled = false;
+    dateInput.style.opacity = '1';
+    dateInput.setAttribute('required', '');
+  }
+}
+
+function clearRefForm() {
+  document.getElementById('refForm').reset();
+}
+
+function handleRefSubmit(e) { e.preventDefault(); downloadRefDoc(); }
+
+/* ── Reference Check Download ── */
+function downloadRefDoc() {
+  /* ── Validate all required fields ── */
+  var form = document.getElementById('refForm');
+  var required = form.querySelectorAll('input[required], select[required], textarea[required]');
+  var invalid = [];
+  required.forEach(function(el) {
+    el.style.borderColor = '';
+    el.style.boxShadow  = '';
+    if (!el.value.trim()) invalid.push(el);
+  });
+  if (invalid.length > 0) {
+    invalid.forEach(function(el) {
+      el.style.borderColor = '#FF2255';
+      el.style.boxShadow   = '0 0 0 2px rgba(255,34,85,.25)';
+      el.addEventListener('input', function onFix() {
+        el.style.borderColor = '';
+        el.style.boxShadow   = '';
+        el.removeEventListener('input', onFix);
+      });
+    });
+    invalid[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    invalid[0].focus();
+    return;
+  }
+
+  function rv(n){ var el=document.querySelector('[name="'+n+'"]'); return el?el.value:''; }
+
+  var candName   = rv('refCandName');
+  var visaSt     = rv('refVisaStatus');
+  var position   = rv('refPosition');
+  var location   = rv('refLocation');
+  var timePeriod = rv('refTimePeriod');
+  var endClient  = rv('refEndClient');
+
+  var vName    = rv('refVendorName');
+  var vTitle   = rv('refVendorTitle');
+  var vOffice  = rv('refVendorOffice');
+  var vMobile  = rv('refVendorMobile');
+  var vLinkedIn= rv('refVendorLinkedIn');
+
+  var B='border:1px solid #000;', F='font-size:10pt;font-family:Arial,sans-serif;', P='padding:4pt 6pt;', VM='vertical-align:top;', BG='background:#fff;';
+  var sL=B+F+P+VM+BG+'width:180pt;font-weight:bold;';
+  var sV=B+F+P+VM+BG+'width:300pt;';
+
+  function row(label, value) {
+    return '<tr><td style="'+sL+'">'+label+'</td><td style="'+sV+'">'+value+'</td></tr>';
+  }
+
+  var vendorInfo = vName + (vTitle ? '<br/>'+vTitle : '') +
+    (vOffice ? '<br/>O ' + vOffice : '') +
+    (vMobile ? ' | M ' + vMobile : '') +
+    (vLinkedIn ? '<br/><span style="color:#0774B7;">'+vLinkedIn+'</span>' : '');
+
+  /* ── Dynamically collect all companies ── */
+  var refProvidedRows = '';
+  var i = 1;
+  while (document.getElementById('company-block-' + i)) {
+    var coName = rv('refCo' + i + 'Name');
+    if (coName) {
+      var coLine = coName +
+        (rv('refCo' + i + 'Position') ? ' | ' + rv('refCo' + i + 'Position') : '') +
+        (rv('refCo' + i + 'Period')   ? ' | ' + rv('refCo' + i + 'Period')   : '') +
+        (rv('refCo' + i + 'Notes')    ? ' | ' + rv('refCo' + i + 'Notes')    : '');
+      refProvidedRows += row('Reference Provided: Company ' + i, coLine);
+    }
+    i++;
+  }
+
+  function refCard(n, name, title, email, phone, company) {
+    var val = (name||'-') + '<br/>' + (title||'') +
+      (email ? '<br/><span style="color:#0774B7;">'+email+'</span>' : '') +
+      (phone ? '<br/>'+phone : '') +
+      (company ? '<br/>'+company : '');
+    return row('Reference ' + n + ':', val);
+  }
+
+  /* ── Dynamically collect all reference cards ── */
+  var refContactRows = '';
+  var j = 1;
+  while (document.getElementById('ref-card-' + j)) {
+    refContactRows += refCard(j, rv('ref'+j+'Name'), rv('ref'+j+'Title'), rv('ref'+j+'Email'), rv('ref'+j+'Phone'), rv('ref'+j+'Company'));
+    j++;
+  }
+
+  var table = '<table style="border-collapse:collapse;width:480pt;">' +
+    row('Name of the Candidate:', candName) +
+    row('Visa Status:', visaSt) +
+    row('Candidate Technology:', position) +
+    row('Job Role (Applied):', rv('refJobRole')) +
+    row('Location Showed:', location) +
+    row('Contract Tenure:', timePeriod) +
+    row('Vendor Name and Contact Info:', vendorInfo) +
+    row('End Client (Vendor Hiring For):', endClient) +
+    refProvidedRows +
+    refContactRows +
+  '</table>';
+
+  var subject = 'Need References - ' + candName + ' - ' + position + ' - ' + visaSt;
+
+  var coverLetter =
+    '<p style="font-family:Arial,sans-serif;font-size:10pt;margin:0 0 10pt 0;">Hi Sir/Madam,</p>' +
+    '<p style="font-family:Arial,sans-serif;font-size:10pt;margin:0 0 10pt 0;">I hope you are doing well.</p>' +
+    '<p style="font-family:Arial,sans-serif;font-size:10pt;margin:0 0 10pt 0;">I would like to request references for the company for the below candidate:</p>' +
+    '<p style="font-family:Arial,sans-serif;font-size:10pt;margin:0 0 4pt 0;"><b>Candidate Name:</b> ' + candName + '</p>' +
+    '<p style="font-family:Arial,sans-serif;font-size:10pt;margin:0 0 4pt 0;"><b>Position:</b> ' + position + '</p>' +
+    '<p style="font-family:Arial,sans-serif;font-size:10pt;margin:0 0 14pt 0;"><b>Visa Status:</b> ' + visaSt + '</p>' +
+    (function(){
+      var rc = 0;
+      while(document.getElementById('ref-card-' + (rc+1))) rc++;
+      return '<p style="font-family:Arial,sans-serif;font-size:10pt;margin:0 0 10pt 0;">Kindly provide <b style="color:#FF2255;">' + rc + '</b> professional reference' + (rc !== 1 ? 's' : '') + ' along with their contact details.</p>';
+    })() +
+    (document.getElementById('chkInterview') && document.getElementById('chkInterview').checked
+      ? '<p style="font-family:Arial,sans-serif;font-size:10pt;margin:0 0 10pt 0;color:#0774B7;"><b>\u2714 Interview / Screening has been completed.</b></p>'
+      : '') +
+    '<p style="font-family:Arial,sans-serif;font-size:10pt;margin:0 0 10pt 0;">Your prompt assistance in sharing the references will be highly appreciated.</p>' +
+    '<p style="font-family:Arial,sans-serif;font-size:10pt;margin:0 0 4pt 0;">Thanks and regards,</p>' +
+    '<br/><br/>' +
+    '<p style="font-family:Arial,sans-serif;font-size:10pt;margin:0 0 18pt 0;border-top:1px solid #ccc;padding-top:10pt;"><b>Subject:</b> ' + subject + '</p>' +
+    '<hr style="border:none;border-top:1.5px solid #14A2E2;margin-bottom:16pt;"/>';
+
+  var doc = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"/><title>Reference Check</title><!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]--><style>@page{size:A4 portrait;margin:2cm 2.5cm}body{font-family:Arial,sans-serif;font-size:10pt}</style></head><body>'+coverLetter+table+'</body></html>';
+
+  var blob = new Blob([doc], {type:'application/msword'});
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  a.href   = url;
+  a.download = (candName.replace(/\s+/g,'_') || 'Reference') + '_RefCheck.doc';
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+
+</script>
+</body>
+</html>

@@ -213,6 +213,10 @@
           <label for="tokenInput">Admin Access Token</label>
           <input id="tokenInput" type="password" placeholder="Enter admin token">
         </div>
+        <div class="field">
+          <label for="searchInput">Search Records</label>
+          <input id="searchInput" type="text" placeholder="Search by candidate, email, phone, vendor...">
+        </div>
         <button id="loadBtn" type="button">Load Submissions</button>
         <button id="clearBtn" class="secondary" type="button">Clear Token</button>
       </div>
@@ -229,6 +233,9 @@
       <section class="panel">
         <h2>Candidate Submissions</h2>
         <p class="muted">Latest records from the main candidate form.</p>
+        <div class="meta">
+          <button id="exportCandidatesBtn" class="secondary" type="button">Export Candidates CSV</button>
+        </div>
         <div class="table-wrap">
           <table>
             <thead>
@@ -250,6 +257,9 @@
       <section class="panel">
         <h2>Reference Submissions</h2>
         <p class="muted">Latest records from the reference check form.</p>
+        <div class="meta">
+          <button id="exportReferencesBtn" class="secondary" type="button">Export References CSV</button>
+        </div>
         <div class="table-wrap">
           <table>
             <thead>
@@ -274,12 +284,17 @@
     const tokenInput = document.getElementById('tokenInput');
     const loadBtn = document.getElementById('loadBtn');
     const clearBtn = document.getElementById('clearBtn');
+    const searchInput = document.getElementById('searchInput');
+    const exportCandidatesBtn = document.getElementById('exportCandidatesBtn');
+    const exportReferencesBtn = document.getElementById('exportReferencesBtn');
     const message = document.getElementById('message');
     const candidateTable = document.getElementById('candidateTable');
     const referenceTable = document.getElementById('referenceTable');
     const candidateCount = document.getElementById('candidateCount');
     const referenceCount = document.getElementById('referenceCount');
     const storageKey = 'vcs-marketing-hub-admin-token';
+    let candidateRows = [];
+    let referenceRows = [];
 
     tokenInput.value = sessionStorage.getItem(storageKey) || '';
 
@@ -316,6 +331,75 @@
       }).join('');
     }
 
+    function getSearchText(row) {
+      return JSON.stringify(row).toLowerCase();
+    }
+
+    function applyFilters() {
+      const query = searchInput.value.trim().toLowerCase();
+      const filteredCandidates = query
+        ? candidateRows.filter(row => getSearchText(row).includes(query))
+        : candidateRows;
+      const filteredReferences = query
+        ? referenceRows.filter(row => getSearchText(row).includes(query))
+        : referenceRows;
+
+      candidateCount.textContent = String(filteredCandidates.length);
+      referenceCount.textContent = String(filteredReferences.length);
+
+      renderRows(candidateTable, filteredCandidates, [
+        { render: row => escapeHtml(formatDate(row.created_at)) },
+        { render: row => escapeHtml(row.candidate_name || '') },
+        { render: row => escapeHtml(row.candidate_email || '') },
+        { render: row => escapeHtml(row.candidate_phone || '') },
+        { render: row => `<div class="json">${escapeHtml(JSON.stringify(row.payload, null, 2))}</div>` }
+      ]);
+
+      renderRows(referenceTable, filteredReferences, [
+        { render: row => escapeHtml(formatDate(row.created_at)) },
+        { render: row => escapeHtml(row.candidate_name || '') },
+        { render: row => escapeHtml(row.vendor_email || '') },
+        { render: row => escapeHtml(row.vendor_phone || '') },
+        { render: row => `<div class="json">${escapeHtml(JSON.stringify(row.payload, null, 2))}</div>` }
+      ]);
+    }
+
+    function escapeCsv(value) {
+      const text = String(value ?? '');
+      if (/[",\n]/.test(text)) return `"${text.replace(/"/g, '""')}"`;
+      return text;
+    }
+
+    function downloadCsv(filename, rows) {
+      if (!rows.length) {
+        setMessage('No records available to export.', true);
+        return;
+      }
+
+      const headers = ['created_at', 'name', 'email_or_vendor_email', 'phone_or_vendor_phone', 'payload'];
+      const csvRows = [headers.join(',')];
+
+      rows.forEach(function(row) {
+        csvRows.push([
+          escapeCsv(row.created_at || ''),
+          escapeCsv(row.candidate_name || ''),
+          escapeCsv(row.candidate_email || row.vendor_email || ''),
+          escapeCsv(row.candidate_phone || row.vendor_phone || ''),
+          escapeCsv(JSON.stringify(row.payload || {}))
+        ].join(','));
+      });
+
+      const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
     async function loadSubmissions() {
       const token = tokenInput.value.trim();
       if (!token) {
@@ -340,24 +424,9 @@
 
         sessionStorage.setItem(storageKey, token);
 
-        candidateCount.textContent = String(data.candidateSubmissions.length);
-        referenceCount.textContent = String(data.referenceSubmissions.length);
-
-        renderRows(candidateTable, data.candidateSubmissions, [
-          { render: row => escapeHtml(formatDate(row.created_at)) },
-          { render: row => escapeHtml(row.candidate_name || '') },
-          { render: row => escapeHtml(row.candidate_email || '') },
-          { render: row => escapeHtml(row.candidate_phone || '') },
-          { render: row => `<div class="json">${escapeHtml(JSON.stringify(row.payload, null, 2))}</div>` }
-        ]);
-
-        renderRows(referenceTable, data.referenceSubmissions, [
-          { render: row => escapeHtml(formatDate(row.created_at)) },
-          { render: row => escapeHtml(row.candidate_name || '') },
-          { render: row => escapeHtml(row.vendor_email || '') },
-          { render: row => escapeHtml(row.vendor_phone || '') },
-          { render: row => `<div class="json">${escapeHtml(JSON.stringify(row.payload, null, 2))}</div>` }
-        ]);
+        candidateRows = data.candidateSubmissions;
+        referenceRows = data.referenceSubmissions;
+        applyFilters();
 
         setMessage('Submissions loaded successfully.', false);
       } catch (error) {
@@ -368,8 +437,15 @@
     }
 
     loadBtn.addEventListener('click', loadSubmissions);
+    searchInput.addEventListener('input', applyFilters);
     tokenInput.addEventListener('keydown', function(event) {
       if (event.key === 'Enter') loadSubmissions();
+    });
+    exportCandidatesBtn.addEventListener('click', function() {
+      downloadCsv('candidate-submissions.csv', candidateRows);
+    });
+    exportReferencesBtn.addEventListener('click', function() {
+      downloadCsv('reference-submissions.csv', referenceRows);
     });
 
     clearBtn.addEventListener('click', function() {

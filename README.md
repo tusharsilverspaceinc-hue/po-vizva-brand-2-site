@@ -1,9 +1,9 @@
-# PO Vizva Brand 2 Site
+# VCS Marketing Hub
 
-Static GitHub Pages site for the Vizva HTML file.
+Static site for the VCS Marketing Hub form.
 
 Live site:
 
-- `https://po-vizva-brand-2-site.vercel.app/`
+- `https://vcs-marketing-hub.vercel.app/`
 
 Auto-deploys are connected through Vercel and GitHub.

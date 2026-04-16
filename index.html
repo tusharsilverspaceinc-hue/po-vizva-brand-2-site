@@ -2906,6 +2906,58 @@ function enhanceEmbeddedIframe(config) {
     "      }\n" +
     "    });\n" +
     "  }\n" +
+    "  function sanitizeBrokenText() {\n" +
+    "    if (CONFIG.table !== 'bsr_submissions') return;\n" +
+    "    var replacements = [\n" +
+    "      ['Employee self-assessment on Submission, Interview and PO ClosuresÂ', 'Employee self-assessment on Submission, Interview and PO Closures'],\n" +
+    "      ['Team Lead feedback on Submission, Interview and PO ClosuresÂ', 'Team Lead feedback on Submission, Interview and PO Closures'],\n" +
+    "      ['Employee self-assessment on Productivity, Work Ethics & Innovation, and DisciplineÂ', 'Employee self-assessment on Productivity, Work Ethics & Innovation, and Discipline'],\n" +
+    "      ['Team Lead feedback on Productivity, Work Ethics & Innovation, and DisciplineÂ', 'Team Lead feedback on Productivity, Work Ethics & Innovation, and Discipline'],\n" +
+    "      ['Additional Tasks Â· Areas for Development Â· Goals Achievement Â· Communication & Collaboration Â· Training & Upskilling Â· Overall FeedbackÂ', 'Additional Tasks · Areas for Development · Goals Achievement · Communication & Collaboration · Training & Upskilling · Overall Feedback'],\n" +
+    "      ['Â', ''],\n" +
+    "      ['â€¡', ''],\n" +
+    "      ['âœ¨', ''],\n" +
+    "      ['ðŸ’¡', '']\n" +
+    "    ];\n" +
+    "    Array.prototype.forEach.call(document.querySelectorAll('textarea, input[placeholder]'), function(el) {\n" +
+    "      var text = el.getAttribute('placeholder');\n" +
+    "      if (!text) return;\n" +
+    "      replacements.forEach(function(pair) { text = text.split(pair[0]).join(pair[1]); });\n" +
+    "      el.setAttribute('placeholder', text.trim());\n" +
+    "    });\n" +
+    "    Array.prototype.forEach.call(document.querySelectorAll('*'), function(el) {\n" +
+    "      if (!el.childNodes || el.childNodes.length !== 1 || !el.firstChild || el.firstChild.nodeType !== 3) return;\n" +
+    "      var text = el.textContent;\n" +
+    "      if (!text || (text.indexOf('Â') === -1 && text.indexOf('â') === -1 && text.indexOf('ðŸ') === -1)) return;\n" +
+    "      replacements.forEach(function(pair) { text = text.split(pair[0]).join(pair[1]); });\n" +
+    "      el.textContent = text.trim();\n" +
+    "    });\n" +
+    "  }\n" +
+    "  function normalizeBSRSuggestionText() {\n" +
+    "    if (CONFIG.table !== 'bsr_submissions') return;\n" +
+    "    var fixes = [\n" +
+    "      [/Employee self-assessment on Submission, Interview and PO Closures[^A-Za-z0-9)]*/gi, 'Employee self-assessment on Submission, Interview and PO Closures'],\n" +
+    "      [/Team Lead feedback on Submission, Interview and PO Closures[^A-Za-z0-9)]*/gi, 'Team Lead feedback on Submission, Interview and PO Closures'],\n" +
+    "      [/Employee self-assessment on Productivity, Work Ethics\\s*&\\s*Innovation, and Discipline[^A-Za-z0-9)]*/gi, 'Employee self-assessment on Productivity, Work Ethics & Innovation, and Discipline'],\n" +
+    "      [/Team Lead feedback on Productivity, Work Ethics\\s*&\\s*Innovation, and Discipline[^A-Za-z0-9)]*/gi, 'Team Lead feedback on Productivity, Work Ethics & Innovation, and Discipline'],\n" +
+    "      [/Additional Tasks[^\\n\\r]*/gi, 'Additional Tasks - Areas for Development - Goals Achievement - Communication & Collaboration - Training & Upskilling - Overall Feedback']\n" +
+    "    ];\n" +
+    "    Array.prototype.forEach.call(document.querySelectorAll('textarea, input[placeholder]'), function(el) {\n" +
+    "      var placeholder = el.getAttribute('placeholder');\n" +
+    "      if (!placeholder) return;\n" +
+    "      fixes.forEach(function(pair) { placeholder = placeholder.replace(pair[0], pair[1]); });\n" +
+    "      placeholder = placeholder.replace(/[ÂÃ][^A-Za-z0-9 ]*/g, '').trim();\n" +
+    "      el.setAttribute('placeholder', placeholder);\n" +
+    "    });\n" +
+    "    Array.prototype.forEach.call(document.querySelectorAll('textarea, label, p, span, div'), function(el) {\n" +
+    "      if (!el.childNodes || el.childNodes.length !== 1 || !el.firstChild || el.firstChild.nodeType !== 3) return;\n" +
+    "      var text = el.textContent;\n" +
+    "      if (!text) return;\n" +
+    "      fixes.forEach(function(pair) { text = text.replace(pair[0], pair[1]); });\n" +
+    "      text = text.replace(/[ÂÃ][^A-Za-z0-9 ]*/g, '').trim();\n" +
+    "      el.textContent = text;\n" +
+    "    });\n" +
+    "  }\n" +
     "  async function persistSubmission() {\n" +
     "    var supabaseGlobal = parent && parent.window ? parent.window.supabase : null;\n" +
     "    var client;\n" +
@@ -2924,6 +2976,8 @@ function enhanceEmbeddedIframe(config) {
     "      return;\n" +
     "    }\n" +
     "    applyBSRLabel();\n" +
+    "    sanitizeBrokenText();\n" +
+    "    normalizeBSRSuggestionText();\n" +
     "    ensureButtonLabel();\n" +
     "    window.__vcsExportWrapped = true;\n" +
     "    var originalExport = window.exportPDF.bind(window);\n" +

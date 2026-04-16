@@ -2783,7 +2783,17 @@ function escapeInlineScript(value) {
 }
 
 function decodeBase64Html(value) {
-  return atob(value.split(',')[1] || '');
+  var base64 = value.split(',')[1] || '';
+  var binary = atob(base64);
+  var bytes = new Uint8Array(binary.length);
+  var index;
+  for (index = 0; index < binary.length; index += 1) {
+    bytes[index] = binary.charCodeAt(index);
+  }
+  if (window.TextDecoder) {
+    return new TextDecoder('utf-8').decode(bytes);
+  }
+  return binary;
 }
 
 function enhanceEmbeddedIframe(config) {

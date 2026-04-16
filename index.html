@@ -2814,7 +2814,7 @@ function enhanceEmbeddedIframe(config) {
     "    return typeof value === 'string' ? value.trim() : (value == null ? '' : value);\n" +
     "  }\n" +
     "  var FIELD_LABELS = CONFIG.table === 'bsr_submissions' ? {\n" +
-    "    empName: 'Employee Name', empID: 'Employee ID', deptInput: 'Department', branchInput: 'Branch / Location', teamLeadName: 'Team Lead / Manager', designationInput: 'Designation', reviewDate: 'Date of Review', monthInput: 'Review Period (Month)',\n" +
+    "    empName: 'Employee Name', empID: 'Employee ID', deptInput: 'Department', branchInput: 'Branch / Location', teamLeadName: 'BSR / Team Lead', designationInput: 'Designation', reviewDate: 'Date of Review', monthInput: 'Review Period (Month)',\n" +
     "    attWorkDays: 'Working Days', attPresent: 'Days Present', attKPI: 'Attendance KPI %', attRating: 'Attendance Rating / 5', intTarget: 'Interview Target', intAchieved: 'Interviews Achieved', intKPI: 'Interview KPI %', intRating: 'Interview Rating / 5',\n" +
     "    subTarget: 'Submission Target', subAchieved: 'Submissions Achieved', subKPI: 'Submission KPI %', subRating: 'Submission Rating / 5', poTarget: 'PO Target', poAchieved: 'PO Achieved', poKPI: 'PO KPI %', poRating: 'PO Rating / 5',\n" +
     "    'ai-emp-kpi': 'Employee Self-Assessment on Submission, Interview and PO Closures', subScoreMetric: 'Submission Score / 5', 'ai-tl-kpi': 'Team Lead Feedback on Submission, Interview and PO Closures', intScoreMetric: 'Interview Score / 5', poScoreMetric: 'PO Score / 5',\n" +
@@ -2898,6 +2898,14 @@ function enhanceEmbeddedIframe(config) {
     "    button.innerHTML = 'Save & Export PDF';\n" +
     "    button.dataset.defaultLabel = button.innerHTML;\n" +
     "  }\n" +
+    "  function applyBSRLabel() {\n" +
+    "    if (CONFIG.table !== 'bsr_submissions') return;\n" +
+    "    Array.prototype.forEach.call(document.querySelectorAll('label'), function(label) {\n" +
+    "      if (cleanValue(label.textContent) === 'Team Lead / Manager') {\n" +
+    "        label.textContent = 'BSR / Team Lead';\n" +
+    "      }\n" +
+    "    });\n" +
+    "  }\n" +
     "  async function persistSubmission() {\n" +
     "    var supabaseGlobal = parent && parent.window ? parent.window.supabase : null;\n" +
     "    var client;\n" +
@@ -2915,6 +2923,7 @@ function enhanceEmbeddedIframe(config) {
     "      setTimeout(wireExport, 200);\n" +
     "      return;\n" +
     "    }\n" +
+    "    applyBSRLabel();\n" +
     "    ensureButtonLabel();\n" +
     "    window.__vcsExportWrapped = true;\n" +
     "    var originalExport = window.exportPDF.bind(window);\n" +

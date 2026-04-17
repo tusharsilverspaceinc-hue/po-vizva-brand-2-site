@@ -2276,10 +2276,10 @@ input.date-invalid {
         <div class="group-card rv d2">
           <div class="gc-lbl blue">Interview Support</div>
           <div class="gc-body">
-            <div class="field"><label>Support By <span class="req">*</span></label><select name="intSupportBy" id="intSupportBy" required><option value="">Select Support By</option></select></div>
+            <div class="field"><label>Support By <span class="req">*</span></label><input type="text" name="intSupportBy" id="intSupportBy" list="intSupportByList" placeholder="Select or type Support By" required/><datalist id="intSupportByList"></datalist></div>
             <div class="field"><label>Team Lead <span class="req">*</span></label><input type="text" name="intTeamLead" id="intTeamLead" placeholder="Auto-filled from selection" readonly required/></div>
             <div class="field"><label>Manager <span class="req">*</span></label><input type="text" name="intManager" id="intManager" placeholder="Auto-filled from selection" value="Harsh Patel" readonly required/></div>
-            <div class="field"><label style="display:flex;align-items:center;gap:.55rem;text-transform:none;letter-spacing:.02em;font-size:.8rem;"><input type="checkbox" id="intSupportManualEdit" style="width:auto;min-height:auto;margin:0;" /> Edit Team Lead / Manager manually</label></div>
+            <div class="field"><label style="display:flex;align-items:center;gap:.55rem;text-transform:none;letter-spacing:.02em;font-size:.8rem;"><input type="checkbox" id="intSupportManualEdit" style="width:auto;min-height:auto;margin:0;" /> Edit Support / Team Lead / Manager manually</label></div>
           </div>
         </div>
       </div>
@@ -3676,6 +3676,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
 window.addEventListener('DOMContentLoaded', function() {
   var supportSelect = document.getElementById('intSupportBy');
+  var supportList = document.getElementById('intSupportByList');
   var teamLeadInput = document.getElementById('intTeamLead');
   var managerInput = document.getElementById('intManager');
   var manualEditToggle = document.getElementById('intSupportManualEdit');
@@ -3723,37 +3724,36 @@ window.addEventListener('DOMContentLoaded', function() {
   };
   var memberToLead = {};
 
-  if (!supportSelect || !teamLeadInput || !managerInput || !manualEditToggle) return;
+  if (!supportSelect || !supportList || !teamLeadInput || !managerInput || !manualEditToggle) return;
 
   Object.keys(orgStructure.teamLeads).forEach(function(teamLead) {
-    var optgroup = document.createElement('optgroup');
-    optgroup.label = teamLead;
     orgStructure.teamLeads[teamLead].forEach(function(member) {
       var option = document.createElement('option');
       option.value = member;
-      option.textContent = member;
-      option.dataset.teamLead = teamLead;
-      optgroup.appendChild(option);
+      option.label = teamLead;
+      supportList.appendChild(option);
       memberToLead[member] = teamLead;
     });
-    supportSelect.appendChild(optgroup);
   });
 
   function applyManualEditState() {
     var isManual = !!manualEditToggle.checked;
+    supportSelect.readOnly = false;
     teamLeadInput.readOnly = !isManual;
     managerInput.readOnly = !isManual;
+    supportSelect.placeholder = isManual ? 'Enter Support By' : 'Select or type Support By';
     teamLeadInput.placeholder = isManual ? 'Enter Team Lead' : 'Auto-filled from selection';
     managerInput.placeholder = isManual ? 'Enter Manager' : 'Auto-filled from selection';
   }
 
   function syncInterviewSupportFields() {
     if (manualEditToggle.checked) return;
-    var selected = supportSelect.value;
+    var selected = (supportSelect.value || '').trim();
     teamLeadInput.value = memberToLead[selected] || '';
     managerInput.value = selected ? orgStructure.manager : 'Harsh Patel';
   }
 
+  supportSelect.addEventListener('input', syncInterviewSupportFields);
   supportSelect.addEventListener('change', syncInterviewSupportFields);
   manualEditToggle.addEventListener('change', function() {
     applyManualEditState();

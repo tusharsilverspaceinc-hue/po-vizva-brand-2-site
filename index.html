@@ -2336,8 +2336,7 @@ input.date-invalid {
     <!-- ACTIONS -->
     <div class="submit-row">
       <button type="reset"   class="btn btn-n">↺ Clear</button>
-      <button type="button"  class="btn btn-g" onclick="downloadAsDoc()">↓ Download .doc</button>
-      <button type="submit"  class="btn btn-p"><span>✓ Submit Form</span></button>
+      <button type="submit"  class="btn btn-p"><span>↓ Save & Download .doc</span></button>
     </div>
 
   </form>
@@ -3378,7 +3377,8 @@ function handleSubmit(e) {
     candidate_phone: payload.phone || '',
     payload: payload
   }).then(function() {
-    alert('Form submitted and saved to Supabase successfully!');
+    downloadAsDoc();
+    alert('Form saved to Supabase and downloaded successfully!');
     form.reset();
   }).catch(function(error) {
     console.error(error);

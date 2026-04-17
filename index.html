@@ -2276,9 +2276,9 @@ input.date-invalid {
         <div class="group-card rv d2">
           <div class="gc-lbl blue">Interview Support</div>
           <div class="gc-body">
-            <div class="field"><label>Support By <span class="req">*</span></label><input type="text" name="intSupportBy" placeholder="Name" required/></div>
-            <div class="field"><label>Team Lead <span class="req">*</span></label><input type="text" name="intTeamLead" placeholder="Name" required/></div>
-            <div class="field"><label>Manager <span class="req">*</span></label><input type="text" name="intManager" placeholder="Name" value="Harsh Patel" required/></div>
+            <div class="field"><label>Support By <span class="req">*</span></label><select name="intSupportBy" id="intSupportBy" required><option value="">Select Support By</option></select></div>
+            <div class="field"><label>Team Lead <span class="req">*</span></label><input type="text" name="intTeamLead" id="intTeamLead" placeholder="Auto-filled from selection" readonly required/></div>
+            <div class="field"><label>Manager <span class="req">*</span></label><input type="text" name="intManager" id="intManager" placeholder="Auto-filled from selection" value="Harsh Patel" readonly required/></div>
           </div>
         </div>
       </div>
@@ -3671,6 +3671,80 @@ window.addEventListener('DOMContentLoaded', function() {
       jobDesc.dataset.richSourceText = '';
     }
   });
+});
+
+window.addEventListener('DOMContentLoaded', function() {
+  var supportSelect = document.getElementById('intSupportBy');
+  var teamLeadInput = document.getElementById('intTeamLead');
+  var managerInput = document.getElementById('intManager');
+  var orgStructure = {
+    manager: 'Harsh Patel',
+    assistantManager: 'Rujuwal Garg',
+    teamLeads: {
+      'Prateek Narvariya': [
+        'Rahul Agarwal',
+        'Harshit Ojha',
+        'Amartya Kumar',
+        'Eklavya Prasad',
+        'Aakash Sharma',
+        'Utsa Maiti',
+        'Priyanshu Jana',
+        'Varsha Sahu'
+      ],
+      'Anusree Vasudevan': [
+        'Ajay Krishna K',
+        'Hridhya KK',
+        'Ritwik Ghosh',
+        'Shraavana S',
+        'Aman Agnihotri',
+        'Saikat Bera'
+      ],
+      'Darshan Singh': [
+        'Aditya Sharma',
+        'Subhash Sharma',
+        'Shubhankar Saha',
+        'Meghna Mondal',
+        'Ainadri Mandal',
+        'Shubhamkumar Jha'
+      ],
+      'Bhavya Dutt': [
+        'Sonali Das',
+        'Ravikant Raj',
+        'Satyam Singh',
+        'Vidhi Patel',
+        'Tushar Mandal',
+        'Aritra Bose',
+        'Aaliya Khurshid',
+        'Shailesh Kumar'
+      ]
+    }
+  };
+  var memberToLead = {};
+
+  if (!supportSelect || !teamLeadInput || !managerInput) return;
+
+  Object.keys(orgStructure.teamLeads).forEach(function(teamLead) {
+    var optgroup = document.createElement('optgroup');
+    optgroup.label = teamLead;
+    orgStructure.teamLeads[teamLead].forEach(function(member) {
+      var option = document.createElement('option');
+      option.value = member;
+      option.textContent = member;
+      option.dataset.teamLead = teamLead;
+      optgroup.appendChild(option);
+      memberToLead[member] = teamLead;
+    });
+    supportSelect.appendChild(optgroup);
+  });
+
+  function syncInterviewSupportFields() {
+    var selected = supportSelect.value;
+    teamLeadInput.value = memberToLead[selected] || '';
+    managerInput.value = selected ? orgStructure.manager : 'Harsh Patel';
+  }
+
+  supportSelect.addEventListener('change', syncInterviewSupportFields);
+  syncInterviewSupportFields();
 });
 
 function switchTab(tab) {

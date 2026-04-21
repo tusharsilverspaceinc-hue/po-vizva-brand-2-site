@@ -2199,11 +2199,12 @@ input.date-invalid {
       <div class="grid grid-2">
         <div class="field rv d1"><label>Type of Job <span class="req">*</span></label>
           <div class="radio-group">
-            <label><input type="radio" name="jobType" value="W2"/> W2</label>
-            <label><input type="radio" name="jobType" value="C2C"/> C2C</label>
-            <label><input type="radio" name="jobType" value="FTE"/> FTE</label>
-            <label><input type="radio" name="jobType" value="Part Time"/> Part Time</label>
-            <label><input type="radio" name="jobType" value="1099"/> 1099</label>
+<label><input type="radio" name="jobType" value="W2"/> W2</label>
+<label><input type="radio" name="jobType" value="C2C"/> C2C</label>
+<label><input type="radio" name="jobType" value="C2H"/> C2H</label>
+<label><input type="radio" name="jobType" value="FTE"/> FTE</label>
+<label><input type="radio" name="jobType" value="Part Time"/> Part Time</label>
+<label><input type="radio" name="jobType" value="1099"/> 1099</label>
           </div>
           <span class="date-error" id="jobTypeErr">⚠ Please select a Job Type</span>
         </div>
@@ -3246,6 +3247,7 @@ function downloadAsDoc() {
       if (jobType === 'FTE')        return '$' + clean + ' /yr (Annual)';
       if (jobType === 'W2')         return '$' + clean + ' /hr (Hourly — W2)';
       if (jobType === 'C2C')        return '$' + clean + ' /hr (Hourly — C2C)';
+      if (jobType === 'C2H')        return '$' + clean + ' /hr (Hourly — C2H)';
       if (jobType === '1099')       return '$' + clean + ' /hr (Hourly — 1099)';
       if (jobType === 'Part Time')  return '$' + clean + ' /hr (Part Time)';
       return '$' + clean;
@@ -3287,7 +3289,7 @@ function downloadAsDoc() {
   ${pr('Personal Phone Number', d.phone)}
   ${pr('Email ID', d.email)}
   ${pr('Full Address', d.address)}
-  ${pr('Type of Job: W2 / C2C / FTE', d.jobType)}
+${pr('Type of Job: W2 / C2C / C2H / FTE', d.jobType)}
   ${pr('Position that Applied:', d.position)}
   ${pr('Job Location:', d.jobLocation)}
   ${pr('Implementation/End Client', d.endClient)}
@@ -3576,7 +3578,7 @@ function handleSubmit(e) {
 
 
 
-/* ── Rate label: FTE=Annual, W2/C2C/1099=Hourly ── */
+/* ── Rate label: FTE=Annual, W2/C2C/C2H/1099=Hourly ── */
 window.addEventListener('DOMContentLoaded', function(){
   var rateInput = document.getElementById('rateInput');
   var rateLabel = document.getElementById('rateLabel');
@@ -3598,7 +3600,7 @@ window.addEventListener('DOMContentLoaded', function(){
       rateLabel.innerHTML = 'Rate — Annual <span class="req">*</span>';
       rateInput.setAttribute('placeholder','e.g. 75,000');
       if (rateInput.value) rateInput.value = addCommas(rateInput.value);
-    } else if (type === 'W2' || type === 'C2C' || type === '1099' || type === 'Part Time') {
+    } else if (type === 'W2' || type === 'C2C' || type === 'C2H' || type === '1099' || type === 'Part Time') {
       rateLabel.innerHTML = 'Rate — Hourly <span class="req">*</span>';
       rateInput.setAttribute('placeholder','e.g. 75');
       rateInput.value = rateInput.value.replace(/,/g,'');

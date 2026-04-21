@@ -3724,7 +3724,7 @@ window.addEventListener('DOMContentLoaded', function() {
     var percentage = agreementPercentageInput.value || '';
     var months = agreementMonthsInput.value || '';
     upfrontAmountInput.value = upfrontAmount;
-    agreementInput.value = upfrontAmount && percentage && months ? ('$' + upfrontAmount + ' / ' + percentage + ' / ' + months) : '';
+    agreementInput.value = upfrontAmount && percentage && months ? (percentage + ' in ' + months + ' - Upfront $' + upfrontAmount) : '';
   }
 
   upfrontAmountInput.addEventListener('input', syncAgreementValue);

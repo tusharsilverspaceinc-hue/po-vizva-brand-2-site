@@ -2955,18 +2955,33 @@ function enhanceEmbeddedIframe(config) {
     "  }\n" +
     "  function enforceSingleLineReportTitle() {\n" +
     "    Array.prototype.forEach.call(document.querySelectorAll('#dynamicTitle, #dynamicTitle2, .report-meta h2'), function(el) {\n" +
+    "      var text;\n" +
+    "      var parts;\n" +
     "      if (!el) return;\n" +
+    "      text = (el.textContent || '').replace(/\\s+/g, ' ').trim();\n" +
+    "      parts = text.match(/^(.*?:)\\s*([A-Z]{3})\\s*-\\s*(\\d{4})$/i);\n" +
+    "      if (parts) {\n" +
+    "        el.textContent = parts[1] + ' ' + parts[2].toUpperCase() + '\\u2011\\u00A0' + parts[3];\n" +
+    "      }\n" +
     "      el.style.whiteSpace = 'nowrap';\n" +
     "      el.style.wordBreak = 'keep-all';\n" +
     "      el.style.overflowWrap = 'normal';\n" +
     "      el.style.display = 'block';\n" +
-    "      el.style.fontSize = '15px';\n" +
+    "      el.style.fontSize = '14px';\n" +
     "      el.style.lineHeight = '1.2';\n" +
+    "      el.style.letterSpacing = '0';\n" +
+    "      el.style.maxWidth = '100%';\n" +
+    "    });\n" +
+    "    Array.prototype.forEach.call(document.querySelectorAll('.page-header'), function(el) {\n" +
+    "      if (!el) return;\n" +
+    "      el.style.flexWrap = 'nowrap';\n" +
+    "      el.style.alignItems = 'flex-end';\n" +
+    "      el.style.gap = '12px';\n" +
     "    });\n" +
     "    Array.prototype.forEach.call(document.querySelectorAll('.report-meta'), function(el) {\n" +
     "      if (!el) return;\n" +
     "      el.style.width = 'auto';\n" +
-    "      el.style.minWidth = '340px';\n" +
+    "      el.style.minWidth = '360px';\n" +
     "      el.style.textAlign = 'right';\n" +
     "      el.style.flexShrink = '0';\n" +
     "    });\n" +

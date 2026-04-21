@@ -2953,6 +2953,24 @@ function enhanceEmbeddedIframe(config) {
     "      }\n" +
     "    });\n" +
     "  }\n" +
+    "  function enforceSingleLineReportTitle() {\n" +
+    "    Array.prototype.forEach.call(document.querySelectorAll('#dynamicTitle, #dynamicTitle2, .report-meta h2'), function(el) {\n" +
+    "      if (!el) return;\n" +
+    "      el.style.whiteSpace = 'nowrap';\n" +
+    "      el.style.wordBreak = 'keep-all';\n" +
+    "      el.style.overflowWrap = 'normal';\n" +
+    "      el.style.display = 'block';\n" +
+    "      el.style.fontSize = '15px';\n" +
+    "      el.style.lineHeight = '1.2';\n" +
+    "    });\n" +
+    "    Array.prototype.forEach.call(document.querySelectorAll('.report-meta'), function(el) {\n" +
+    "      if (!el) return;\n" +
+    "      el.style.width = 'auto';\n" +
+    "      el.style.minWidth = '340px';\n" +
+    "      el.style.textAlign = 'right';\n" +
+    "      el.style.flexShrink = '0';\n" +
+    "    });\n" +
+    "  }\n" +
     "  function sanitizeBrokenText() {\n" +
     "    var replacements = [\n" +
     "      ['Employee self-assessment on Submission, Interview and PO ClosuresÂ', 'Employee self-assessment on Submission, Interview and PO Closures'],\n" +
@@ -3023,6 +3041,7 @@ function enhanceEmbeddedIframe(config) {
     "      return;\n" +
     "    }\n" +
     "    applyBSRLabel();\n" +
+    "    enforceSingleLineReportTitle();\n" +
     "    sanitizeBrokenText();\n" +
     "    normalizeBSRSuggestionText();\n" +
     "    ensureButtonLabel();\n" +

@@ -2317,7 +2317,42 @@ input.date-invalid {
             </label>
           </div>
         </div>
-        <div class="field rv d4"><label>Agreement Percentage and Months <span class="req">*</span></label><input type="text" name="agreement" placeholder="e.g. 15% / 6 months" required/></div>
+        <div class="field rv d4">
+          <label>Agreement Percentage and Months <span class="req">*</span></label>
+          <div class="grid grid-3" style="gap:10px;">
+            <div class="input-prefix-wrap">
+              <span class="input-prefix">$</span>
+              <input type="text" id="upfrontAmountInput" name="upfrontAmount" placeholder="Upfront Amount" style="padding-left:2.1rem;" required/>
+            </div>
+            <select id="agreementPercentageInput" name="agreementPercentage" required>
+              <option value="" disabled selected>Agreement %</option>
+              <option value="1%">1%</option>
+              <option value="2%">2%</option>
+              <option value="3%">3%</option>
+              <option value="4%">4%</option>
+              <option value="5%">5%</option>
+              <option value="6%">6%</option>
+              <option value="7%">7%</option>
+              <option value="8%">8%</option>
+              <option value="9%">9%</option>
+              <option value="10%">10%</option>
+              <option value="11%">11%</option>
+              <option value="12%">12%</option>
+              <option value="13%">13%</option>
+              <option value="14%">14%</option>
+              <option value="15%">15%</option>
+            </select>
+            <select id="agreementMonthsInput" name="agreementMonths" required>
+              <option value="" disabled selected>Months</option>
+              <option value="1 Month">1 Month</option>
+              <option value="2 Months">2 Months</option>
+              <option value="3 Months">3 Months</option>
+              <option value="4 Months">4 Months</option>
+              <option value="5 Months">5 Months</option>
+            </select>
+          </div>
+          <input type="hidden" id="agreementInput" name="agreement" value=""/>
+        </div>
       </div>
     </div>
 
@@ -3674,6 +3709,28 @@ window.addEventListener('DOMContentLoaded', function() {
       jobDesc.dataset.richSourceText = '';
     }
   });
+});
+
+window.addEventListener('DOMContentLoaded', function() {
+  var upfrontAmountInput = document.getElementById('upfrontAmountInput');
+  var agreementPercentageInput = document.getElementById('agreementPercentageInput');
+  var agreementMonthsInput = document.getElementById('agreementMonthsInput');
+  var agreementInput = document.getElementById('agreementInput');
+
+  if (!upfrontAmountInput || !agreementPercentageInput || !agreementMonthsInput || !agreementInput) return;
+
+  function syncAgreementValue() {
+    var upfrontAmount = (upfrontAmountInput.value || '').replace(/[^0-9,]/g, '');
+    var percentage = agreementPercentageInput.value || '';
+    var months = agreementMonthsInput.value || '';
+    upfrontAmountInput.value = upfrontAmount;
+    agreementInput.value = upfrontAmount && percentage && months ? ('$' + upfrontAmount + ' / ' + percentage + ' / ' + months) : '';
+  }
+
+  upfrontAmountInput.addEventListener('input', syncAgreementValue);
+  agreementPercentageInput.addEventListener('change', syncAgreementValue);
+  agreementMonthsInput.addEventListener('change', syncAgreementValue);
+  syncAgreementValue();
 });
 
 window.addEventListener('DOMContentLoaded', function() {

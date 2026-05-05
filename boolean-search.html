@@ -1238,7 +1238,7 @@ footer{max-width:1040px;margin:0 auto;border:1px solid rgba(20,162,226,.36);bord
     <input type="hidden" id="exactTitleMatch" />
     <input type="hidden" id="useParens" checked />
     <input type="hidden" id="includeCurrentRole" />
-    <input type="hidden" id="customSuffix" value="-recruiter -staffing -hiring -jobs" />
+    <input type="hidden" id="customSuffix" value="" />
   </div><!-- /main-grid -->
 
   <!-- GENERATE CTA -->
@@ -1834,7 +1834,7 @@ function buildLocationBlock(platform='linkedin') {
   const onsite  = document.getElementById('onsiteCheck').checked;
 
   let parts = [];
-  if (state) parts.push(`"${state}"`);
+  if (state && platform !== 'linkedin') parts.push(`"${state}"`);
 
   let arr = [];
   if (remote) arr.push('Remote');
@@ -1913,7 +1913,22 @@ function getGoogleAfterDate() {
   return d.toISOString().split('T')[0]; // YYYY-MM-DD
 }
 
-function assembleString(extraPrefix='', platform='linkedin') {
+function hasSearchCore() {
+  return !!(
+    document.getElementById('primaryTitle').value.trim() ||
+    tags.title.length ||
+    tags.must.length ||
+    tags.any.length ||
+    tags.exclude.length ||
+    tags.industry.length ||
+    document.getElementById('stateSelect').value ||
+    document.querySelector('#seniorityGroup input:checked') ||
+    document.querySelector('#empGroup input:checked') ||
+    document.querySelector('input[name="h1bFilter"]:checked')?.value
+  );
+}
+
+function assembleString(extraPrefix='', platform='linkedin', options={}) {
   const title   = buildTitleBlock();
   const skills  = buildSkillsBlock();
   const loc     = buildLocationBlock(platform);
@@ -1921,7 +1936,7 @@ function assembleString(extraPrefix='', platform='linkedin') {
   const edu     = buildEducationBlock();
   const visa    = buildVisaBlock();
   const misc    = buildMiscBlock();
-  const suffix  = (document.getElementById('customSuffix').value || '-recruiter -staffing -hiring -jobs').trim();
+  const suffix  = options.includeSuffix ? (document.getElementById('customSuffix').value || '').trim() : '';
 
   let parts = [];
   if (extraPrefix) parts.push(extraPrefix);
@@ -2069,7 +2084,8 @@ const platformMeta = {
   'linkedin':     { name:'LinkedIn',      url: q => {
     const tpr = getDatePostedValue();
     const tprParam = tpr && tpr !== 'r2592001' ? `&f_TPR=${tpr}` : (tpr === 'r2592001' ? '&f_TPR=r2592000&f_E=1' : '');
-    return `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(q)}${tprParam}`;
+    const location = document.getElementById('stateSelect').value || 'United States';
+    return `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(q)}&location=${encodeURIComponent(location)}${tprParam}`;
   }, tip:'Full boolean: AND / OR / NOT + "quotes". Up to 1000 chars. Best for recruiter sourcing.' },
   'glassdoor':    { name:'Glassdoor',     url: q => `https://www.glassdoor.com/Job/jobs.htm?sc.keyword=${encodeURIComponent(q)}&locT=N&locId=1`,
                     tip:'Quotes + AND/OR supported. Avoid deep nesting. Best with title + skills + location.' },
@@ -2132,7 +2148,7 @@ function updatePreview() {
   const pill= document.getElementById('charPill');
   const bar = document.getElementById('qualityBar');
 
-  el.textContent = str || 'Fill in the form to see your boolean string…';
+  el.textContent = str || 'Fill in the form to see your boolean string...';
   el.classList.toggle('has-content', !!str);
 
   const len = str.length;
@@ -2146,15 +2162,16 @@ function updatePreview() {
 }
 
 function copyPreview() {
-  const str = assembleString('','linkedin');
+  const str = assembleString('', 'linkedin');
   if (!str) { showToast('Nothing to copy yet'); return; }
-  navigator.clipboard.writeText(str).then(() => showToast('✓ Preview copied'));
+  navigator.clipboard.writeText(str).then(() => showToast('Preview copied'));
 }
 
 // ── GENERATE ALL ─────────────────────────────────────────
 function generateAll() {
   const active = [...document.querySelectorAll('.plat-btn.active')].map(el => el.dataset.platform);
-  if (!active.length) { showToast('⚠ Select at least one platform'); return; }
+  if (!active.length) { showToast('Select at least one platform'); return; }
+  if (!hasSearchCore()) { showToast('Add at least a job title or skills first'); return; }
 
   const section  = document.getElementById('outputSection');
   const tabsEl   = document.getElementById('outputTabs');
@@ -2169,7 +2186,6 @@ function generateAll() {
     const len  = str.length;
     const limitClass = len > 1000 ? 'over' : len > 700 ? 'warn' : 'ok';
 
-    // Tab
     const tab = document.createElement('button');
     tab.className = 'tab-btn' + (idx === 0 ? ' active' : '');
     tab.textContent = meta.name;
@@ -2177,7 +2193,6 @@ function generateAll() {
     tab.id = `tabBtn-${platform}`;
     tabsEl.appendChild(tab);
 
-    // Panel
     const panel = document.createElement('div');
     panel.className = 'tab-panel' + (idx === 0 ? ' active' : '');
     panel.id = `panel-${platform}`;
@@ -2188,14 +2203,14 @@ function generateAll() {
       <div class="panel-toolbar">
         <div class="panel-label">${meta.name}</div>
         <div class="panel-actions">
-          <div class="char-pill ${limitClass}">${len} chars${({'linkedin':' / 1000 limit','dice':' / full boolean','indeed':' / full boolean','glassdoor':' / AND·OR','ziprecruiter':' / AND·OR','wellfound':' / keywords','hiringcafe':' / keywords','jobright':' / keywords','crawljobs':' / AND·OR','googlexray':' / X-Ray'}[platform] || '')}</div>
-          <button class="btn-action" onclick="clearPanel('${platform}')">✕ Clear</button>
-          <button class="btn-action" id="copyBtn-${platform}" onclick="copyPanel('${platform}')">⎘ Copy</button>
-          <a class="btn-action search-btn" href="${searchUrl}" target="_blank" rel="noopener">↗ Search Now</a>
+          <div class="char-pill ${limitClass}">${len} chars${({'linkedin':' / 1000 limit','dice':' / full boolean','indeed':' / full boolean','glassdoor':' / AND/OR','ziprecruiter':' / AND/OR','wellfound':' / keywords','hiringcafe':' / keywords','jobright':' / keywords','crawljobs':' / AND/OR','googlexray':' / X-Ray'}[platform] || '')}</div>
+          <button class="btn-action" onclick="clearPanel('${platform}')">Clear</button>
+          <button class="btn-action" id="copyBtn-${platform}" onclick="copyPanel('${platform}')">Copy</button>
+          <a class="btn-action search-btn" href="${searchUrl}" target="_blank" rel="noopener">Search Now</a>
         </div>
       </div>
-      <div class="bool-string" id="str-${platform}">${str ? highlight(str) : '<span class="placeholder">Fill in the form and click Generate…</span>'}</div>
-      <div class="panel-tip">✦ ${meta.tip}</div>
+      <div class="bool-string" id="str-${platform}">${str ? highlight(str) : '<span class="placeholder">Fill in the form and click Generate...</span>'}</div>
+      <div class="panel-tip">${meta.tip}</div>
     `;
     panelsEl.appendChild(panel);
   });
@@ -2215,10 +2230,10 @@ function copyPanel(platform) {
   const raw = document.getElementById(`str-${platform}`).textContent;
   const btn = document.getElementById(`copyBtn-${platform}`);
   navigator.clipboard.writeText(raw).then(() => {
-    btn.textContent = '✓ Copied';
+    btn.textContent = 'Copied';
     btn.classList.add('copy-active');
-    showToast('✓ Copied to clipboard');
-    setTimeout(() => { btn.textContent = '⎘ Copy'; btn.classList.remove('copy-active'); }, 2000);
+    showToast('Copied to clipboard');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copy-active'); }, 2000);
   });
 }
 

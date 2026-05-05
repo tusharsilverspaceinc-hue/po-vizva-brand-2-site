@@ -1,0 +1,2438 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vizva BoolSearch Pro â€” US Recruitment Boolean Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Framer Design System */
+  --canvas:        #090909;
+  --surface-1:     #141414;
+  --surface-2:     #1c1c1c;
+  --hairline:      #262626;
+  --hairline-soft: #1a1a1a;
+  --ink:           #ffffff;
+  --ink-muted:     #999999;
+  --accent:        #0099ff;
+  --accent-dim:    rgba(0,153,255,0.10);
+  --accent-glow:   rgba(0,153,255,0.20);
+  --g-violet:      #6a4cf5;
+  --g-magenta:     #d44df0;
+  --g-orange:      #ff7a3d;
+  --g-coral:       #ff5577;
+  --success:       #22c55e;
+  --warn:          #f59e0b;
+  --danger:        #ef4444;
+  --f-display:     'Plus Jakarta Sans', sans-serif;
+  --f-body:        'Inter', sans-serif;
+  --f-mono:        'JetBrains Mono', monospace;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+html{scroll-behavior:smooth}
+
+body{
+  background:var(--canvas);
+  color:var(--ink);
+  font-family:var(--f-body);
+  font-size:14px;
+  line-height:1.5;
+  min-height:100vh;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* Fine dot grid */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:radial-gradient(circle,rgba(255,255,255,0.04) 1px,transparent 1px);
+  background-size:28px 28px;
+  pointer-events:none;z-index:0;
+}
+
+/* Ambient glow */
+body::after{
+  content:'';
+  position:fixed;
+  top:-200px;left:50%;
+  transform:translateX(-50%);
+  width:700px;height:400px;
+  background:radial-gradient(ellipse,rgba(106,76,245,0.08) 0%,transparent 70%);
+  pointer-events:none;z-index:0;
+}
+
+.wrap{max-width:1260px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+
+/* â”€â”€ HEADER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+header{
+  padding:20px 0;
+  border-bottom:1px solid var(--hairline-soft);
+  position:sticky;top:0;
+  background:rgba(9,9,9,0.88);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  z-index:100;
+}
+
+.header-inner{
+  display:flex;align-items:center;
+  justify-content:space-between;gap:16px;flex-wrap:wrap;
+}
+
+.logo{display:flex;align-items:center;gap:12px}
+
+.logo-mark{
+  width:38px;height:38px;
+  background:var(--ink);
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--f-mono);font-weight:600;font-size:14px;
+  color:var(--canvas);flex-shrink:0;
+  letter-spacing:-1px;
+}
+
+.logo-text{
+  font-family:var(--f-display);
+  font-size:18px;font-weight:800;
+  letter-spacing:-0.8px;color:var(--ink);
+}
+
+.logo-sub{
+  font-size:11px;color:var(--ink-muted);
+  font-weight:400;letter-spacing:0;
+  margin-top:1px;
+}
+
+.header-right{display:flex;align-items:center;gap:8px}
+
+.pill-badge{
+  background:var(--surface-1);
+  border:1px solid var(--hairline);
+  color:var(--ink-muted);
+  font-size:11px;font-weight:500;
+  padding:5px 12px;border-radius:100px;
+  letter-spacing:0.2px;font-family:var(--f-body);
+}
+
+.pill-badge.live{
+  border-color:var(--success);
+  color:var(--success);
+  background:rgba(34,197,94,0.08);
+}
+
+/* â”€â”€ SECTION HEADERS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.page-section{padding:40px 0 0}
+
+.section-eyebrow{
+  font-size:11px;font-weight:600;
+  color:var(--ink-muted);
+  letter-spacing:1.2px;text-transform:uppercase;
+  margin-bottom:8px;font-family:var(--f-mono);
+}
+
+.section-title{
+  font-family:var(--f-display);
+  font-size:26px;font-weight:800;
+  letter-spacing:-1.2px;color:var(--ink);
+  margin-bottom:4px;
+}
+
+/* â”€â”€ PRESETS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.preset-dropdown-wrap{margin-top:20px;}
+.preset-select-row{display:flex;gap:10px;align-items:center;}
+.preset-select-row select{flex:1;background:var(--surface-1);border:1px solid var(--hairline);border-radius:10px;padding:10px 14px;color:var(--ink);font-family:var(--f-body);font-size:13px;outline:none;cursor:pointer;transition:border-color 0.18s;}
+.preset-select-row select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow);}
+.preset-select-row select option{background:var(--surface-2);color:var(--ink);}
+.preset-select-row select optgroup{background:var(--surface-1);color:var(--ink-muted);font-weight:600;font-size:11px;}
+#presetLoadedBadge{display:inline-flex;align-items:center;gap:6px;background:var(--accent-dim);border:1px solid rgba(0,153,255,0.3);border-radius:100px;padding:5px 14px;font-size:12px;color:var(--accent);font-family:var(--f-body);font-weight:500;}
+.presets-row{
+  display:flex;gap:8px;
+  overflow-x:auto;padding-bottom:4px;
+  scrollbar-width:none;margin-top:20px;
+}
+.presets-row::-webkit-scrollbar{display:none}
+
+.preset-chip{
+  display:inline-flex;align-items:center;gap:7px;
+  background:var(--surface-1);
+  border:1px solid var(--hairline);
+  border-radius:100px;
+  padding:7px 14px;cursor:pointer;
+  transition:all 0.15s;white-space:nowrap;flex-shrink:0;
+  font-size:12px;font-weight:500;color:var(--ink-muted);
+  font-family:var(--f-body);
+}
+.preset-chip:hover{border-color:var(--ink-muted);color:var(--ink)}
+.preset-chip .chip-icon{font-size:14px}
+
+/* Spotlight chips */
+.preset-chip.spot-violet{
+  background:linear-gradient(135deg,rgba(106,76,245,0.25),rgba(106,76,245,0.08));
+  border-color:rgba(106,76,245,0.4);color:var(--ink);
+}
+.preset-chip.spot-violet:hover{border-color:var(--g-violet)}
+.preset-chip.spot-magenta{
+  background:linear-gradient(135deg,rgba(212,77,240,0.20),rgba(212,77,240,0.06));
+  border-color:rgba(212,77,240,0.35);color:var(--ink);
+}
+
+/* â”€â”€ MAIN GRID â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.main-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin-top:24px;
+}
+@media(max-width:860px){.main-grid{grid-template-columns:1fr}}
+
+.span-2{grid-column:1/-1}
+
+/* â”€â”€ CARDS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.card{
+  background:var(--surface-1);
+  border:1px solid var(--hairline);
+  border-radius:16px;
+  padding:22px;
+  transition:border-color 0.2s;
+}
+.card:hover{border-color:var(--hairline)}
+
+.card-head{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:18px;padding-bottom:14px;
+  border-bottom:1px solid var(--hairline-soft);
+}
+
+.card-icon{
+  width:28px;height:28px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;flex-shrink:0;
+}
+
+.ci-blue  {background:rgba(0,153,255,0.12);}
+.ci-violet{background:rgba(106,76,245,0.15);}
+.ci-green {background:rgba(34,197,94,0.12);}
+.ci-purple{background:rgba(212,77,240,0.12);}
+.ci-orange{background:rgba(255,122,61,0.12);}
+.ci-coral {background:rgba(255,85,119,0.12);}
+
+.card-title{
+  font-family:var(--f-display);
+  font-size:13px;font-weight:700;
+  letter-spacing:-0.3px;color:var(--ink);
+}
+
+.card-desc{font-size:11px;color:var(--ink-muted);margin-top:1px}
+
+/* â”€â”€ FORM ELEMENTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.field{margin-bottom:15px}
+.field:last-child{margin-bottom:0}
+
+label.field-label{
+  display:block;
+  font-size:11px;font-weight:600;
+  color:var(--ink-muted);
+  letter-spacing:0.8px;text-transform:uppercase;
+  margin-bottom:6px;font-family:var(--f-body);
+}
+
+input[type="text"],textarea,select{
+  width:100%;
+  background:var(--surface-2);
+  border:1px solid var(--hairline);
+  border-radius:10px;
+  padding:9px 12px;
+  color:var(--ink);
+  font-family:var(--f-body);font-size:13px;
+  outline:none;
+  transition:border-color 0.18s,box-shadow 0.18s;
+  -webkit-appearance:none;
+}
+input[type="text"]:focus,
+textarea:focus,
+select:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-glow);
+}
+select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23666'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;}
+select option{background:var(--surface-2);color:var(--ink)}
+textarea{resize:vertical;min-height:76px;line-height:1.5}
+
+.field-hint{font-size:11px;color:var(--ink-muted);margin-top:4px;font-style:italic}
+
+/* â”€â”€ TAG INPUT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.tag-wrap{
+  background:var(--surface-2);
+  border:1px solid var(--hairline);
+  border-radius:10px;
+  padding:6px 8px;
+  display:flex;flex-wrap:wrap;gap:5px;
+  min-height:42px;align-items:flex-start;
+  cursor:text;transition:border-color 0.18s,box-shadow 0.18s;
+}
+.tag-wrap:focus-within{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-glow);
+}
+
+.tag{
+  display:inline-flex;align-items:center;gap:4px;
+  background:var(--surface-1);
+  border:1px solid var(--hairline);
+  border-radius:6px;padding:3px 8px;
+  font-size:12px;color:var(--ink);
+  white-space:nowrap;
+  animation:tagIn 0.12s ease;
+}
+@keyframes tagIn{from{opacity:0;transform:scale(0.88)}to{opacity:1;transform:scale(1)}}
+
+.tag.t-must  {border-color:rgba(0,153,255,0.4);background:rgba(0,153,255,0.1);color:#7dd3fc}
+.tag.t-any   {border-color:rgba(34,197,94,0.4);background:rgba(34,197,94,0.08);color:#86efac}
+.tag.t-exc   {border-color:rgba(239,68,68,0.4);background:rgba(239,68,68,0.08);color:#fca5a5}
+
+.tag-remove{
+  cursor:pointer;opacity:0.4;font-size:14px;
+  line-height:1;padding:0 1px;transition:opacity 0.1s;
+}
+.tag-remove:hover{opacity:1}
+
+.tag-input{
+  border:none;background:transparent;outline:none;
+  color:var(--ink);font-size:13px;
+  font-family:var(--f-body);
+  min-width:100px;flex:1;padding:2px 4px;
+}
+.tag-input::placeholder{color:#555}
+
+/* â”€â”€ CHECKBOXES / PILLS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.check-group{display:flex;flex-wrap:wrap;gap:6px}
+
+.check-pill{
+  display:flex;align-items:center;gap:6px;
+  cursor:pointer;
+  font-size:12px;color:var(--ink-muted);
+  padding:5px 11px;
+  background:var(--surface-2);
+  border:1px solid var(--hairline);
+  border-radius:100px;
+  transition:all 0.15s;user-select:none;
+}
+.check-pill:hover{border-color:var(--ink-muted);color:var(--ink)}
+.check-pill input{display:none}
+.check-dot{
+  width:12px;height:12px;
+  border:1.5px solid var(--hairline);
+  border-radius:3px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.15s;flex-shrink:0;
+}
+.check-pill input:checked ~ .check-dot{
+  background:var(--ink);border-color:var(--ink);
+}
+.check-pill input:checked ~ .check-dot::after{
+  content:'âœ“';font-size:8px;color:var(--canvas);font-weight:700;
+}
+.check-pill input:checked ~ span{color:var(--ink)}
+.check-pill input:checked + .check-dot + span{color:var(--ink)}
+
+/* Checked state for the whole pill */
+.check-pill:has(input:checked){
+  background:var(--surface-1);
+  border-color:var(--hairline);
+  color:var(--ink);
+}
+
+/* â”€â”€ PLATFORMS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.platform-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(110px,1fr));
+  gap:8px;
+}
+
+.plat-btn{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:12px 8px;
+  background:var(--surface-2);
+  border:1.5px solid var(--hairline);
+  border-radius:12px;cursor:pointer;
+  transition:all 0.15s;position:relative;
+  text-align:center;
+}
+.plat-btn:hover{border-color:rgba(255,255,255,0.2);background:var(--surface-2)}
+.plat-btn.active{
+  border-color:rgba(255,255,255,0.4);
+  background:var(--surface-1);
+}
+.plat-btn.active::after{
+  content:'âœ“';
+  position:absolute;top:6px;right:8px;
+  font-size:9px;color:var(--ink);font-weight:700;
+}
+
+.plat-logo{
+  width:30px;height:30px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:800;flex-shrink:0;
+}
+
+.plat-name{
+  font-size:10px;font-weight:600;color:var(--ink-muted);
+  line-height:1.3;font-family:var(--f-body);
+}
+.plat-btn.active .plat-name{color:var(--ink)}
+
+.plat-tag{
+  font-size:9px;
+  background:rgba(34,197,94,0.12);
+  color:var(--success);
+  border:1px solid rgba(34,197,94,0.3);
+  border-radius:4px;padding:1px 5px;
+  font-family:var(--f-mono);font-weight:600;
+  margin-top:2px;
+}
+
+/* â”€â”€ TWO-COL INSIDE CARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:480px){.two-col{grid-template-columns:1fr}}
+
+/* â”€â”€ RANGE SLIDER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+input[type="range"]{
+  -webkit-appearance:none;
+  width:100%;height:4px;
+  background:var(--surface-2);
+  border-radius:2px;outline:none;
+  margin:8px 0;border:1px solid var(--hairline);
+}
+input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:16px;height:16px;border-radius:50%;
+  background:var(--ink);cursor:pointer;
+  box-shadow:0 0 0 3px rgba(255,255,255,0.1);
+}
+.range-labels{
+  display:flex;justify-content:space-between;
+  font-size:10px;color:var(--ink-muted);
+  font-family:var(--f-mono);margin-top:2px;
+}
+
+/* â”€â”€ LIVE PREVIEW BAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.preview-bar{
+  position:sticky;bottom:0;
+  background:rgba(9,9,9,0.92);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--hairline);
+  padding:14px 0;z-index:90;
+  margin-top:24px;
+}
+.preview-inner{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+}
+.preview-label{
+  font-size:10px;font-weight:600;color:var(--ink-muted);
+  text-transform:uppercase;letter-spacing:0.8px;
+  font-family:var(--f-mono);white-space:nowrap;flex-shrink:0;
+}
+.preview-string{
+  flex:1;min-width:0;
+  font-family:var(--f-mono);font-size:11px;
+  color:var(--ink-muted);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.preview-string.has-content{color:var(--ink)}
+.preview-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+
+.char-pill{
+  font-family:var(--f-mono);font-size:10px;font-weight:600;
+  padding:3px 10px;border-radius:100px;
+  border:1px solid var(--hairline);color:var(--ink-muted);
+  white-space:nowrap;
+}
+.char-pill.ok  {border-color:rgba(34,197,94,0.4);color:var(--success)}
+.char-pill.warn{border-color:rgba(245,158,11,0.4);color:var(--warn)}
+.char-pill.over{border-color:rgba(239,68,68,0.4);color:var(--danger)}
+
+/* â”€â”€ BUTTONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* Primary â€” white pill */
+.btn-primary{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  background:var(--ink);color:var(--canvas);
+  font-family:var(--f-display);font-size:14px;font-weight:700;
+  letter-spacing:-0.3px;
+  padding:10px 22px;border-radius:100px;
+  border:none;cursor:pointer;
+  transition:all 0.15s;white-space:nowrap;
+}
+.btn-primary:hover{background:#eeeeee;transform:translateY(-1px)}
+.btn-primary:active{transform:translateY(0)}
+
+/* Secondary â€” charcoal pill */
+.btn-secondary{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  background:var(--surface-1);color:var(--ink);
+  font-family:var(--f-body);font-size:13px;font-weight:500;
+  padding:8px 16px;border-radius:100px;
+  border:1px solid var(--hairline);cursor:pointer;
+  transition:all 0.15s;white-space:nowrap;
+}
+.btn-secondary:hover{border-color:var(--ink-muted);color:var(--ink)}
+
+/* Action small */
+.btn-action{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 12px;border-radius:8px;
+  font-size:11px;font-weight:600;
+  cursor:pointer;border:1px solid var(--hairline);
+  background:var(--surface-2);color:var(--ink-muted);
+  transition:all 0.15s;font-family:var(--f-body);
+}
+.btn-action:hover{border-color:var(--ink-muted);color:var(--ink)}
+.btn-action.copy-active{
+  border-color:rgba(34,197,94,0.5);
+  background:rgba(34,197,94,0.08);color:var(--success);
+}
+.btn-action.search-btn{
+  border-color:rgba(0,153,255,0.4);
+  background:var(--accent-dim);color:var(--accent);
+}
+.btn-action.search-btn:hover{
+  background:rgba(0,153,255,0.18);
+}
+
+/* Generate CTA â€” full width */
+.generate-wrap{padding:24px 0 8px}
+.generate-cta{
+  width:100%;padding:15px;
+  background:var(--ink);color:var(--canvas);
+  font-family:var(--f-display);font-size:16px;font-weight:800;
+  letter-spacing:-0.5px;
+  border:none;border-radius:100px;cursor:pointer;
+  transition:all 0.18s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.generate-cta:hover{background:#e8e8e8;transform:translateY(-2px);box-shadow:0 8px 32px rgba(255,255,255,0.08)}
+.generate-cta:active{transform:translateY(0)}
+
+/* â”€â”€ OUTPUT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.output-section{margin-top:24px;display:none}
+
+.output-tabs{
+  display:flex;gap:3px;overflow-x:auto;
+  padding-bottom:0;scrollbar-width:none;
+}
+.output-tabs::-webkit-scrollbar{display:none}
+
+.tab-btn{
+  padding:6px 14px;
+  background:transparent;
+  border:1px solid var(--hairline);
+  border-bottom:none;
+  border-radius:10px 10px 0 0;
+  cursor:pointer;font-family:var(--f-body);font-size:11px;
+  font-weight:600;color:var(--ink-muted);
+  transition:all 0.12s;white-space:nowrap;flex-shrink:0;
+}
+.tab-btn:hover{color:var(--ink);background:var(--surface-2)}
+.tab-btn.active{
+  background:var(--surface-1);
+  color:var(--ink);
+  border-color:var(--hairline);
+  border-bottom-color:var(--surface-1);
+}
+
+.tab-panel{
+  background:var(--surface-1);
+  border:1px solid var(--hairline);
+  border-radius:0 12px 12px 12px;
+  overflow:hidden;display:none;
+}
+.tab-panel.active{display:block}
+
+.panel-toolbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 16px;border-bottom:1px solid var(--hairline-soft);
+  background:var(--surface-2);gap:10px;flex-wrap:wrap;
+}
+
+.panel-label{
+  font-size:10px;font-weight:600;color:var(--ink-muted);
+  letter-spacing:0.8px;text-transform:uppercase;
+  font-family:var(--f-mono);
+}
+
+.panel-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+
+.bool-string{
+  padding:16px;
+  font-family:var(--f-mono);font-size:12.5px;
+  line-height:1.8;color:var(--ink);
+  word-break:break-all;white-space:pre-wrap;
+  min-height:80px;
+}
+.bool-string .op-and{color:#60a5fa;font-weight:600}
+.bool-string .op-or {color:#4ade80;font-weight:600}
+.bool-string .op-not{color:#f87171;font-weight:600}
+.bool-string .op-qt {color:#c084fc}
+.bool-string .op-site{color:#fb923c}
+.bool-string .op-par{color:var(--warn)}
+.bool-string .placeholder{color:#444;font-style:italic}
+
+.panel-tip{
+  padding:8px 16px 12px;
+  font-size:11px;color:var(--ink-muted);
+  font-family:var(--f-mono);
+  border-top:1px solid var(--hairline-soft);
+}
+
+/* â”€â”€ SPOTLIGHT TIPS SECTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.tips-section{
+  margin-top:32px;padding:32px 0 48px;
+}
+
+.tips-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:12px;margin-top:20px;
+}
+
+.tip-card{
+  background:var(--surface-1);
+  border:1px solid var(--hairline);
+  border-radius:14px;padding:16px;
+}
+.tip-card.spot{
+  background:linear-gradient(135deg,rgba(106,76,245,0.3),rgba(106,76,245,0.08));
+  border-color:rgba(106,76,245,0.35);
+}
+.tip-card.spot-mg{
+  background:linear-gradient(135deg,rgba(212,77,240,0.25),rgba(212,77,240,0.06));
+  border-color:rgba(212,77,240,0.3);
+}
+
+.tip-cat{
+  font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--ink-muted);margin-bottom:8px;font-family:var(--f-mono);
+}
+.tip-card.spot .tip-cat,
+.tip-card.spot-mg .tip-cat{color:rgba(255,255,255,0.6)}
+
+.tip-head{
+  font-size:13px;font-weight:700;letter-spacing:-0.3px;
+  color:var(--ink);margin-bottom:6px;
+  font-family:var(--f-display);
+}
+
+.tip-body{font-size:12px;color:var(--ink-muted);line-height:1.55}
+.tip-card.spot .tip-body,
+.tip-card.spot-mg .tip-body{color:rgba(255,255,255,0.7)}
+
+.tip-code{
+  display:block;font-family:var(--f-mono);font-size:10.5px;
+  background:rgba(0,0,0,0.3);border-radius:6px;
+  padding:5px 8px;margin-top:8px;
+  color:rgba(255,255,255,0.8);
+  border:1px solid rgba(255,255,255,0.08);
+}
+
+/* â”€â”€ FOOTER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+footer{
+  text-align:center;padding:20px 0 32px;
+  font-size:11px;color:var(--ink-muted);
+  border-top:1px solid var(--hairline-soft);
+  font-family:var(--f-mono);
+}
+
+/* â”€â”€ TOAST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.toast{
+  position:fixed;bottom:80px;right:24px;
+  background:var(--surface-1);
+  border:1px solid var(--hairline);
+  color:var(--ink);
+  padding:10px 18px;border-radius:100px;
+  font-size:12px;font-weight:600;
+  font-family:var(--f-body);z-index:9999;
+  opacity:0;transform:translateY(8px) scale(0.95);
+  transition:all 0.2s;pointer-events:none;
+}
+.toast.show{opacity:1;transform:translateY(0) scale(1)}
+
+/* â”€â”€ QUALITY METER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.quality-bar-wrap{
+  margin-top:6px;height:3px;
+  background:var(--surface-2);border-radius:2px;overflow:hidden;
+}
+.quality-bar{
+  height:100%;border-radius:2px;
+  transition:width 0.3s,background 0.3s;
+  width:0%;background:var(--hairline);
+}
+
+/* â”€â”€ MISC â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.divider{height:1px;background:var(--hairline-soft);margin:14px 0}
+
+.metro-quick{
+  display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;
+}
+.metro-btn{
+  font-size:11px;font-weight:500;
+  padding:3px 10px;border-radius:100px;
+  border:1px solid var(--hairline);
+  background:transparent;color:var(--ink-muted);
+  cursor:pointer;transition:all 0.12s;font-family:var(--f-body);
+}
+.metro-btn:hover{border-color:var(--ink-muted);color:var(--ink)}
+.metro-btn.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
+
+.skill-suggestions{
+  display:flex;flex-wrap:wrap;gap:5px;margin-top:7px;
+}
+.sugg-chip{
+  font-size:11px;padding:2px 9px;border-radius:5px;
+  background:var(--surface-2);border:1px solid var(--hairline);
+  color:var(--ink-muted);cursor:pointer;
+  transition:all 0.12s;font-family:var(--f-body);
+}
+.sugg-chip:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
+
+.section-mini-label{
+  font-size:10px;font-weight:600;color:var(--ink-muted);
+  letter-spacing:0.6px;text-transform:uppercase;
+  font-family:var(--f-mono);margin-bottom:6px;
+}
+
+
+  /* Date Posted radio pills */
+  .date-pill input[type="radio"] { display: none; }
+  .date-pill { cursor: pointer; }
+  .date-pill:has(input[type="radio"]:checked) {
+    background: var(--primary, #01696f);
+    color: #fff;
+    border-color: var(--primary, #01696f);
+  }
+  .date-pill:has(input[type="radio"]:checked) .check-dot {
+    background: #fff;
+    border-color: rgba(255,255,255,0.6);
+  }
+
+
+  /* H1B radio pills */
+  .h1b-pill input[type="radio"] { display: none; }
+  .h1b-pill { cursor: pointer; }
+  .h1b-pill:has(input[type="radio"]:checked) {
+    background: var(--primary, #01696f);
+    color: #fff;
+    border-color: var(--primary, #01696f);
+  }
+  .h1b-pill:has(input[type="radio"]:checked) .check-dot {
+    background: #fff;
+    border-color: rgba(255,255,255,0.6);
+  }
+
+
+/* â”€â”€ FIND PEOPLE HIRING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.hiring-section {
+  margin-top: 32px;
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: 18px;
+  padding: 28px 32px 32px;
+}
+.hiring-section .section-eyebrow { margin-bottom: 4px; }
+.hiring-section .section-title   { margin-bottom: 20px; }
+.hiring-role-row {
+  display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+}
+.hiring-role-row select {
+  flex: 1; min-width: 220px;
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  border-radius: 10px; padding: 10px 14px;
+  color: var(--ink); font-family: var(--f-body); font-size: 13px;
+  outline: none; cursor: pointer; transition: border-color 0.18s;
+}
+.hiring-role-row select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+.hiring-role-row select option  { background: var(--surface-2); color: var(--ink); }
+.hiring-role-row select optgroup{ background: var(--surface-1); color: var(--ink-muted); font-weight: 600; font-size: 11px; }
+.hiring-results { margin-top: 20px; display: none; }
+.hiring-result-card {
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  border-radius: 12px; padding: 16px 18px; margin-bottom: 14px;
+}
+.hiring-result-card:last-child { margin-bottom: 0; }
+.hiring-result-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.hiring-platform-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--accent-dim); border: 1px solid rgba(0,153,255,0.25);
+  border-radius: 100px; padding: 3px 11px; font-size: 11px;
+  font-weight: 600; color: var(--accent); font-family: var(--f-body);
+}
+.hiring-bool-string {
+  font-family: var(--f-mono); font-size: 12px; color: var(--ink);
+  background: var(--surface-1); border: 1px solid var(--hairline);
+  border-radius: 8px; padding: 10px 14px; line-height: 1.7;
+  word-break: break-all; margin-bottom: 10px;
+}
+.hiring-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.hiring-tip { margin-top: 10px; font-size: 11px; color: var(--ink-muted); font-family: var(--f-body); }
+
+/* Vizva Consultancy header + reference aesthetic restore */
+:root{
+  --void:#0D1B25;--c:#14A2E2;--g:#0774B7;--w:#FFFFFF;--tx:#B5D6F2;--tx2:#6B90B0;
+  --bdr:rgba(20,162,226,.16);--border:var(--bdr);--sf:rgba(7,116,183,.14);
+  --canvas:var(--void);--surface-1:rgba(11,22,32,.97);--surface-2:var(--sf);
+  --hairline:var(--bdr);--hairline-soft:rgba(20,162,226,.08);--ink:var(--w);
+  --ink-muted:var(--tx);--ink-faint:var(--tx2);--accent:var(--c);
+  --accent-dim:rgba(20,162,226,.12);--accent-glow:rgba(20,162,226,.22);
+  --accent-2:var(--g);--success:var(--c);--f-display:Arial,sans-serif;--f-body:Arial,sans-serif;
+}
+body{
+  background:var(--void);font-family:Arial,sans-serif;
+  padding:clamp(40px,6vh,76px) clamp(1rem,4vw,3rem) 88px;
+}
+body::before{
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 20%,rgba(20,162,226,.15) 0%,transparent 55%),
+    radial-gradient(ellipse 60% 50% at 85% 80%,rgba(7,116,183,.11) 0%,transparent 50%),
+    radial-gradient(ellipse 50% 40% at 50% 50%,rgba(7,116,183,.09) 0%,transparent 60%),var(--void);
+}
+body::after{
+  top:auto;left:0;right:0;bottom:0;transform:perspective(400px) rotateX(60deg) scaleX(1.4);
+  width:auto;height:48%;background-image:linear-gradient(rgba(20,162,226,.10) 1px,transparent 1px),linear-gradient(90deg,rgba(20,162,226,.10) 1px,transparent 1px);
+  background-size:60px 60px;transform-origin:center bottom;mask-image:linear-gradient(to top,rgba(0,0,0,.22),transparent);
+}
+header{
+  position:relative;top:auto;width:100%;max-width:1040px;margin:0 auto;padding:0;
+  border:1px solid rgba(20,162,226,.36);border-bottom:1px solid var(--bdr);
+  background:linear-gradient(135deg,rgba(8,16,24,.98) 0%,rgba(12,22,34,.94) 100%);overflow:hidden;
+}
+header::after{content:"";position:absolute;top:-60px;right:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(20,162,226,.17) 0%,transparent 70%);pointer-events:none;}
+header .wrap{max-width:none;padding:20px 32px;}
+.header-inner{position:relative;z-index:1;}
+.vcs-lockup{flex:1;min-width:0;gap:1.8rem;}
+.vcs-logo-tile{
+  width:84px;height:84px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+  background:#fff;border-radius:6px;border:1px solid rgba(255,255,255,.95);
+  box-shadow:0 0 0 1px rgba(20,162,226,.18),0 0 22px rgba(20,162,226,.55),0 0 42px rgba(20,162,226,.20);
+  overflow:hidden;
+}
+.vcs-logo-tile img{width:76px;height:76px;display:block;object-fit:contain;}
+.vcs-wordmark{min-width:0;padding-top:.1rem;}
+.vcs-lockup .logo-text{
+  font-family:Arial Black,Impact,Arial,sans-serif;font-size:clamp(1.85rem,3.5vw,2.35rem);
+  line-height:.92;letter-spacing:.12em;color:#fff;text-transform:uppercase;text-shadow:0 2px 0 rgba(255,255,255,.08);
+}
+.vcs-lockup .logo-sub{
+  margin-top:.75rem;color:#b5d6f2;font-size:clamp(.56rem,.9vw,.72rem);
+  font-weight:700;letter-spacing:.4em;line-height:1.45;text-transform:uppercase;
+}
+.header-right{display:none;}
+.aesthetic-stripe{height:1.5px;width:100%;max-width:1040px;margin:0 auto;background:linear-gradient(90deg,#055A8E,#14A2E2,#0774B7);box-shadow:0 0 5px var(--c);position:relative;z-index:2;}
+.aesthetic-ticker{width:100%;max-width:1040px;margin:0 auto;overflow:hidden;border-left:1px solid rgba(20,162,226,.36);border-right:1px solid rgba(20,162,226,.36);border-bottom:1px solid rgba(20,162,226,.35);background:rgba(8,18,28,.98);padding:.55rem 0;position:relative;z-index:2;}
+.aesthetic-ticker-track{display:flex;gap:2rem;white-space:nowrap;width:max-content;animation:aestheticTicker 24s linear infinite;}
+.aesthetic-ticker span{font-family:Arial,sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--w);}
+.aesthetic-ticker b{color:var(--c);font-size:.55rem;margin:0 1.25rem;}
+@keyframes aestheticTicker{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+body > .wrap{max-width:1040px;background:rgba(11,22,32,.97);border:1px solid rgba(20,162,226,.36);border-top:0;padding:0 clamp(1.4rem,5vw,3.4rem) 1.5rem;overflow:visible;}
+body > .wrap::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(20,162,226,.014) 2px,rgba(20,162,226,.014) 4px);}
+body > .wrap > *{position:relative;z-index:1;}
+.card,.tip-card,.hiring-section,.hiring-result-card,.tab-panel{background:rgba(20,162,226,.04);border:1px solid var(--bdr);border-radius:0;backdrop-filter:none;box-shadow:none;}
+.preset-chip,.check-pill,.metro-btn,.sugg-chip,.tag,.plat-btn,.btn-secondary,.btn-action,.char-pill,.hiring-platform-badge,#presetLoadedBadge,.tab-btn,
+input[type="text"],textarea,select,.tag-wrap{border-radius:0!important;background:var(--sf)!important;border:1px solid var(--bdr)!important;color:var(--tx);}
+.btn-primary,.generate-cta{border-radius:0!important;border:1px solid var(--c);background:var(--c);color:var(--void);font-family:Arial,sans-serif;font-weight:700;letter-spacing:.14em;text-transform:uppercase;box-shadow:none;}
+.preview-bar{left:clamp(1rem,4vw,3rem);right:clamp(1rem,4vw,3rem);bottom:0;width:auto;max-width:1040px;margin:0 auto;background:rgba(8,18,28,.98);border:1px solid rgba(20,162,226,.36);border-bottom:0;padding:.75rem clamp(1rem,3vw,1.6rem);}
+.preview-bar .wrap{max-width:none;padding:0;}
+footer{max-width:1040px;margin:0 auto;border:1px solid rgba(20,162,226,.36);border-top:0;background:rgba(11,22,32,.97);}
+@media(max-width:720px){
+  body{padding:24px 1rem 88px;}header,.aesthetic-stripe,.aesthetic-ticker,body > .wrap,footer{max-width:none;}
+  header .wrap,body > .wrap{padding-left:1.1rem;padding-right:1.1rem;}
+  .vcs-lockup{align-items:flex-start;gap:.9rem;}.vcs-logo-tile{width:54px;height:54px;border-radius:5px;}
+  .vcs-logo-tile img{width:46px;height:46px;}.vcs-lockup .logo-text{font-size:clamp(1.2rem,7vw,1.9rem);line-height:.95;letter-spacing:.1em;}
+  .vcs-lockup .logo-sub{font-size:.52rem;letter-spacing:.24em;line-height:1.55;margin-top:.7rem;}
+}
+
+</style>
+</head>
+<body>
+
+<!-- â”€â”€ HEADER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+<header>
+  <div class="wrap">
+    <div class="header-inner">
+      <div class="logo vcs-lockup">
+        <div class="vcs-logo-tile">
+          <img src="data:image/png;base64,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" alt="Vizva Consultancy Services logo">
+        </div>
+        <div class="vcs-wordmark">
+          <div class="logo-text">Vizva Consultancy<br>Services</div>
+          <div class="logo-sub">Connecting Talent with Opportunity Â· Specialized Staffing Solutions</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="pill-badge live" id="liveStatus">â— Live Preview</div>
+        <div class="pill-badge">ðŸ‡ºðŸ‡¸ US Market</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="aesthetic-stripe" aria-hidden="true"></div>
+<div class="aesthetic-ticker" aria-hidden="true">
+  <div class="aesthetic-ticker-track">
+    <span>BOOLEAN SEARCH PRO <b>*</b> US RECRUITMENT <b>*</b> LINKEDIN SOURCING <b>*</b> GOOGLE X-RAY <b>*</b> H1B SPONSOR TARGETING <b>*</b> FIND PEOPLE HIRING <b>*</b></span>
+    <span>BOOLEAN SEARCH PRO <b>*</b> US RECRUITMENT <b>*</b> LINKEDIN SOURCING <b>*</b> GOOGLE X-RAY <b>*</b> H1B SPONSOR TARGETING <b>*</b> FIND PEOPLE HIRING <b>*</b></span>
+  </div>
+</div>
+
+<!-- â”€â”€ MAIN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+<div class="wrap">
+
+  <!-- Quick Presets -->
+  <div class="page-section">
+    <div class="section-eyebrow">Quick Start</div>
+    <div class="section-title">Role Presets</div>
+    <div class="preset-dropdown-wrap">
+      <div class="preset-select-row">
+        <select id="presetDropdown" onchange="onPresetSelect(this)">
+          <option value="">â€” Select a Role Preset â€”</option>
+          <optgroup label="â”€â”€ Development">
+            <option value="javaDev">â˜• Java Developer</option>
+            <option value="python">ðŸ Python Engineer</option>
+            <option value="dotnetDev">ðŸ–¥ï¸ .Net Developer</option>
+            <option value="react">âš›ï¸ React Developer</option>
+            <option value="node">ðŸŸ¢ Node.js Developer</option>
+            <option value="frontend">ðŸŽ¨ Frontend Engineer</option>
+            <option value="backend">ðŸ—„ï¸ Backend Engineer</option>
+            <option value="fullStackDev">ðŸŒ Full Stack Developer</option>
+            <option value="fullStackEngineer">ðŸ—ï¸ Full Stack Engineer</option>
+            <option value="softwareDev">ðŸ’» Software Developer</option>
+            <option value="softwareEngineer">ðŸ‘¨â€ðŸ’» Software Engineer</option>
+            <option value="hardwareEngineer">ðŸ”§ Hardware Engineer</option>
+            <option value="muleSoftDev">ðŸ”— MuleSoft Developer</option>
+            <option value="serviceNowDev">ðŸ› ï¸ ServiceNow Developer</option>
+            <option value="salesforce">â˜ï¸ Salesforce Developer</option>
+          </optgroup>
+          <optgroup label="â”€â”€ Cloud / Infrastructure">
+            <option value="devopsEngineer">âš™ï¸ DevOps Engineer</option>
+            <option value="aws">ðŸŸ  AWS Cloud Engineer</option>
+            <option value="cloudEngineer">â˜ï¸ Cloud Engineer</option>
+            <option value="sre">ðŸ“¡ Site Reliability Engineer</option>
+            <option value="networkEngineer">ðŸŒ Network Engineer</option>
+            <option value="opsArchitect">ðŸ›ï¸ Operations Architect</option>
+          </optgroup>
+          <optgroup label="â”€â”€ Data / AI / ML">
+            <option value="dataScientist">ðŸ”¬ Data Scientist</option>
+            <option value="dataAnalyst">ðŸ“ˆ Data Analyst</option>
+            <option value="dataEngineer">ðŸ—„ï¸ Data Engineer</option>
+            <option value="mlEngineer">ðŸ§  ML Engineer</option>
+            <option value="aimlAnalyst">ðŸ¤– AI/ML Analyst</option>
+          </optgroup>
+          <optgroup label="â”€â”€ Security">
+            <option value="security">ðŸ” Cybersecurity Engineer</option>
+            <option value="cyberSecAnalyst">ðŸ”’ Cyber Security Analyst</option>
+            <option value="socAnalyst">ðŸ›¡ï¸ SOC Analyst</option>
+          </optgroup>
+          <optgroup label="â”€â”€ Business / Management">
+            <option value="businessAnalyst">ðŸ“Š Business Analyst</option>
+            <option value="projectManager">ðŸ“‹ Project Manager</option>
+            <option value="product">ðŸ“¦ Product Manager</option>
+            <option value="scrummaster">ðŸ Scrum Master</option>
+            <option value="financialAnalyst">ðŸ’¹ Financial Analyst</option>
+            <option value="supplyChainAnalyst">ðŸ“¦ Supply Chain Analyst</option>
+          </optgroup>
+          <optgroup label="â”€â”€ QA / Testing">
+            <option value="qaAnalyst">âœ… QA Analyst</option>
+            <option value="qa">ðŸ§ª QA Automation Engineer</option>
+          </optgroup>
+          <optgroup label="â”€â”€ Enterprise">
+            <option value="sap">ðŸ”µ SAP Consultant</option>
+          </optgroup>
+          <optgroup label="â”€â”€ Add Custom Role">
+            <option value="__custom__">âœï¸ Type my own role...</option>
+          </optgroup>
+        </select>
+        <button class="btn-secondary" onclick="clearAll()" style="padding:8px 16px;font-size:12px;white-space:nowrap;">ðŸ—‘ Clear All</button>
+      </div>
+      <div id="customRoleRow" style="display:none;margin-top:10px;gap:8px;" class="preset-select-row">
+        <input type="text" id="customRoleInput" placeholder="e.g. Salesforce Architect, iOS Developer..." style="flex:1;background:var(--surface-1);border:1px solid var(--hairline);border-radius:10px;padding:10px 14px;color:var(--ink);font-family:var(--f-body);font-size:13px;outline:none;transition:border-color 0.18s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--hairline)'" onkeydown="if(event.key==='Enter')applyCustomRole()" />
+        <button class="btn-primary" onclick="applyCustomRole()" style="padding:9px 18px;font-size:13px;border-radius:100px;">Apply</button>
+        <button class="btn-secondary" onclick="hideCustomRole()" style="padding:9px 14px;font-size:12px;">âœ•</button>
+      </div>
+      <div id="presetLoadedBadge" style="display:none;margin-top:10px;"></div>
+    </div>
+  </div>
+
+  <!-- FORM GRID -->
+  <div class="main-grid" style="margin-top:28px">
+
+    <!-- 1 Â· Job Title -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-icon ci-blue">ðŸŽ¯</div>
+        <div>
+          <div class="card-title">Job Title & Alternatives</div>
+          <div class="card-desc">Primary role + synonyms joined with OR</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Primary Job Title</label>
+        <input type="text" id="primaryTitle" placeholder="e.g. Software Engineer" oninput="updatePreview()" />
+      </div>
+
+      <div class="field">
+        <label class="field-label">Title Alternatives <span style="text-transform:none;letter-spacing:0;font-weight:400;color:#555">(Enter to add)</span></label>
+        <div class="tag-wrap" id="titleTagWrap">
+          <input class="tag-input" id="titleTagInput" placeholder="e.g. SWE, Developer, Programmerâ€¦" />
+        </div>
+        <div class="field-hint">All alternatives joined with OR â€” cast a wider net</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Seniority Level</label>
+        <div class="check-group" id="seniorityGroup">
+          <label class="check-pill"><input type="checkbox" value="Intern"><div class="check-dot"></div><span>Intern</span></label>
+          <label class="check-pill"><input type="checkbox" value="Junior"><div class="check-dot"></div><span>Junior</span></label>
+          <label class="check-pill"><input type="checkbox" value="Mid-Level"><div class="check-dot"></div><span>Mid</span></label>
+          <label class="check-pill"><input type="checkbox" value="Senior"><div class="check-dot"></div><span>Senior</span></label>
+          <label class="check-pill"><input type="checkbox" value="Lead"><div class="check-dot"></div><span>Lead</span></label>
+          <label class="check-pill"><input type="checkbox" value="Staff"><div class="check-dot"></div><span>Staff</span></label>
+          <label class="check-pill"><input type="checkbox" value="Principal"><div class="check-dot"></div><span>Principal</span></label>
+          <label class="check-pill"><input type="checkbox" value="Director"><div class="check-dot"></div><span>Director</span></label>
+          <label class="check-pill"><input type="checkbox" value="VP"><div class="check-dot"></div><span>VP</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 Â· Skills -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-icon ci-violet">âš¡</div>
+        <div>
+          <div class="card-title">Skills & Keywords</div>
+          <div class="card-desc">AND / OR / NOT logic per section</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Must-Have Skills <span style="color:#60a5fa;text-transform:none;letter-spacing:0">(AND)</span></label>
+        <div class="tag-wrap" id="mustTagWrap">
+          <input class="tag-input" id="mustTagInput" placeholder="Required skill, press Enterâ€¦" />
+        </div>
+        <div class="field-hint">Candidate must have ALL of these</div>
+        <div class="skill-suggestions" id="mustSugg"></div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Any-Of Skills <span style="color:#4ade80;text-transform:none;letter-spacing:0">(OR)</span></label>
+        <div class="tag-wrap" id="anyTagWrap">
+          <input class="tag-input" id="anyTagInput" placeholder="Preferred skill, press Enterâ€¦" />
+        </div>
+        <div class="field-hint">Candidate needs at least one of these</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Exclude Keywords <span style="color:#f87171;text-transform:none;letter-spacing:0">(NOT)</span></label>
+        <div class="tag-wrap" id="excludeTagWrap">
+          <input class="tag-input" id="excludeTagInput" placeholder="Term to filter out, press Enterâ€¦" />
+        </div>
+        <div class="field-hint">Commonly: recruiter, manager, intern, hiring</div>
+      </div>
+
+      <div class="field" style="border-top:1px solid var(--border,#e5e7eb);padding-top:14px;margin-top:4px;">
+        <label class="field-label" style="display:flex;align-items:center;gap:8px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#01696f"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20"/><path d="M2 12h20"/><path d="M12 2c-4 4-4 16 0 20"/></svg>
+          H1B Visa Sponsorship
+        </label>
+        <div class="check-group" id="h1bGroup" style="margin-top:8px;">
+          <label class="check-pill h1b-pill" data-value="">
+            <input type="radio" name="h1bFilter" value="" onchange="updatePreview()" checked>
+            <div class="check-dot"></div><span>Any</span>
+          </label>
+          <label class="check-pill h1b-pill" data-value="yes">
+            <input type="radio" name="h1bFilter" value="yes" onchange="updatePreview()">
+            <div class="check-dot"></div><span>âœ… H1B Sponsor Only</span>
+          </label>
+          <label class="check-pill h1b-pill" data-value="no">
+            <input type="radio" name="h1bFilter" value="no" onchange="updatePreview()">
+            <div class="check-dot"></div><span>ðŸš« No Sponsorship</span>
+          </label>
+        </div>
+        <div class="field-hint" id="h1bHint" style="margin-top:6px;display:none;color:#01696f;font-weight:500;">
+          ðŸŸ¢ Boolean will include: <span id="h1bHintText"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 Â· Location -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-icon ci-green">ðŸ“</div>
+        <div>
+          <div class="card-title">Location Targeting</div>
+          <div class="card-desc">State selection &amp; work arrangement</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">State</label>
+          <select id="stateSelect" onchange="updatePreview()">
+            <option value="">Any State</option>
+            <option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option>
+            <option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option>
+            <option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option>
+            <option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option>
+            <option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option>
+            <option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option>
+            <option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option>
+            <option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option>
+            <option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option>
+            <option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option>
+            <option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option>
+            <option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option>
+            <option>Wisconsin</option><option>Wyoming</option>
+          </select>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Work Arrangement</label>
+        <div class="check-group">
+          <label class="check-pill"><input type="checkbox" id="remoteCheck" value="Remote" onchange="updatePreview()"><div class="check-dot"></div><span>Remote</span></label>
+          <label class="check-pill"><input type="checkbox" id="hybridCheck" value="Hybrid" onchange="updatePreview()"><div class="check-dot"></div><span>Hybrid</span></label>
+          <label class="check-pill"><input type="checkbox" id="onsiteCheck" value="On-site" onchange="updatePreview()"><div class="check-dot"></div><span>On-site</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 Â· Platforms (full width) -->
+    <div class="card span-2">
+      <div class="card-head">
+        <div class="card-icon ci-blue">ðŸŒ</div>
+        <div>
+          <div class="card-title">Target Platforms</div>
+          <div class="card-desc">Select all platforms to generate strings for</div>
+        </div>
+      </div>
+      <div class="platform-grid" id="platformGrid">
+        <div class="plat-btn active" data-platform="linkedin">
+          <div class="plat-logo" style="background:#0077b5;color:#fff;font-size:14px;font-weight:800">in</div>
+          <div class="plat-name">LinkedIn</div>
+          <div class="plat-tag">Top</div>
+        </div>
+        <div class="plat-btn active" data-platform="glassdoor">
+          <div class="plat-logo" style="background:#0caa41;color:#fff;font-size:10px;font-weight:800">GD</div>
+          <div class="plat-name">Glassdoor</div>
+        </div>
+        <div class="plat-btn active" data-platform="wellfound">
+          <div class="plat-logo" style="background:#141414;color:#fff;font-size:10px;font-weight:800">WF</div>
+          <div class="plat-name">Wellfound</div>
+          <div class="plat-tag">Startup</div>
+        </div>
+        <div class="plat-btn active" data-platform="hiringcafe">
+          <div class="plat-logo" style="background:#7c3aed;color:#fff;font-size:9px;font-weight:800">HC</div>
+          <div class="plat-name">HiringCafe</div>
+        </div>
+        <div class="plat-btn active" data-platform="jobright">
+          <div class="plat-logo" style="background:#0ea5e9;color:#fff;font-size:9px;font-weight:700">JR</div>
+          <div class="plat-name">Jobright</div>
+          <div class="plat-tag">AI</div>
+        </div>
+        <div class="plat-btn active" data-platform="crawljobs">
+          <div class="plat-logo" style="background:#f97316;color:#fff;font-size:9px;font-weight:700">CJ</div>
+          <div class="plat-name">CrawlJobs</div>
+        </div>
+        <div class="plat-btn active" data-platform="ziprecruiter">
+          <div class="plat-logo" style="background:#24a4c0;color:#fff;font-size:9px;font-weight:700">ZR</div>
+          <div class="plat-name">ZipRecruiter</div>
+        </div>
+        <div class="plat-btn active" data-platform="googlexray">
+          <div class="plat-logo" style="background:#4285f4;color:#fff;font-size:9px;font-weight:800">Gâš¡</div>
+          <div class="plat-name">Google X-Ray</div>
+          <div class="plat-tag">Jobs</div>
+        </div>
+        <div class="plat-btn active" data-platform="indeed">
+          <div class="plat-logo" style="background:#2164f3;color:#fff;font-size:13px;font-weight:800">i</div>
+          <div class="plat-name">Indeed</div>
+        </div>
+        <div class="plat-btn active" data-platform="dice">
+          <div class="plat-logo" style="background:#eb0028;color:#fff;font-size:12px;font-weight:800">D</div>
+          <div class="plat-name">Dice</div>
+          <div class="plat-tag">IT</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7 Â· Advanced -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-icon ci-coral">âš™ï¸</div>
+        <div>
+          <div class="card-title">Advanced Options</div>
+          <div class="card-desc">Employment type, experience, date posted, industry</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Experience Range</label>
+        <input type="range" id="expRange" min="0" max="20" value="0" step="1"
+          oninput="document.getElementById('expVal').textContent=this.value==0?'Any':this.value+'+ yrs';updatePreview()" />
+        <div class="range-labels"><span>Any</span><span id="expVal">Any</span><span>20+ yrs</span></div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Employment Type</label>
+        <div class="check-group" id="empGroup">
+          <label class="check-pill"><input type="checkbox" value="Full-time" onchange="updatePreview()"><div class="check-dot"></div><span>Full-time</span></label>
+          <label class="check-pill"><input type="checkbox" value="Contract" onchange="updatePreview()"><div class="check-dot"></div><span>Contract</span></label>
+          <label class="check-pill"><input type="checkbox" value="W2" onchange="updatePreview()"><div class="check-dot"></div><span>W2</span></label>
+          <label class="check-pill"><input type="checkbox" value="C2C" onchange="updatePreview()"><div class="check-dot"></div><span>C2C</span></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Date Posted</label>
+        <div class="check-group" id="datePostedGroup" style="flex-wrap:wrap;gap:6px;">
+          <label class="check-pill date-pill" data-value="">
+            <input type="radio" name="datePosted" value="" onchange="updatePreview()" checked>
+            <div class="check-dot"></div><span>Any time</span>
+          </label>
+          <label class="check-pill date-pill" data-value="r86400">
+            <input type="radio" name="datePosted" value="r86400" onchange="updatePreview()">
+            <div class="check-dot"></div><span>24 hours</span>
+          </label>
+          <label class="check-pill date-pill" data-value="r259200">
+            <input type="radio" name="datePosted" value="r259200" onchange="updatePreview()">
+            <div class="check-dot"></div><span>3 days</span>
+          </label>
+          <label class="check-pill date-pill" data-value="r604800">
+            <input type="radio" name="datePosted" value="r604800" onchange="updatePreview()">
+            <div class="check-dot"></div><span>7 days</span>
+          </label>
+          <label class="check-pill date-pill" data-value="r2592000">
+            <input type="radio" name="datePosted" value="r2592000" onchange="updatePreview()">
+            <div class="check-dot"></div><span>30 days</span>
+          </label>
+          <label class="check-pill date-pill" data-value="r2592001">
+            <input type="radio" name="datePosted" value="r2592001" onchange="updatePreview()">
+            <div class="check-dot"></div><span>30 days+</span>
+          </label>
+        </div>
+        <div class="field-hint" id="datePostedHint" style="margin-top:6px;color:#888;font-size:12px;">Applies to LinkedIn, Indeed, Dice, and Google X-Ray searches.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Industry Keywords <span style="text-transform:none;letter-spacing:0;font-weight:400;color:#555">(Enter)</span></label>
+        <div class="tag-wrap" id="industryTagWrap">
+          <input class="tag-input" id="industryTagInput" placeholder="e.g. FinTech, Healthcare, SaaSâ€¦" />
+        </div>
+      </div>
+
+    </div>
+
+    <!-- String Config â€” hidden inputs, always active -->
+    <input type="hidden" id="freshnessSelect" value="" />
+    <input type="hidden" id="exactTitleMatch" />
+    <input type="hidden" id="useParens" checked />
+    <input type="hidden" id="includeCurrentRole" />
+    <input type="hidden" id="customSuffix" value="-recruiter -staffing -hiring -jobs" />
+  </div><!-- /main-grid -->
+
+  <!-- GENERATE CTA -->
+  <div class="generate-wrap">
+    <button class="generate-cta" onclick="generateAll()">
+      âš¡ Generate Boolean Strings
+    </button>
+  </div>
+
+  <!-- OUTPUT SECTION -->
+  <div class="output-section" id="outputSection">
+    <div class="card span-2" style="padding:0;overflow:visible;background:transparent;border:none">
+      <div class="output-tabs" id="outputTabs"></div>
+      <div id="outputPanels"></div>
+    </div>
+  </div>
+
+
+  <!-- FIND PEOPLE HIRING -->
+  <div class="hiring-section">
+    <div class="section-eyebrow">Reverse Search</div>
+    <div class="section-title">ðŸ” Find People Hiring for a Role</div>
+    <p style="font-size:13px;color:var(--ink-muted);font-family:var(--f-body);margin-bottom:20px;max-width:640px;">
+      Select a role and location to generate boolean strings that find <strong>hiring managers, HR professionals, and recruiters</strong>
+      actively posting or hiring for that position on LinkedIn and Google.
+    </p>
+
+    <!-- Row 1: Role Dropdown + Manual Role Input -->
+    <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-bottom:14px;">
+      <div style="flex:1;min-width:220px;">
+        <label class="field-label">Role</label>
+        <select id="hiringRoleSelect" onchange="onHiringRoleDropdown(this)" style="width:100%;background:var(--surface-2);border:1px solid var(--hairline);border-radius:10px;padding:10px 14px;color:var(--ink);font-family:var(--f-body);font-size:13px;outline:none;cursor:pointer;transition:border-color 0.18s;">
+          <option value="">â€” Select a Role Preset â€”</option>
+          <optgroup label="â”€â”€ Development">
+            <option value="Java Developer">â˜• Java Developer</option>
+            <option value="Python Engineer">ðŸ Python Engineer</option>
+            <option value=".Net Developer">ðŸ–¥ï¸ .Net Developer</option>
+            <option value="React Developer">âš›ï¸ React Developer</option>
+            <option value="Node.js Developer">ðŸŸ¢ Node.js Developer</option>
+            <option value="Frontend Engineer">ðŸŽ¨ Frontend Engineer</option>
+            <option value="Backend Engineer">ðŸ—„ï¸ Backend Engineer</option>
+            <option value="Full Stack Developer">ðŸŒ Full Stack Developer</option>
+            <option value="Full Stack Engineer">ðŸ—ï¸ Full Stack Engineer</option>
+            <option value="Software Developer">ðŸ’» Software Developer</option>
+            <option value="Software Engineer">ðŸ‘¨â€ðŸ’» Software Engineer</option>
+            <option value="Hardware Engineer">ðŸ”§ Hardware Engineer</option>
+            <option value="MuleSoft Developer">ðŸ”— MuleSoft Developer</option>
+            <option value="ServiceNow Developer">ðŸ› ï¸ ServiceNow Developer</option>
+            <option value="Salesforce Developer">â˜ï¸ Salesforce Developer</option>
+          </optgroup>
+          <optgroup label="â”€â”€ Cloud / Infrastructure">
+            <option value="DevOps Engineer">âš™ï¸ DevOps Engineer</option>
+            <option value="AWS Cloud Engineer">ðŸŸ  AWS Cloud Engineer</option>
+            <option value="Cloud Engineer">â˜ï¸ Cloud Engineer</option>
+            <option value="Site Reliability Engineer">ðŸ“¡ Site Reliability Engineer</option>
+            <option value="Network Engineer">ðŸŒ Network Engineer</option>
+            <option value="Operations Architect">ðŸ›ï¸ Operations Architect</option>
+          </optgroup>
+          <optgroup label="â”€â”€ Data / AI / ML">
+            <option value="Data Scientist">ðŸ”¬ Data Scientist</option>
+            <option value="Data Analyst">ðŸ“ˆ Data Analyst</option>
+            <option value="Data Engineer">ðŸ—„ï¸ Data Engineer</option>
+            <option value="ML Engineer">ðŸ§  ML Engineer</option>
+            <option value="AI/ML Analyst">ðŸ¤– AI/ML Analyst</option>
+          </optgroup>
+          <optgroup label="â”€â”€ Security">
+            <option value="Cybersecurity Engineer">ðŸ” Cybersecurity Engineer</option>
+            <option value="Cyber Security Analyst">ðŸ”’ Cyber Security Analyst</option>
+            <option value="SOC Analyst">ðŸ›¡ï¸ SOC Analyst</option>
+          </optgroup>
+          <optgroup label="â”€â”€ Business / Management">
+            <option value="Business Analyst">ðŸ“Š Business Analyst</option>
+            <option value="Project Manager">ðŸ“‹ Project Manager</option>
+            <option value="Product Manager">ðŸ“¦ Product Manager</option>
+            <option value="Scrum Master">ðŸ Scrum Master</option>
+            <option value="Financial Analyst">ðŸ’¹ Financial Analyst</option>
+            <option value="Supply Chain Analyst">ðŸ“¦ Supply Chain Analyst</option>
+          </optgroup>
+          <optgroup label="â”€â”€ QA / Testing">
+            <option value="QA Analyst">âœ… QA Analyst</option>
+            <option value="QA Automation Engineer">ðŸ§ª QA Automation Engineer</option>
+          </optgroup>
+          <optgroup label="â”€â”€ Enterprise">
+            <option value="SAP Consultant">ðŸ”µ SAP Consultant</option>
+          </optgroup>
+          <optgroup label="â”€â”€ Custom">
+            <option value="__manual__">âœï¸ Type my own role...</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <!-- State Dropdown -->
+      <div style="flex:1;min-width:180px;">
+        <label class="field-label">State</label>
+        <select id="hiringStateSelect" style="width:100%;background:var(--surface-2);border:1px solid var(--hairline);border-radius:10px;padding:10px 14px;color:var(--ink);font-family:var(--f-body);font-size:13px;outline:none;cursor:pointer;transition:border-color 0.18s;">
+          <option value="">Any State</option>
+          <option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option>
+          <option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option>
+          <option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option>
+          <option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option>
+          <option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option>
+          <option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option>
+          <option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option>
+          <option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option>
+          <option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option>
+          <option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option>
+          <option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option>
+          <option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option>
+          <option>Wisconsin</option><option>Wyoming</option>
+        </select>
+      </div>
+
+      <!-- Generate Button -->
+      <div>
+        <button class="btn-primary" onclick="generateHiringSearch()" style="padding:10px 22px;font-size:13px;border-radius:100px;white-space:nowrap;height:42px;">
+          ðŸŽ¯ Generate
+        </button>
+      </div>
+    </div>
+
+    <!-- Manual Role Input Row (shown when "Type my own role" is picked) -->
+    <div id="hiringManualRow" style="display:none;margin-bottom:14px;">
+      <label class="field-label">Custom Role Title</label>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="text" id="hiringManualInput"
+          placeholder="e.g. iOS Developer, Salesforce Architect, Data Platform Engineerâ€¦"
+          style="flex:1;background:var(--surface-2);border:1px solid var(--hairline);border-radius:10px;padding:10px 14px;color:var(--ink);font-family:var(--f-body);font-size:13px;outline:none;transition:border-color 0.18s;"
+          onfocus="this.style.borderColor='var(--accent)'"
+          onblur="this.style.borderColor='var(--hairline)'"
+          onkeydown="if(event.key==='Enter') generateHiringSearch()"
+        />
+        <button class="btn-secondary" onclick="clearHiringManual()" style="padding:9px 14px;font-size:12px;border-radius:100px;">âœ•</button>
+      </div>
+      <div class="field-hint" style="margin-top:6px;">Press Enter or click Generate after typing your role</div>
+    </div>
+
+    <!-- Company Name Input Row -->
+    <div style="margin-bottom:14px;">
+      <label class="field-label">Company Name <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--ink-faint);font-size:10px;">(optional)</span></label>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="text" id="hiringCompanyInput"
+          placeholder="e.g. Google, Microsoft, JPMorgan, Infosysâ€¦"
+          style="flex:1;background:var(--surface-2);border:1px solid var(--hairline);border-radius:10px;padding:10px 14px;color:var(--ink);font-family:var(--f-body);font-size:13px;outline:none;transition:border-color 0.18s;"
+          onfocus="this.style.borderColor='var(--accent)'"
+          onblur="this.style.borderColor='var(--hairline)'"
+          onkeydown="if(event.key==='Enter') generateHiringSearch()"
+        />
+        <button class="btn-secondary" onclick="document.getElementById('hiringCompanyInput').value=''" style="padding:9px 14px;font-size:12px;border-radius:100px;" title="Clear company">âœ•</button>
+      </div>
+      <div class="field-hint" style="margin-top:6px;">Narrows results to people hiring at a specific company</div>
+    </div>
+
+    <!-- Results -->
+    <div class="hiring-results" id="hiringResults">
+
+      <!-- LinkedIn People Search -->
+      <div class="hiring-result-card" style="margin-top:4px;">
+        <div class="hiring-result-header">
+          <div class="hiring-platform-badge">in LinkedIn Â· People Search</div>
+          <span style="font-size:12px;color:var(--ink-muted);font-family:var(--f-body);">Find recruiters &amp; hiring managers by title</span>
+        </div>
+        <div class="hiring-bool-string" id="hiringLinkedInStr"></div>
+        <div class="hiring-actions">
+          <button class="btn-action" onclick="copyHiringStr('hiringLinkedInStr')">âŽ˜ Copy</button>
+          <a class="btn-action search-btn" id="hiringLinkedInLink" href="#" target="_blank" rel="noopener">â†— LinkedIn People Search</a>
+        </div>
+        <div class="hiring-tip">ðŸ’¡ Searches LinkedIn profile headlines &amp; titles (&lt;220 chars). Uses role synonyms to widen reach. Finds Hiring Managers, Engineering Managers, VPs &amp; Recruiters. <strong>Tip:</strong> Filter by &ldquo;2nd degree&rdquo; connections for warm outreach.</div>
+      </div>
+
+      <!-- LinkedIn Posts Search -->
+      <div class="hiring-result-card">
+        <div class="hiring-result-header">
+          <div class="hiring-platform-badge" style="background:rgba(0,119,181,0.12);border-color:rgba(0,119,181,0.3);color:#0077b5;">in LinkedIn Â· Posts Search</div>
+          <span style="font-size:12px;color:var(--ink-muted);font-family:var(--f-body);">Find "we are hiring" posts on LinkedIn feed</span>
+        </div>
+        <div class="hiring-bool-string" id="hiringLinkedInPostsStr"></div>
+        <div class="hiring-actions">
+          <button class="btn-action" onclick="copyHiringStr('hiringLinkedInPostsStr')">âŽ˜ Copy</button>
+          <a class="btn-action search-btn" id="hiringLinkedInPostsLink" href="#" target="_blank" rel="noopener" style="background:rgba(0,119,181,0.12);color:#0077b5;border-color:rgba(0,119,181,0.3);">â†— LinkedIn Posts Search</a>
+        </div>
+        <div class="hiring-tip">ðŸ’¡ Searches LinkedIn feed post text. Uses real US hiring-manager phrases. <strong>Tip:</strong> After pasting into LinkedIn search, switch to <em>Posts</em> tab &rarr; filter by <em>Past week</em> for freshest results.</div>
+      </div>
+
+      <!-- Google Web Search -->
+      <div class="hiring-result-card">
+        <div class="hiring-result-header">
+          <div class="hiring-platform-badge" style="background:rgba(234,67,53,0.1);border-color:rgba(234,67,53,0.3);color:#ea4335;">G Google Web Search</div>
+          <span style="font-size:12px;color:var(--ink-muted);font-family:var(--f-body);">Find job postings &amp; hiring announcements across the web</span>
+        </div>
+        <div class="hiring-bool-string" id="hiringGoogleStr"></div>
+        <div class="hiring-actions">
+          <button class="btn-action" onclick="copyHiringStr('hiringGoogleStr')">âŽ˜ Copy</button>
+          <a class="btn-action search-btn" id="hiringGoogleLink" href="#" target="_blank" rel="noopener" style="background:rgba(234,67,53,0.12);color:#ea4335;border-color:rgba(234,67,53,0.25);">â†— Search on Google</a>
+        </div>
+        <div class="hiring-tip">ðŸ’¡ Uses <strong>intitle:</strong> operator to find pages where the role is in the page title. Excludes 7 major job-board aggregators so you hit direct company career pages. <strong>Tip:</strong> Add Google &ldquo;Past month&rdquo; filter for recent openings.</div>
+      </div>
+
+      <!-- Google X-Ray on LinkedIn -->
+      <div class="hiring-result-card">
+        <div class="hiring-result-header">
+          <div class="hiring-platform-badge" style="background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.3);color:#10b981;">G+in Google X-Ray (LinkedIn)</div>
+          <span style="font-size:12px;color:var(--ink-muted);font-family:var(--f-body);">Find LinkedIn profiles of hiring managers via Google</span>
+        </div>
+        <div class="hiring-bool-string" id="hiringXRayStr"></div>
+        <div class="hiring-actions">
+          <button class="btn-action" onclick="copyHiringStr('hiringXRayStr')">âŽ˜ Copy</button>
+          <a class="btn-action search-btn" id="hiringXRayLink" href="#" target="_blank" rel="noopener" style="background:rgba(16,185,129,0.1);color:#10b981;border-color:rgba(16,185,129,0.3);">â†— Google X-Ray Search</a>
+        </div>
+        <div class="hiring-tip">ðŸ’¡ Searches <strong>site:linkedin.com/in/</strong> for HM profiles mentioning hiring intent. Excludes &ldquo;open to work&rdquo; candidates. Uses role + geo + decision-maker titles. <strong>Tip:</strong> Add Google &ldquo;Past year&rdquo; filter to find recently active profiles.</div>
+      </div>
+
+      <!-- Google X-Ray â†’ LinkedIn Posts -->
+      <div class="hiring-result-card">
+        <div class="hiring-result-header">
+          <div class="hiring-platform-badge" style="background:rgba(255,122,61,0.1);border-color:rgba(255,122,61,0.35);color:#ff7a3d;">G+in Google X-Ray (LI Posts)</div>
+          <span style="font-size:12px;color:var(--ink-muted);font-family:var(--f-body);">Find live LinkedIn hiring posts via Google index</span>
+        </div>
+        <div class="hiring-bool-string" id="hiringGooglePostsStr"></div>
+        <div class="hiring-actions">
+          <button class="btn-action" onclick="copyHiringStr('hiringGooglePostsStr')">&#x2398; Copy</button>
+          <a class="btn-action search-btn" id="hiringGooglePostsLink" href="#" target="_blank" rel="noopener" style="background:rgba(255,122,61,0.1);color:#ff7a3d;border-color:rgba(255,122,61,0.3);">&#x2197; Google X-Ray Posts</a>
+        </div>
+        <div class="hiring-tip">&#x1F4A1; Indexes <strong>site:linkedin.com/posts/</strong> &#x2014; surfaces hiring announcements published on LinkedIn, often more recent than the built-in Posts search. Pair with Google &#x2018;Past month&#x2019; filter for freshest results.</div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- TIPS SECTION -->
+  <div class="tips-section">
+    <div class="section-eyebrow">Platform Guide</div>
+    <div class="section-title">Boolean Tips & US Sourcing Insights</div>
+    <div class="tips-grid">
+      <div class="tip-card spot">
+        <div class="tip-cat">Operator</div>
+        <div class="tip-head">AND â€” Must Match</div>
+        <div class="tip-body">Narrows results. Candidate must match every AND term.</div>
+        <code class="tip-code">Java AND "Spring Boot" AND AWS</code>
+      </div>
+      <div class="tip-card">
+        <div class="tip-cat">Operator</div>
+        <div class="tip-head">OR â€” Either Match</div>
+        <div class="tip-body">Broadens results. Matches any one of the grouped terms.</div>
+        <code class="tip-code">("Software Engineer" OR SWE OR Developer)</code>
+      </div>
+      <div class="tip-card">
+        <div class="tip-cat">Operator</div>
+        <div class="tip-head">NOT â€” Exclude</div>
+        <div class="tip-body">Filters out unwanted results. Use to suppress recruiters or intern postings.</div>
+        <code class="tip-code">NOT recruiter NOT staffing NOT hiring</code>
+      </div>
+      <div class="tip-card spot-mg">
+        <div class="tip-cat">Technique</div>
+        <div class="tip-head">Google X-Ray</div>
+        <div class="tip-body">Search inside LinkedIn or GitHub profiles via Google â€” bypasses LinkedIn limits.</div>
+        <code class="tip-code">site:linkedin.com/in/ "Java" "OPT"</code>
+      </div>
+      <div class="tip-card">
+        <div class="tip-cat">US Staffing</div>
+        <div class="tip-head">Dice for IT</div>
+        <div class="tip-body">Best for tech roles. Dice profiles are US-focused with visa & skills data.</div>
+        <code class="tip-code">site:dice.com/candidate/ Java H1B</code>
+      </div>
+      <div class="tip-card">
+        <div class="tip-cat">US Staffing</div>
+        <div class="tip-head">Visa Targeting</div>
+        <div class="tip-body">Combine visa types with OR to widen your candidate pool across auth statuses.</div>
+        <code class="tip-code">("OPT" OR "STEM OPT" OR "H4 EAD")</code>
+      </div>
+      <div class="tip-card">
+        <div class="tip-cat">LinkedIn</div>
+        <div class="tip-head">1000 Char Limit</div>
+        <div class="tip-body">LinkedIn basic search caps boolean strings at ~1000 chars. Use Recruiter for longer strings.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-cat">Best Practice</div>
+        <div class="tip-head">Quotes = Exact</div>
+        <div class="tip-body">Multi-word phrases need quotes. Single words don't â€” they're searched as-is.</div>
+        <code class="tip-code">"machine learning" vs machinelearning</code>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<!-- Live Preview Bar -->
+<div class="preview-bar">
+  <div class="wrap">
+    <div class="preview-inner">
+      <div class="preview-label">Preview</div>
+      <div class="preview-string" id="previewStr">Fill in the form above to see your boolean stringâ€¦</div>
+      <div class="preview-actions">
+        <div class="char-pill ok" id="charPill">0 chars</div>
+        <button class="btn-secondary" style="padding:6px 14px;font-size:11px;border-radius:100px" onclick="copyPreview()">Copy</button>
+      </div>
+    </div>
+    <div class="quality-bar-wrap">
+      <div class="quality-bar" id="qualityBar"></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    Vizva BoolSearch Pro &nbsp;Â·&nbsp; Built for U.S. IT Recruitment &nbsp;Â·&nbsp; LinkedIn Â· Glassdoor Â· Wellfound Â· HiringCafe Â· Jobright Â· CrawlJobs Â· ZipRecruiter Â· Google Jobs Â· Indeed Â· Dice
+  </div>
+</footer>
+
+<div class="toast" id="toast">âœ“ Copied to clipboard</div>
+
+<script>
+// â”€â”€ STATE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+const tags = {
+  title:[], must:[], any:[], exclude:[],
+  location:[], company:[], exCompany:[], cert:[], industry:[]
+};
+
+// â”€â”€ PRESETS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+const PRESETS = {
+  java:{ title:'Java Developer', alts:['Java Engineer','Backend Java Developer','J2EE Developer','Spring Boot Developer','Java Full Stack Developer','Software Engineer Java','Microservices Java Developer'], must:['Java','Spring Boot','Microservices','REST API','SQL'], any:['Hibernate','Kafka','AWS','Docker','JUnit','Maven'], edu:[], certs:[] },
+  python:{ title:'Python Developer', alts:['Python Engineer','Backend Python Developer','Software Engineer Python','Django Developer','Flask Developer','API Developer Python','Python Full Stack Developer'], must:['Python','Django','Flask','REST API','SQL'], any:['FastAPI','AWS','Docker','PostgreSQL','Pandas','PyTest'], edu:[], certs:[] },
+  dotnet:{ title:'.NET Developer', alts:['C# Developer','.NET Engineer','ASP.NET Developer','Full Stack .NET Developer','Backend .NET Developer','Software Engineer .NET','Microsoft Stack Developer'], must:['C#','.NET Core','ASP.NET','SQL Server','Web API'], any:['Azure','Entity Framework','Microservices','React','Angular','Docker'], edu:[], certs:[] },
+  devops:{ title:'DevOps Engineer', alts:['Cloud Engineer','Platform Engineer','Site Reliability Engineer','Infrastructure Engineer','AWS DevOps Engineer','Azure DevOps Engineer','Kubernetes Engineer'], must:['CI/CD','Docker','Kubernetes','Terraform','Linux'], any:['AWS','Azure','Jenkins','Ansible','GitHub Actions','Monitoring'], edu:[], certs:['AWS','CKA'] },
+  data:{ title:'Data Scientist', alts:['Senior Data Scientist','Machine Learning Scientist','Applied Scientist','AI Data Scientist','Decision Scientist','Research Scientist AI','Statistical Data Scientist'], must:['Python','Machine Learning','SQL','Statistics','Data Analysis'], any:['TensorFlow','PyTorch','Pandas','A/B Testing','NLP','Scikit-learn'], edu:["Master's",'PhD'], certs:[] },
+  fullstack:{ title:'Full Stack Developer', alts:['Full Stack Engineer','Software Engineer Full Stack','Web Application Developer','MERN Stack Developer','MEAN Stack Developer','Fullstack JavaScript Developer','Product Engineer'], must:['JavaScript','HTML','CSS','React','Node.js'], any:['TypeScript','MongoDB','Express.js','REST API','AWS','Next.js'], edu:[], certs:[] },
+  salesforce:{ title:'Salesforce Developer', alts:['Salesforce Engineer','CRM Developer','Salesforce Consultant','Salesforce Platform Developer','Salesforce Application Developer','Salesforce Technical Consultant','Apex Developer'], must:['Salesforce','Apex','Lightning','SOQL','Flows'], any:['LWC','Visualforce','Sales Cloud','Service Cloud','Integration','CPQ'], edu:[], certs:['Salesforce'] },
+  qa:{ title:'QA Automation Engineer', alts:['SDET','Quality Engineer','Test Automation Engineer','Software Test Engineer','QA Analyst Automation','Automation Tester','Quality Assurance Engineer'], must:['Selenium','Test Automation','Java','API Testing','TestNG'], any:['Cypress','Playwright','JMeter','BDD','Postman','CI/CD'], edu:[], certs:[] },
+  ba:{ title:'Business Analyst', alts:['Senior Business Analyst','IT Business Analyst','Systems Analyst','Functional Analyst','Product Analyst','Business Systems Analyst','Technical Business Analyst'], must:['Requirements Gathering','BRD','FRD','Stakeholder Management','Agile'], any:['JIRA','UAT','SQL','Process Mapping','User Stories','Visio'], edu:["Bachelor's"], certs:['PMP','CBAP'] },
+  sap:{ title:'SAP Consultant', alts:['SAP Analyst','SAP Functional Consultant','SAP Technical Consultant','SAP ABAP Developer','SAP S/4HANA Consultant','SAP Specialist','SAP Lead Consultant'], must:['SAP','S/4HANA','Configuration','Business Process','Integration'], any:['ABAP','FICO','MM','SD','HANA','Support'], edu:[], certs:[] },
+  ml:{ title:'Machine Learning Engineer', alts:['AI Engineer','Applied ML Engineer','MLOps Engineer','Deep Learning Engineer','Computer Vision Engineer','NLP Engineer','ML Platform Engineer'], must:['Python','Machine Learning','Deep Learning','PyTorch','Model Deployment'], any:['TensorFlow','MLOps','Docker','AWS','NLP','Computer Vision'], edu:["Master's",'PhD'], certs:[] },
+  frontend:{ title:'Frontend Engineer', alts:['Frontend Developer','UI Engineer','Web UI Developer','JavaScript Frontend Developer','React Frontend Engineer','Client Side Engineer','Senior Frontend Developer'], must:['JavaScript','HTML','CSS','React','TypeScript'], any:['Redux','Next.js','Jest','UI/UX','Tailwind CSS','Webpack'], edu:[], certs:[] },
+  backend:{ title:'Backend Engineer', alts:['Backend Developer','Server Side Engineer','API Engineer','Software Engineer Backend','Platform Backend Engineer','Microservices Engineer','Application Backend Developer'], must:['Java','Spring Boot','Microservices','REST API','SQL'], any:['Kafka','Redis','AWS','Docker','Kubernetes','NoSQL'], edu:[], certs:[] },
+  react:{ title:'React Developer', alts:['React Engineer','Frontend React Developer','UI Developer React','JavaScript React Engineer','ReactJS Developer','Web Developer React','Senior React Developer'], must:['React','JavaScript','TypeScript','HTML','CSS'], any:['Redux','Next.js','Jest','REST API','Tailwind CSS','Material UI'], edu:[], certs:[] },
+  node:{ title:'Node.js Developer', alts:['Node Developer','Backend Node.js Engineer','JavaScript Backend Developer','API Developer Node.js','Express.js Developer','Server Side JavaScript Engineer','Full Stack Node.js Developer'], must:['Node.js','JavaScript','Express.js','REST API','MongoDB'], any:['TypeScript','AWS','Docker','SQL','Microservices','GraphQL'], edu:[], certs:[] },
+  aws:{ title:'AWS Cloud Engineer', alts:['AWS DevOps Engineer','Cloud Infrastructure Engineer','AWS Solutions Engineer','Cloud Platform Engineer','AWS Systems Engineer','Cloud Operations Engineer','AWS Site Reliability Engineer'], must:['AWS','EC2','S3','IAM','Terraform'], any:['Lambda','CloudFormation','CI/CD','Docker','Kubernetes','CloudWatch'], edu:[], certs:['AWS'] },
+  security:{ title:'Cybersecurity Engineer', alts:['Information Security Engineer','Security Analyst','Application Security Engineer','Cloud Security Engineer','SOC Engineer','Network Security Engineer','Security Operations Analyst'], must:['Cybersecurity','SIEM','Incident Response','Vulnerability Management','Network Security'], any:['Splunk','IAM','Cloud Security','EDR','SOC','Python'], edu:[], certs:['Security+','CISSP'] },
+  product:{ title:'Product Manager', alts:['Senior Product Manager','Technical Product Manager','Digital Product Manager','Product Owner','Platform Product Manager','Software Product Manager','Growth Product Manager'], must:['Product Management','Roadmap','Stakeholder Management','Agile','Requirements'], any:['JIRA','User Stories','Analytics','A/B Testing','Go-to-Market','Scrum'], edu:[], certs:[] },
+  scrummaster:{ title:'Scrum Master', alts:['Agile Project Manager','Agile Coach','Technical Project Manager','Delivery Manager','Program Manager Agile','Iteration Manager','Release Train Engineer'], must:['Scrum','Agile','Sprint Planning','JIRA','Stakeholder Management'], any:['Kanban','SAFe','Coaching','Risk Management','Project Planning','Confluence'], edu:[], certs:['CSM','SAFe'] },
+  sre:{ title:'Site Reliability Engineer', alts:['SRE Engineer','Production Engineer','Platform Reliability Engineer','Cloud Reliability Engineer','Infrastructure Reliability Engineer','DevOps SRE Engineer','Systems Reliability Engineer'], must:['Linux','Kubernetes','Monitoring','Automation','Incident Management'], any:['AWS','GCP','Terraform','Python','CI/CD','Observability'], edu:[], certs:[] },
+  etl:{ title:'Data Engineer', alts:['ETL Developer','Big Data Engineer','Data Integration Engineer','Cloud Data Engineer','Data Pipeline Engineer','Data Warehouse Engineer','Senior ETL Developer'], must:['SQL','ETL','Data Warehousing','Python','Data Pipelines'], any:['Spark','Informatica','Airflow','Snowflake','AWS','Azure Data Factory'], edu:[], certs:[] },
+  dotnetDev: { title: '.Net Developer', alts: ['C# Developer','.NET Engineer','ASP.NET Developer','Full Stack .NET Developer','Backend .NET Developer','Software Engineer .NET','Microsoft .NET Developer'], must: ['C#', '.NET Core', 'ASP.NET', 'SQL Server', 'Web API'], any: ['Azure', 'Entity Framework', 'Microservices', 'React', 'Angular', 'Docker', 'LINQ'], edu: [], certs: [] },
+  aimlAnalyst: { title: 'AI/ML Analyst', alts: ['Artificial Intelligence Analyst','Machine Learning Analyst','AI Data Analyst','Applied AI Analyst','AI Business Analyst','Analytics ML Analyst','Intelligent Systems Analyst'], must: ['Python', 'Machine Learning', 'Data Analysis', 'AI', 'SQL'], any: ['TensorFlow', 'PyTorch', 'NLP', 'Power BI', 'Tableau', 'Scikit-learn', 'Cloud'], edu: ["Bachelor's", "Master's"], certs: [] },
+  businessAnalyst: { title: 'Business Analyst', alts: ['Senior Business Analyst','IT Business Analyst','Systems Analyst','Functional Analyst','Product Analyst','Business Systems Analyst','Technical Business Analyst'], must: ['Requirements Gathering', 'BRD', 'FRD', 'Stakeholder Management', 'Agile'], any: ['JIRA', 'UAT', 'SQL', 'Process Mapping', 'User Stories', 'Visio'], edu: ["Bachelor's"], certs: ['PMP', 'CBAP'] },
+  cloudEngineer: { title: 'Cloud Engineer', alts: ['Cloud Infrastructure Engineer','Cloud Platform Engineer','Cloud Solutions Engineer','Cloud Architect','Cloud DevOps Engineer','Cloud Operations Engineer','AWS Cloud Engineer'], must: ['AWS', 'Azure', 'Cloud Infrastructure', 'Terraform', 'Linux'], any: ['GCP', 'Kubernetes', 'Docker', 'CI/CD', 'Ansible', 'CloudFormation', 'Python'], edu: [], certs: ['AWS', 'Azure'] },
+  cyberSecAnalyst: { title: 'Cyber Security Analyst', alts: ['Cybersecurity Analyst','Information Security Analyst','IT Security Analyst','Security Operations Analyst','Cyber Threat Analyst','Network Security Analyst','Application Security Analyst'], must: ['Cybersecurity', 'SIEM', 'Incident Response', 'Vulnerability Management', 'Threat Analysis'], any: ['Splunk', 'SOC', 'Firewalls', 'NIST', 'CrowdStrike', 'Python', 'Cloud Security'], edu: ["Bachelor's"], certs: ['CISSP', 'CEH', 'Security+'] },
+  dataAnalyst: { title: 'Data Analyst', alts: ['Senior Data Analyst','Business Data Analyst','Analytics Engineer','BI Analyst','Reporting Analyst','Marketing Data Analyst','Financial Data Analyst'], must: ['SQL', 'Excel', 'Data Analysis', 'Python', 'Visualization'], any: ['Power BI', 'Tableau', 'R', 'Pandas', 'ETL', 'Google Analytics', 'Looker'], edu: ["Bachelor's"], certs: [] },
+  dataEngineer: { title: 'Data Engineer', alts: ['ETL Developer','Big Data Engineer','Data Integration Engineer','Cloud Data Engineer','Data Pipeline Engineer','Data Warehouse Engineer','Senior ETL Developer'], must: ['SQL', 'ETL', 'Data Warehousing', 'Python', 'Data Pipelines'], any: ['Spark', 'Informatica', 'Airflow', 'Snowflake', 'AWS', 'Azure Data Factory'], edu: [], certs: [] },
+  dataScientist: { title: 'Data Scientist', alts: ['Senior Data Scientist','Machine Learning Scientist','Applied Scientist','AI Data Scientist','Decision Scientist','Research Scientist AI','Statistical Data Scientist'], must: ['Python', 'Machine Learning', 'SQL', 'Statistics', 'Data Analysis'], any: ['TensorFlow', 'PyTorch', 'Pandas', 'A/B Testing', 'NLP', 'Scikit-learn'], edu: ["Master's", 'PhD'], certs: [] },
+  devopsEngineer: { title: 'DevOps Engineer', alts: ['Cloud Engineer','Platform Engineer','Site Reliability Engineer','Infrastructure Engineer','AWS DevOps Engineer','Azure DevOps Engineer','Kubernetes Engineer'], must: ['CI/CD', 'Docker', 'Kubernetes', 'Terraform', 'Linux'], any: ['AWS', 'Azure', 'Jenkins', 'Ansible', 'GitHub Actions', 'Monitoring'], edu: [], certs: ['AWS', 'CKA'] },
+  financialAnalyst: { title: 'Financial Analyst', alts: ['Senior Financial Analyst','Finance Analyst','Corporate Finance Analyst','FP&A Analyst','Investment Analyst','Financial Planning Analyst','Budget Analyst'], must: ['Financial Modeling', 'Excel', 'Financial Analysis', 'Forecasting', 'Reporting'], any: ['SQL', 'SAP', 'Power BI', 'Tableau', 'Bloomberg', 'CFA', 'Python'], edu: ["Bachelor's"], certs: ['CFA', 'CPA'] },
+  fullStackDev: { title: 'Full Stack Developer', alts: ['Full Stack Engineer','Software Engineer Full Stack','Web Application Developer','MERN Stack Developer','MEAN Stack Developer','Fullstack JavaScript Developer','Product Engineer'], must: ['JavaScript', 'HTML', 'CSS', 'React', 'Node.js'], any: ['TypeScript', 'MongoDB', 'Express.js', 'REST API', 'AWS', 'Next.js'], edu: [], certs: [] },
+  fullStackEngineer: { title: 'Full Stack Engineer', alts: ['Full Stack Developer','Software Engineer','Web Engineer','Product Engineer','Application Engineer','MERN Stack Engineer','Cloud Full Stack Engineer'], must: ['JavaScript', 'React', 'Node.js', 'REST API', 'SQL'], any: ['TypeScript', 'AWS', 'Docker', 'Next.js', 'GraphQL', 'CI/CD'], edu: [], certs: [] },
+  hardwareEngineer: { title: 'Hardware Engineer', alts: ['Electrical Hardware Engineer','Embedded Hardware Engineer','VLSI Engineer','PCB Design Engineer','Digital Hardware Engineer','Hardware Design Engineer','Electronics Engineer'], must: ['PCB Design', 'Embedded Systems', 'FPGA', 'Circuit Design', 'Hardware Testing'], any: ['VHDL', 'Verilog', 'Altium', 'MATLAB', 'Signal Processing', 'ARM', 'CAD'], edu: ["Bachelor's"], certs: [] },
+  javaDev: { title: 'Java Developer', alts: ['Java Engineer','Backend Java Developer','J2EE Developer','Spring Boot Developer','Java Full Stack Developer','Software Engineer Java','Microservices Java Developer'], must: ['Java', 'Spring Boot', 'Microservices', 'REST API', 'SQL'], any: ['Hibernate', 'Kafka', 'AWS', 'Docker', 'JUnit', 'Maven'], edu: [], certs: [] },
+  mlEngineer: { title: 'ML Engineer', alts: ['Machine Learning Engineer','AI Engineer','Applied ML Engineer','MLOps Engineer','Deep Learning Engineer','Computer Vision Engineer','NLP Engineer'], must: ['Python', 'Machine Learning', 'Deep Learning', 'PyTorch', 'Model Deployment'], any: ['TensorFlow', 'MLOps', 'Docker', 'AWS', 'NLP', 'Computer Vision'], edu: ["Master's", 'PhD'], certs: [] },
+  muleSoftDev: { title: 'MuleSoft Developer', alts: ['MuleSoft Integration Developer','MuleSoft Architect','API Integration Developer','Anypoint Platform Developer','MuleSoft Consultant','MuleSoft Engineer','Integration Platform Developer'], must: ['MuleSoft', 'Anypoint Platform', 'REST API', 'RAML', 'Integration'], any: ['SOAP', 'Java', 'Salesforce', 'CloudHub', 'DataWeave', 'API Gateway', 'JSON'], edu: [], certs: ['MuleSoft CSA'] },
+  networkEngineer: { title: 'Network Engineer', alts: ['Network Infrastructure Engineer','Senior Network Engineer','Network Administrator','WAN Engineer','LAN Engineer','Cloud Network Engineer','Network Architect'], must: ['Cisco', 'Routing', 'Switching', 'TCP/IP', 'Network Security'], any: ['BGP', 'OSPF', 'Firewalls', 'VPN', 'SD-WAN', 'Juniper', 'AWS Networking'], edu: [], certs: ['CCNA', 'CCNP'] },
+  opsArchitect: { title: 'Operations Architect', alts: ['IT Operations Architect','Cloud Operations Architect','Infrastructure Architect','Platform Operations Architect','Systems Architect','Technology Operations Architect','Enterprise Operations Architect'], must: ['Architecture', 'Infrastructure', 'Cloud', 'Operations Management', 'System Design'], any: ['AWS', 'Azure', 'Kubernetes', 'Terraform', 'ITIL', 'DevOps', 'Python'], edu: ["Bachelor's"], certs: ['AWS', 'Azure'] },
+  projectManager: { title: 'Project Manager', alts: ['Senior Project Manager','IT Project Manager','Technical Project Manager','Program Manager','Delivery Manager','Scrum Project Manager','Agile Project Manager'], must: ['Project Management', 'Agile', 'Stakeholder Management', 'Budgeting', 'Risk Management'], any: ['PMP', 'JIRA', 'Scrum', 'MS Project', 'Resource Planning', 'Confluence', 'Waterfall'], edu: ["Bachelor's"], certs: ['PMP', 'PMI'] },
+  qaAnalyst: { title: 'QA Analyst', alts: ['Quality Assurance Analyst','QA Tester','Software QA Analyst','Manual QA Analyst','QA Engineer','Software Tester','Quality Analyst'], must: ['Manual Testing', 'Test Cases', 'Bug Tracking', 'QA', 'SDLC'], any: ['Selenium', 'JIRA', 'Postman', 'API Testing', 'Agile', 'Regression Testing', 'SQL'], edu: [], certs: [] },
+  serviceNowDev: { title: 'ServiceNow Developer', alts: ['ServiceNow Engineer','ServiceNow Consultant','ServiceNow Technical Developer','ITSM Developer','ServiceNow Platform Developer','ServiceNow Application Developer','NOW Platform Developer'], must: ['ServiceNow', 'JavaScript', 'REST API', 'ITSM', 'Workflows'], any: ['GlideScript', 'ITIL', 'Catalog Items', 'Flow Designer', 'Integration Hub', 'CSM', 'HRSD'], edu: [], certs: ['ServiceNow CSA', 'ServiceNow CAD'] },
+  socAnalyst: { title: 'SOC Analyst', alts: ['Security Operations Center Analyst','SOC Engineer','Tier 2 SOC Analyst','Cyber Threat Analyst','Security Analyst SOC','Incident Response Analyst','SIEM Analyst'], must: ['SIEM', 'Incident Response', 'Threat Analysis', 'SOC', 'Cybersecurity'], any: ['Splunk', 'CrowdStrike', 'EDR', 'QRadar', 'Malware Analysis', 'Forensics', 'SOAR'], edu: ["Bachelor's"], certs: ['Security+', 'CISSP', 'CEH'] },
+  softwareDev: { title: 'Software Developer', alts: ['Software Engineer','Application Developer','Software Programmer','Full Stack Software Developer','Backend Software Developer','Frontend Software Developer','Software Development Engineer'], must: ['Programming', 'Software Development', 'Git', 'Agile', 'REST API'], any: ['Java', 'Python', 'JavaScript', 'C#', 'Cloud', 'SQL', 'Docker'], edu: [], certs: [] },
+  softwareEngineer: { title: 'Software Engineer', alts: ['Software Developer','Senior Software Engineer','Staff Engineer','Application Engineer','Backend Engineer','Full Stack Software Engineer','Systems Software Engineer'], must: ['Software Engineering', 'Data Structures', 'Algorithms', 'Git', 'REST API'], any: ['Java', 'Python', 'JavaScript', 'Go', 'AWS', 'Kubernetes', 'SQL'], edu: ["Bachelor's"], certs: [] },
+  supplyChainAnalyst: { title: 'Supply Chain Analyst', alts: ['Supply Chain Specialist','Logistics Analyst','Procurement Analyst','Operations Analyst Supply Chain','SCM Analyst','Inventory Analyst','Demand Planning Analyst'], must: ['Supply Chain', 'Inventory Management', 'Forecasting', 'ERP', 'SAP'], any: ['Excel', 'SQL', 'Power BI', 'Tableau', 'Logistics', 'Procurement', 'S&OP'], edu: ["Bachelor's"], certs: ['APICS', 'CSCP'] }
+};
+
+function onPresetSelect(sel) {
+  const key = sel.value;
+  if (!key) return;
+  if (key === '__custom__') {
+    document.getElementById('customRoleRow').style.display = 'flex';
+    document.getElementById('customRoleInput').focus();
+    return;
+  }
+  hideCustomRole();
+  applyPreset(key);
+  const badge = document.getElementById('presetLoadedBadge');
+  badge.style.display = 'inline-flex';
+  const label = sel.options[sel.selectedIndex].text.replace(/^\S+\s/, '').trim();
+  badge.innerHTML = 'âœ¦ ' + label + ' preset loaded';
+  setTimeout(() => { badge.style.display = 'none'; }, 3000);
+}
+
+function hideCustomRole() {
+  document.getElementById('customRoleRow').style.display = 'none';
+}
+
+function applyCustomRole() {
+  const val = document.getElementById('customRoleInput').value.trim();
+  if (!val) return;
+  // Clear previous, set primary title
+  Object.keys(tags).forEach(k => tags[k] = []);
+  document.querySelectorAll('.tag-wrap .tag').forEach(el => el.remove());
+  document.getElementById('primaryTitle').value = val;
+  hideCustomRole();
+  document.getElementById('presetDropdown').value = '';
+  document.getElementById('customRoleInput').value = '';
+  const badge = document.getElementById('presetLoadedBadge');
+  badge.style.display = 'inline-flex';
+  badge.innerHTML = 'âœ¦ Custom role "' + val + '" applied';
+  setTimeout(() => { badge.style.display = 'none'; }, 3000);
+  updatePreview();
+  showToast('âœ¦ Custom role applied');
+}
+
+function applyPreset(key) {
+  const p = PRESETS[key];
+  if (!p) return;
+
+  // Clear all tags
+  Object.keys(tags).forEach(k => tags[k] = []);
+  document.querySelectorAll('.tag-wrap .tag').forEach(el => el.remove());
+
+  // Primary title
+  document.getElementById('primaryTitle').value = p.title;
+
+  // Title alts
+  const titleWrap = document.getElementById('titleTagWrap');
+  const titleInput = document.getElementById('titleTagInput');
+  p.alts.forEach(a => { tags.title.push(a); renderTag(titleWrap, titleInput, 'title', a, ''); });
+
+  // Must skills
+  const mustWrap = document.getElementById('mustTagWrap');
+  const mustInput = document.getElementById('mustTagInput');
+  p.must.forEach(s => { tags.must.push(s); renderTag(mustWrap, mustInput, 'must', s, 't-must'); });
+
+  // Any skills
+  const anyWrap = document.getElementById('anyTagWrap');
+  const anyInput = document.getElementById('anyTagInput');
+  p.any.forEach(s => { tags.any.push(s); renderTag(anyWrap, anyInput, 'any', s, 't-any'); });
+
+  // Skill suggestions
+  updateSkillSuggestions(p.must.concat(p.any));
+
+  updatePreview();
+  showToast(`âœ¦ ${p.title} preset loaded`);
+}
+
+function clearAll() {
+  document.getElementById('primaryTitle').value = '';
+  Object.keys(tags).forEach(k => tags[k] = []);
+  document.querySelectorAll('.tag-wrap .tag').forEach(el => el.remove());
+  document.querySelectorAll('.check-pill input[type="checkbox"]').forEach(cb => cb.checked = false);
+  document.getElementById('expRange').value = 0;
+  document.getElementById('expVal').textContent = 'Any';
+  document.getElementById('stateSelect').value = '';
+  document.getElementById('customSuffix').value = '';
+  document.getElementById('mustSugg').innerHTML = '';
+  updatePreview();
+  showToast('Form cleared');
+}
+
+
+
+// â”€â”€ SKILL SUGGESTIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+const SKILL_HINTS = {
+  'Java':['Spring Boot','Microservices','Hibernate','Maven','Kafka','JUnit'],
+  'Python':['Django','FastAPI','Pandas','Scikit-learn','Flask','Celery'],
+  '.NET':['C#','ASP.NET','Azure','Entity Framework','SQL Server','MVC'],
+  'JavaScript':['React','Node.js','TypeScript','Vue.js','Next.js','GraphQL'],
+  'Salesforce':['Apex','LWC','SOQL','Visualforce','CPQ','Sales Cloud'],
+  'DevOps':['Kubernetes','Docker','Terraform','Jenkins','CI/CD','Ansible'],
+  'SAP':['ABAP','S/4HANA','FICO','MM','SD','SAP BW'],
+  'Machine Learning':['TensorFlow','PyTorch','NLP','Deep Learning','MLOps','Scikit-learn'],
+};
+
+function updateSkillSuggestions(skills) {
+  const el = document.getElementById('mustSugg');
+  let hints = [];
+  skills.forEach(s => { if (SKILL_HINTS[s]) hints = hints.concat(SKILL_HINTS[s]); });
+  hints = [...new Set(hints)].filter(h => !tags.must.includes(h) && !tags.any.includes(h)).slice(0, 8);
+  el.innerHTML = hints.map(h =>
+    `<span class="sugg-chip" onclick="addSuggestion('${h}')">${h}</span>`
+  ).join('');
+}
+
+function addSuggestion(skill) {
+  if (tags.any.includes(skill)) return;
+  tags.any.push(skill);
+  const wrap = document.getElementById('anyTagWrap');
+  const input = document.getElementById('anyTagInput');
+  renderTag(wrap, input, 'any', skill, 't-any');
+  updatePreview();
+}
+
+// â”€â”€ TAG SYSTEM â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function setupTagInput(inputId, wrapId, tagKey, tagClass='') {
+  const input = document.getElementById(inputId);
+  const wrap  = document.getElementById(wrapId);
+  wrap.addEventListener('click', () => input.focus());
+  input.addEventListener('keydown', e => {
+    if ((e.key === 'Enter' || e.key === ',') && input.value.trim()) {
+      e.preventDefault();
+      const val = input.value.trim().replace(/,$/, '');
+      if (val && !tags[tagKey].includes(val)) {
+        tags[tagKey].push(val);
+        renderTag(wrap, input, tagKey, val, tagClass);
+        if (tagKey === 'must') updateSkillSuggestions(tags.must.concat(tags.any));
+      }
+      input.value = '';
+      updatePreview();
+    } else if (e.key === 'Backspace' && !input.value && tags[tagKey].length) {
+      const last = tags[tagKey].pop();
+      const tagEls = wrap.querySelectorAll('.tag');
+      if (tagEls.length) wrap.removeChild(tagEls[tagEls.length - 1]);
+      updatePreview();
+    }
+  });
+  input.addEventListener('input', updatePreview);
+}
+
+function renderTag(wrap, input, tagKey, val, cls) {
+  const tag = document.createElement('span');
+  tag.className = 'tag ' + cls;
+  tag.innerHTML = `${escHtml(val)}<span class="tag-remove" onclick="removeTag('${tagKey}','${escHtml(val)}',this.parentElement)">Ã—</span>`;
+  wrap.insertBefore(tag, input);
+}
+
+function removeTag(tagKey, val, el) {
+  tags[tagKey] = tags[tagKey].filter(t => t !== val);
+  el.remove();
+  updatePreview();
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// â”€â”€ PLATFORM TOGGLE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+document.querySelectorAll('.plat-btn').forEach(btn => {
+  btn.addEventListener('click', () => btn.classList.toggle('active'));
+});
+
+// â”€â”€ NOTIFICATION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function showToast(msg='âœ“ Copied') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// â”€â”€ OPERATORS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function getOp(op) {
+  return op;  // always UPPERCASE
+}
+function useParens() { return true; }
+
+// â”€â”€ BUILDERS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function buildTitleBlock() {
+  const primary  = document.getElementById('primaryTitle').value.trim();
+  const alts     = tags.title;
+  const seniority= getChecked('#seniorityGroup input');
+  const exact    = true; // Always apply exact title match
+
+  let titleTerms = [];
+  if (primary) titleTerms.push(exact || primary.includes(' ') ? `"${primary}"` : primary);
+  alts.forEach(a => titleTerms.push(a.includes(' ') ? `"${a}"` : a));
+
+  let block = '';
+  if (titleTerms.length > 1) block = useParens() ? `(${titleTerms.join(' '+getOp('OR')+' ')})` : titleTerms.join(' '+getOp('OR')+' ');
+  else if (titleTerms.length === 1) block = titleTerms[0];
+
+  if (seniority.length) {
+    const senBlock = useParens() ? `(${seniority.join(' '+getOp('OR')+' ')})` : seniority.join(' '+getOp('OR')+' ');
+    block = block ? `${block} ${getOp('AND')} ${senBlock}` : senBlock;
+  }
+  return block;
+}
+
+function buildSkillsBlock() {
+  const mustSkills    = tags.must;
+  const anySkills     = tags.any;
+  const excludeSkills = tags.exclude;
+  let parts = [];
+
+  if (mustSkills.length) {
+    parts.push(mustSkills.map(s => s.includes(' ') ? `"${s}"` : s).join(' '+getOp('AND')+' '));
+  }
+  if (anySkills.length) {
+    const anyStr = anySkills.map(s => s.includes(' ') ? `"${s}"` : s).join(' '+getOp('OR')+' ');
+    parts.push(useParens() ? `(${anyStr})` : anyStr);
+  }
+  const excludeStr = excludeSkills.map(s => `${getOp('NOT')} ${s.includes(' ') ? '"'+s+'"' : s}`).join(' ');
+  return { include: parts.join(' '+getOp('AND')+' '), exclude: excludeStr };
+}
+
+function buildLocationBlock(platform='linkedin') {
+  const state   = document.getElementById('stateSelect').value;
+  const remote  = document.getElementById('remoteCheck').checked;
+  const hybrid  = document.getElementById('hybridCheck').checked;
+  const onsite  = document.getElementById('onsiteCheck').checked;
+
+  let parts = [];
+  if (state) parts.push(`"${state}"`);
+
+  let arr = [];
+  if (remote) arr.push('Remote');
+  if (hybrid) arr.push('Hybrid');
+  if (onsite) arr.push('"On-site"');
+  if (arr.length) parts.push(useParens() ? `(${arr.join(' '+getOp('OR')+' ')})` : arr.join(' '+getOp('OR')+' '));
+
+  return parts.join(' '+getOp('AND')+' ');
+}
+
+function buildCompanyBlock() {
+  return { include: '', exclude: '' };
+}
+
+function buildEducationBlock() {
+  return '';
+}
+
+function buildVisaBlock() {
+  const val = document.querySelector('input[name="h1bFilter"]:checked')?.value || '';
+  const hint = document.getElementById('h1bHint');
+  const hintText = document.getElementById('h1bHintText');
+
+  if (val === 'yes') {
+    const terms = ['"H1B" OR "H-1B" OR "visa sponsorship" OR "will sponsor" OR "sponsorship available" OR "OPT" OR "CPT"'];
+    const str = `("H1B" OR "H-1B" OR "visa sponsorship" OR "will sponsor" OR "sponsorship available")`;
+    if (hint) { hint.style.display='block'; hintText.textContent = '"H1B" OR "H-1B" OR "visa sponsorship" OR "will sponsor"'; }
+    return str;
+  } else if (val === 'no') {
+    const str = `("no sponsorship" OR "USC only" OR "US citizens only" OR "no visa")`;
+    if (hint) { hint.style.display='block'; hintText.textContent = '"no sponsorship" OR "USC only" OR "US citizens only"'; }
+    return str;
+  }
+  if (hint) hint.style.display='none';
+  return '';
+}
+
+function buildMiscBlock() {
+  const empType = getChecked('#empGroup input');
+  const industry  = tags.industry;
+  const exp       = document.getElementById('expRange').value;
+
+
+  let parts = [];
+  if (industry.length) {
+    const indStr = industry.join(' '+getOp('OR')+' ');
+    parts.push(useParens() ? `(${indStr})` : indStr);
+  }
+  if (empType.length) {
+    const et = empType.join(' '+getOp('OR')+' ');
+    parts.push(useParens() ? `(${et})` : et);
+  }
+  if (exp > 0) parts.push(`"${exp}+ years"`);
+  return parts.join(' '+getOp('AND')+' ');
+}
+
+
+// â”€â”€ DATE POSTED HELPER â”€â”€
+function getDatePostedValue() {
+  const sel = document.querySelector('input[name="datePosted"]:checked');
+  return sel ? sel.value : '';
+}
+
+function getDatePostedDays() {
+  const v = getDatePostedValue();
+  const map = { 'r86400': 1, 'r259200': 3, 'r604800': 7, 'r2592000': 30, 'r2592001': 0 };
+  return map[v] !== undefined ? map[v] : null; // null = any time, 0 = 30+
+}
+
+function getGoogleAfterDate() {
+  const days = getDatePostedDays();
+  if (days === null) return '';
+  if (days === 0) return ''; // 30+ can't easily filter in Google
+  const d = new Date();
+  d.setDate(d.getDate() - days);
+  return d.toISOString().split('T')[0]; // YYYY-MM-DD
+}
+
+function assembleString(extraPrefix='', platform='linkedin') {
+  const title   = buildTitleBlock();
+  const skills  = buildSkillsBlock();
+  const loc     = buildLocationBlock(platform);
+  const company = buildCompanyBlock();
+  const edu     = buildEducationBlock();
+  const visa    = buildVisaBlock();
+  const misc    = buildMiscBlock();
+  const suffix  = (document.getElementById('customSuffix').value || '-recruiter -staffing -hiring -jobs').trim();
+
+  let parts = [];
+  if (extraPrefix) parts.push(extraPrefix);
+  if (title)          parts.push(title);
+  if (skills.include) parts.push(skills.include);
+  if (loc)            parts.push(loc);
+  if (company.include)parts.push(company.include);
+  if (edu)            parts.push(edu);
+  if (visa)           parts.push(visa);
+  if (misc)           parts.push(misc);
+
+  let mainStr = parts.join(' '+getOp('AND')+' ');
+  let excParts = [];
+  if (skills.exclude)  excParts.push(skills.exclude);
+  if (company.exclude) excParts.push(company.exclude);
+  if (excParts.length) mainStr += ' ' + excParts.join(' ');
+  if (suffix) mainStr += ' ' + suffix;
+  return mainStr.trim();
+}
+
+// â”€â”€ PLATFORM GENERATORS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Helper: get primary job title (first token, unquoted)
+function getPrimaryTitle() {
+  const t = (document.getElementById('primaryTitle').value || '').trim();
+  return t;
+}
+// Helper: get must-have skills as simple space-joined string
+function getMustSkillsSimple() {
+  const vals = [...document.querySelectorAll('#mustTagWrap .tag')].map(el=>el.firstChild?.textContent?.trim()||'').filter(Boolean);
+  return vals.slice(0,5).join(' ');
+}
+
+const generators = {
+
+  // â”€â”€ 1. LinkedIn: Full boolean, AND/OR/NOT, quotes, up to 1000 chars
+  'linkedin': () => assembleString('', 'linkedin'),
+
+  // â”€â”€ 2. Glassdoor: Quotes + OR supported; avoid deep nesting
+  'glassdoor': () => {
+    const title  = buildTitleBlock();
+    const skills = buildSkillsBlock();
+    const loc    = buildLocationBlock('glassdoor');
+    const visa   = buildVisaBlock();
+    let parts = [];
+    if (title)          parts.push(title);
+    if (skills.include) parts.push(skills.include);
+    if (loc)            parts.push(loc);
+    if (visa)           parts.push(visa);
+    let str = parts.join(' AND ');
+    if (skills.exclude) str += ' ' + skills.exclude;
+    return str.trim();
+  },
+
+  // â”€â”€ 3. Wellfound (startup-focused): keyword + title only, no NOT, simple OR
+  'wellfound': () => {
+    const title  = buildTitleBlock();
+    const skills = buildSkillsBlock();
+    let parts = [];
+    if (title)          parts.push(title);
+    if (skills.include) parts.push(skills.include);
+    return parts.join(' ').trim() || getPrimaryTitle();
+  },
+
+  // â”€â”€ 4. HiringCafe: AI-powered, simple keyword phrase works best
+  'hiringcafe': () => {
+    const title = getPrimaryTitle();
+    const skills = [...document.querySelectorAll('#mustTagWrap .tag')]
+      .map(el => el.firstChild?.textContent?.trim() || '')
+      .filter(Boolean).slice(0,4);
+    const loc = buildLocationBlock('hiringcafe');
+    let parts = [title, ...skills];
+    if (loc) parts.push(loc);
+    return parts.filter(Boolean).join(' ').trim();
+  },
+
+  // â”€â”€ 5. Jobright: AI job matching â€” title + top skills, clean keywords
+  'jobright': () => {
+    const title  = getPrimaryTitle();
+    const skills = getMustSkillsSimple();
+    const visa   = buildVisaBlock();
+    let parts = [title];
+    if (skills) parts.push(skills);
+    if (visa)   parts.push(visa);
+    return parts.filter(Boolean).join(' ').trim();
+  },
+
+  // â”€â”€ 6. CrawlJobs: Job aggregator â€” simple boolean, quotes + OR
+  'crawljobs': () => {
+    const title  = buildTitleBlock();
+    const skills = buildSkillsBlock();
+    let parts = [];
+    if (title)          parts.push(title);
+    if (skills.include) parts.push(skills.include);
+    return parts.join(' AND ').trim();
+  },
+
+  // â”€â”€ 7. ZipRecruiter: Quotes + AND/OR supported natively
+  'ziprecruiter': () => {
+    const title  = buildTitleBlock();
+    const skills = buildSkillsBlock();
+    const loc    = buildLocationBlock('ziprecruiter');
+    const visa   = buildVisaBlock();
+    let parts = [];
+    if (title)          parts.push(title);
+    if (skills.include) parts.push(skills.include);
+    if (visa)           parts.push(visa);
+    let str = parts.join(' AND ');
+    if (skills.exclude) str += ' ' + skills.exclude;
+    return str.trim();
+  },
+
+  // â”€â”€ 8. Google X-Ray Jobs: site:linkedin.com/jobs/ + full boolean
+  'googlexray': () => {
+    const core     = assembleString('', 'google');
+    const fresh    = document.getElementById('freshnessSelect') ? document.getElementById('freshnessSelect').value : '';
+    const afterDate = getGoogleAfterDate ? getGoogleAfterDate() : '';
+    let dateStr = '';
+    if (afterDate) dateStr = ' after:' + afterDate;
+    else if (fresh) dateStr = ' after:' + fresh.replace('past ','').replace(' ','+');
+    return 'site:linkedin.com/jobs/view/ ' + core + dateStr;
+  },
+
+
+  // â”€â”€ 9. Indeed: Full boolean AND/OR/NOT + quotes â€” fully supported
+  'indeed': () => {
+    const title  = buildTitleBlock();
+    const skills = buildSkillsBlock();
+    const loc    = buildLocationBlock('indeed');
+    const visa   = buildVisaBlock();
+    let parts = [];
+    if (title)          parts.push(title);
+    if (skills.include) parts.push(skills.include);
+    if (visa)           parts.push(visa);
+    let str = parts.join(' AND ');
+    if (skills.exclude) str += ' ' + skills.exclude;
+    return str.trim();
+  },
+
+  // â”€â”€ 10. Dice: Best IT boolean support â€” full AND/OR/NOT/quotes
+  'dice': () => assembleString('', 'dice'),
+
+};
+
+const platformMeta = {
+  'linkedin':     { name:'LinkedIn',      url: q => {
+    const tpr = getDatePostedValue();
+    const tprParam = tpr && tpr !== 'r2592001' ? `&f_TPR=${tpr}` : (tpr === 'r2592001' ? '&f_TPR=r2592000&f_E=1' : '');
+    return `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(q)}${tprParam}`;
+  }, tip:'Full boolean: AND / OR / NOT + "quotes". Up to 1000 chars. Best for recruiter sourcing.' },
+  'glassdoor':    { name:'Glassdoor',     url: q => `https://www.glassdoor.com/Job/jobs.htm?sc.keyword=${encodeURIComponent(q)}&locT=N&locId=1`,
+                    tip:'Quotes + AND/OR supported. Avoid deep nesting. Best with title + skills + location.' },
+  'wellfound':    { name:'Wellfound',     url: q => `https://wellfound.com/jobs?q=${encodeURIComponent(q)}`,
+                    tip:'Startup & tech jobs. Simplified keywords + OR work best. No complex NOT chains.' },
+  'hiringcafe':   { name:'HiringCafe',    url: q => `https://hiring.cafe/?q=${encodeURIComponent(q)}`,
+                    tip:'AI-powered aggregator. Plain keywords + skills work best â€” no complex boolean needed.' },
+  'jobright':     { name:'Jobright',      url: q => `https://jobright.ai/jobs?keyword=${encodeURIComponent(q)}`,
+                    tip:'AI job matching. Clean keywords: title + top skills. AI handles relevance ranking.' },
+  'crawljobs':    { name:'CrawlJobs',     url: q => `https://crawljobs.com/jobs?q=${encodeURIComponent(q)}`,
+                    tip:'Job aggregator. Quotes + OR supported. Keep it clean: title AND top skills.' },
+  'ziprecruiter': { name:'ZipRecruiter',  url: q => {
+    const days = getDatePostedDays();
+    const daysParam = days !== null && days > 0 ? `&days=${days}` : '';
+    return `https://www.ziprecruiter.com/jobs-search?search=${encodeURIComponent(q)}&location=United+States${daysParam}`;
+  }, tip:'AND/OR + "quotes" supported natively. Avoid long NOT chains â€” may suppress results.' },
+  'googlexray':   { name:'Google X-Ray (Jobs)', url: q => `https://www.google.com/search?q=${encodeURIComponent(q)}`,
+                    tip:'X-Rays LinkedIn job postings via Google. Full boolean + site:linkedin.com/jobs/view/ â€” finds real jobs not visible in LinkedIn search.' },
+  'indeed':       { name:'Indeed',        url: q => {
+    const days = getDatePostedDays();
+    const fromage = days !== null && days > 0 ? `&fromage=${days}` : '';
+    return `https://www.indeed.com/jobs?q=${encodeURIComponent(q)}${fromage}&l=United+States`;
+  }, tip:'Full boolean: AND / OR / NOT + "quotes" all supported natively in Indeed search bar.' },
+  'dice':         { name:'Dice',          url: q => {
+    const days = getDatePostedDays();
+    const ageParam = days !== null && days > 0 ? `&age=${days}` : '';
+    return `https://www.dice.com/jobs?q=${encodeURIComponent(q)}${ageParam}`;
+  }, tip:'Best IT/tech boolean support. AND / OR / NOT + "quotes" â€” full syntax works in Dice search bar.' },
+};
+
+// â”€â”€ HIGHLIGHT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function highlight(str) {
+  const AND = getOp('AND'), OR = getOp('OR'), NOT = getOp('NOT');
+  return str
+    .replace(new RegExp(`\\b${AND}\\b`,'g'), `<span class="op-and">${AND}</span>`)
+    .replace(new RegExp(`\\b${OR}\\b`,'g'),  `<span class="op-or">${OR}</span>`)
+    .replace(new RegExp(`\\b${NOT}\\b`,'g'), `<span class="op-not">${NOT}</span>`)
+    .replace(/site:[^\s]+/g,  m => `<span class="op-site">${m}</span>`)
+    .replace(/[""]([^""]+)[""]/g, m => `<span class="op-qt">${m}</span>`)
+    .replace(/[()]/g, m => `<span class="op-par">${m}</span>`)
+    .replace(/#\w+/g, m => `<span style="color:#818cf8">${m}</span>`);
+}
+
+// â”€â”€ QUALITY SCORE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function calcQuality(str) {
+  let score = 0;
+  if (str.length > 10) score += 20;
+  if (tags.must.length || tags.any.length) score += 20;
+  if (document.getElementById('primaryTitle').value.trim()) score += 20;
+  if (document.getElementById('stateSelect').value) score += 15;
+  if (tags.exclude.length || document.getElementById('customSuffix').value) score += 15;
+
+  return Math.min(score, 100);
+}
+
+// â”€â”€ LIVE PREVIEW â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function updatePreview() {
+  const str = assembleString('', 'linkedin');
+  const el  = document.getElementById('previewStr');
+  const pill= document.getElementById('charPill');
+  const bar = document.getElementById('qualityBar');
+
+  el.textContent = str || 'Fill in the form to see your boolean stringâ€¦';
+  el.classList.toggle('has-content', !!str);
+
+  const len = str.length;
+  pill.textContent = `${len} chars`;
+  pill.className = 'char-pill ' + (len > 1000 ? 'over' : len > 700 ? 'warn' : 'ok');
+
+  const q = calcQuality(str);
+  const barColor = q < 40 ? 'var(--danger)' : q < 70 ? 'var(--warn)' : 'var(--success)';
+  bar.style.width  = q + '%';
+  bar.style.background = barColor;
+}
+
+function copyPreview() {
+  const str = assembleString('','linkedin');
+  if (!str) { showToast('Nothing to copy yet'); return; }
+  navigator.clipboard.writeText(str).then(() => showToast('âœ“ Preview copied'));
+}
+
+// â”€â”€ GENERATE ALL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function generateAll() {
+  const active = [...document.querySelectorAll('.plat-btn.active')].map(el => el.dataset.platform);
+  if (!active.length) { showToast('âš  Select at least one platform'); return; }
+
+  const section  = document.getElementById('outputSection');
+  const tabsEl   = document.getElementById('outputTabs');
+  const panelsEl = document.getElementById('outputPanels');
+
+  tabsEl.innerHTML   = '';
+  panelsEl.innerHTML = '';
+
+  active.forEach((platform, idx) => {
+    const str  = generators[platform] ? generators[platform]() : assembleString();
+    const meta = platformMeta[platform] || { name: platform, url: q => '#', tip: '' };
+    const len  = str.length;
+    const limitClass = len > 1000 ? 'over' : len > 700 ? 'warn' : 'ok';
+
+    // Tab
+    const tab = document.createElement('button');
+    tab.className = 'tab-btn' + (idx === 0 ? ' active' : '');
+    tab.textContent = meta.name;
+    tab.onclick = () => switchTab(platform);
+    tab.id = `tabBtn-${platform}`;
+    tabsEl.appendChild(tab);
+
+    // Panel
+    const panel = document.createElement('div');
+    panel.className = 'tab-panel' + (idx === 0 ? ' active' : '');
+    panel.id = `panel-${platform}`;
+
+    const searchUrl = meta.url(str);
+
+    panel.innerHTML = `
+      <div class="panel-toolbar">
+        <div class="panel-label">${meta.name}</div>
+        <div class="panel-actions">
+          <div class="char-pill ${limitClass}">${len} chars${({'linkedin':' / 1000 limit','dice':' / full boolean','indeed':' / full boolean','glassdoor':' / ANDÂ·OR','ziprecruiter':' / ANDÂ·OR','wellfound':' / keywords','hiringcafe':' / keywords','jobright':' / keywords','crawljobs':' / ANDÂ·OR','googlexray':' / X-Ray'}[platform] || '')}</div>
+          <button class="btn-action" onclick="clearPanel('${platform}')">âœ• Clear</button>
+          <button class="btn-action" id="copyBtn-${platform}" onclick="copyPanel('${platform}')">âŽ˜ Copy</button>
+          <a class="btn-action search-btn" href="${searchUrl}" target="_blank" rel="noopener">â†— Search Now</a>
+        </div>
+      </div>
+      <div class="bool-string" id="str-${platform}">${str ? highlight(str) : '<span class="placeholder">Fill in the form and click Generateâ€¦</span>'}</div>
+      <div class="panel-tip">âœ¦ ${meta.tip}</div>
+    `;
+    panelsEl.appendChild(panel);
+  });
+
+  section.style.display = 'block';
+  section.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function switchTab(platform) {
+  document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(`tabBtn-${platform}`)?.classList.add('active');
+  document.getElementById(`panel-${platform}`)?.classList.add('active');
+}
+
+function copyPanel(platform) {
+  const raw = document.getElementById(`str-${platform}`).textContent;
+  const btn = document.getElementById(`copyBtn-${platform}`);
+  navigator.clipboard.writeText(raw).then(() => {
+    btn.textContent = 'âœ“ Copied';
+    btn.classList.add('copy-active');
+    showToast('âœ“ Copied to clipboard');
+    setTimeout(() => { btn.textContent = 'âŽ˜ Copy'; btn.classList.remove('copy-active'); }, 2000);
+  });
+}
+
+function clearPanel(platform) {
+  document.getElementById(`str-${platform}`).innerHTML = '<span class="placeholder">Cleared. Adjust and regenerate.</span>';
+}
+
+function getChecked(selector) {
+  return [...document.querySelectorAll(selector + ':checked')].map(el => el.value);
+}
+
+// â”€â”€ INIT TAG INPUTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+setupTagInput('titleTagInput',    'titleTagWrap',    'title');
+setupTagInput('mustTagInput',     'mustTagWrap',     'must',      't-must');
+setupTagInput('anyTagInput',      'anyTagWrap',      'any',       't-any');
+setupTagInput('excludeTagInput',  'excludeTagWrap',  'exclude',   't-exc');
+setupTagInput('industryTagInput', 'industryTagWrap', 'industry');
+
+// All checkbox/select inputs trigger preview
+document.querySelectorAll('input[type="checkbox"],input[type="radio"],select')
+  .forEach(el => el.addEventListener('change', updatePreview));
+
+// Init preview
+updatePreview();
+
+// â”€â”€ FIND PEOPLE HIRING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
+function onHiringRoleDropdown(sel) {
+  const manualRow = document.getElementById('hiringManualRow');
+  if (sel.value === '__manual__') {
+    manualRow.style.display = 'block';
+    document.getElementById('hiringManualInput').focus();
+  } else {
+    manualRow.style.display = 'none';
+  }
+}
+
+function clearHiringManual() {
+  document.getElementById('hiringManualInput').value = '';
+  document.getElementById('hiringRoleSelect').value = '';
+  document.getElementById('hiringManualRow').style.display = 'none';
+}
+
+function generateHiringSearch() {
+  const sel       = document.getElementById('hiringRoleSelect');
+  const stateEl   = document.getElementById('hiringStateSelect');
+  const manualEl  = document.getElementById('hiringManualInput');
+  const companyEl = document.getElementById('hiringCompanyInput');
+
+  let role = sel.value;
+  if (role === '__manual__') role = manualEl.value.trim();
+  if (!role) { showToast('\u26a0 Please select or type a role first'); return; }
+
+  const state   = stateEl   ? stateEl.value.trim()   : '';
+  const company = companyEl ? companyEl.value.trim()  : '';
+
+  // â”€â”€ Role synonyms: alternate titles to widen the net
+  const SYN = {
+    'Java Developer':['Java Engineer','Java Programmer','Java Software Engineer'],
+    'Python Engineer':['Python Developer','Python Programmer'],
+    '.Net Developer':['.NET Engineer','C# Developer','Dot Net Developer'],
+    'React Developer':['React.js Developer','React Engineer','Frontend Developer'],
+    'Node.js Developer':['NodeJS Developer','Node Developer','Backend Node Developer'],
+    'Full Stack Developer':['Full Stack Engineer','Fullstack Developer'],
+    'Full Stack Engineer':['Full Stack Developer','Fullstack Engineer'],
+    'Software Developer':['Software Engineer','Application Developer'],
+    'Software Engineer':['Software Developer','SWE','Application Engineer'],
+    'DevOps Engineer':['Platform Engineer','Infrastructure Engineer','DevOps'],
+    'Data Scientist':['Machine Learning Scientist','Data Science Engineer'],
+    'Data Analyst':['BI Analyst','Analytics Engineer','Business Intelligence Analyst'],
+    'Data Engineer':['Data Platform Engineer','Analytics Engineer','Big Data Engineer'],
+    'ML Engineer':['Machine Learning Engineer','AI Engineer','MLOps Engineer'],
+    'AI/ML Analyst':['AI Analyst','ML Analyst','Machine Learning Analyst'],
+    'Business Analyst':['IT Business Analyst','Business Systems Analyst','BA'],
+    'Project Manager':['Program Manager','IT Project Manager','Technical Project Manager'],
+    'Product Manager':['Product Owner','PM','Technical Product Manager'],
+    'Scrum Master':['Agile Coach','Scrum Coach','Agile Scrum Master'],
+    'QA Automation Engineer':['SDET','Test Automation Engineer','QA Engineer'],
+    'QA Analyst':['Quality Assurance Analyst','QA Tester','Software QA Analyst'],
+    'Cybersecurity Engineer':['Security Engineer','InfoSec Engineer','Cyber Engineer'],
+    'Cyber Security Analyst':['Security Analyst','InfoSec Analyst','Cybersecurity Analyst'],
+    'SOC Analyst':['Security Operations Analyst','SOC Engineer','Threat Analyst'],
+    'Cloud Engineer':['Cloud Architect','Cloud Solutions Engineer','AWS Engineer'],
+    'AWS Cloud Engineer':['AWS Solutions Architect','AWS Engineer','Cloud Infrastructure Engineer'],
+    'Site Reliability Engineer':['SRE','Platform Reliability Engineer','Site Reliability'],
+    'Network Engineer':['Network Administrator','Network Architect','Network Infrastructure Engineer'],
+    'SAP Consultant':['SAP Analyst','SAP Developer','SAP Functional Consultant'],
+    'Salesforce Developer':['Salesforce Engineer','SFDC Developer','Salesforce Architect'],
+    'ServiceNow Developer':['ServiceNow Engineer','ServiceNow Consultant','ServiceNow Admin'],
+    'MuleSoft Developer':['MuleSoft Integration Developer','MuleSoft Engineer','Integration Developer'],
+    'Financial Analyst':['Finance Analyst','FP&A Analyst','Financial Planning Analyst'],
+    'Supply Chain Analyst':['Supply Chain Manager','Logistics Analyst','SCM Analyst'],
+    'Hardware Engineer':['Hardware Design Engineer','Embedded Engineer','FPGA Engineer'],
+  };
+
+  const syns    = SYN[role] || [];
+  const roleQ   = '"' + role + '"';
+  // Role OR group â€” primary + up to 2 synonyms
+  const roleOR  = syns.length
+    ? '(' + [role,...syns.slice(0,2)].map(r => '"'+r+'"').join(' OR ') + ')'
+    : roleQ;
+
+  const stateStr = state   ? ' "' + state + '"' : '';
+  const coStr    = company ? ' "' + company + '"' : '';
+  const usOr     = state   ? '("' + state + '" OR "United States")' : '"United States"';
+  const usFull   = '"United States"';
+
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  // 1. LinkedIn PEOPLE SEARCH
+  //    Searches profile titles & headlines â€” MUST stay < 220 chars
+  //    Pattern: role + HM/recruiter titles + US geo + state + company
+  //    Uses role synonyms for broader title matching
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  const linkedInPeopleBool = [
+    roleOR,
+    '("Hiring Manager" OR "Technical Recruiter" OR "Talent Acquisition" OR "Engineering Manager" OR "VP Engineering" OR "Director of Engineering" OR "Head of Talent")',
+    '("United States" OR "USA")',
+    stateStr,
+    coStr
+  ].filter(Boolean).join(' ');
+
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  // 2. LinkedIn POSTS SEARCH (Feed content search)
+  //    Searches actual post text â€” use viral US hiring phrases
+  //    Best: filter by "Past week" on LinkedIn after searching
+  //    Tip from research: add "hiring" AND role + filter Posts tab
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  const linkedInPostsBool = [
+    roleQ,
+    '("we are hiring" OR "now hiring" OR "actively hiring" OR "hiring now" OR "I am hiring" OR "looking to hire" OR "join our team" OR "open role")',
+    usOr,
+    coStr,
+    '-"apply on indeed" -"via indeed" -"job description" -"apply here"'
+  ].filter(Boolean).join(' ');
+
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  // 3. GOOGLE WEB SEARCH
+  //    Finds job posts on direct company career pages
+  //    Exclude ALL major aggregators to surface direct postings
+  //    intitle: finds pages where the role is in the page title
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  const googleBool = [
+    'intitle:(' + role.split(' ').map(w=>'"'+w+'"').join(' OR ') + ')',
+    '("we are hiring" OR "now hiring" OR "job opening" OR "open position" OR "immediately hiring" OR "join our team")',
+    usFull,
+    stateStr,
+    coStr,
+    '-site:indeed.com -site:linkedin.com -site:glassdoor.com -site:ziprecruiter.com -site:monster.com -site:careerbuilder.com -site:dice.com'
+  ].filter(Boolean).join(' ');
+
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  // 4. GOOGLE X-RAY â€” LinkedIn PROFILES of hiring managers
+  //    site:linkedin.com/in/ = profile pages only
+  //    Finds HMs who mention "hiring" in their profile/activity
+  //    Exclude candidates (-"open to work"), exclude LI job pages
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  const xRayBool = [
+    'site:linkedin.com/in/',
+    roleQ,
+    stateStr || usFull,
+    '("hiring" OR "we are hiring" OR "looking to hire" OR "open role" OR "building a team")',
+    '("Hiring Manager" OR "Engineering Manager" OR "Technical Recruiter" OR "VP Engineering" OR "Director")',
+    '-"open to work" -"job seeker" -"seeking" -"jobs you may"'
+  ].filter(Boolean).join(' ');
+
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  // 5. GOOGLE X-RAY â€” LinkedIn POSTS (newest hiring announcements)
+  //    site:linkedin.com/posts/ = indexes actual LinkedIn post pages
+  //    Often returns MORE RECENT results than LinkedIn Posts search
+  //    Best for finding posts made in the last 7-30 days
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  const googlePostsBool = [
+    'site:linkedin.com/posts/',
+    roleQ,
+    '("hiring" OR "now hiring" OR "we are hiring" OR "looking for" OR "open role")',
+    stateStr || usFull,
+    coStr
+  ].filter(Boolean).join(' ');
+
+  // â”€â”€ Populate all 5 display boxes
+  document.getElementById('hiringLinkedInStr').textContent      = linkedInPeopleBool;
+  document.getElementById('hiringLinkedInPostsStr').textContent = linkedInPostsBool;
+  document.getElementById('hiringGoogleStr').textContent        = googleBool;
+  document.getElementById('hiringXRayStr').textContent          = xRayBool;
+  const gPostsEl = document.getElementById('hiringGooglePostsStr');
+  if (gPostsEl) gPostsEl.textContent = googlePostsBool;
+
+  // â”€â”€ Wire search buttons
+  document.getElementById('hiringLinkedInLink').href =
+    'https://www.linkedin.com/search/results/people/?keywords=' + encodeURIComponent(linkedInPeopleBool);
+  document.getElementById('hiringLinkedInPostsLink').href =
+    'https://www.linkedin.com/search/results/content/?keywords=' + encodeURIComponent(linkedInPostsBool) + '&sortBy=date_posted';
+  document.getElementById('hiringGoogleLink').href =
+    'https://www.google.com/search?q=' + encodeURIComponent(googleBool);
+  document.getElementById('hiringXRayLink').href =
+    'https://www.google.com/search?q=' + encodeURIComponent(xRayBool);
+  const gpLink = document.getElementById('hiringGooglePostsLink');
+  if (gpLink) gpLink.href = 'https://www.google.com/search?q=' + encodeURIComponent(googlePostsBool);
+
+  // â”€â”€ Show results
+  const res = document.getElementById('hiringResults');
+  res.style.display = 'block';
+  res.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  const label = role + (state ? ' \u00b7 ' + state : ' \u00b7 All US States') + (company ? ' \u00b7 ' + company : '');
+  showToast('\u2726 5 hiring searches ready \u2014 ' + label);
+}
+
+function copyHiringStr(elId) {
+  const text = document.getElementById(elId).textContent;
+  navigator.clipboard.writeText(text).then(() => showToast('âœ“ Copied to clipboard'));
+}
+
+</script>
+</body>
+</html>
+
